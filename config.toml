@@ -19,6 +19,6 @@
 		hide_falling_blocks = false
 		replace_ah_message = true
 		jacob_start_alert = true
-		change_stash_action = 0
+		change_stash_action = 1
 		coin_flip = true
 

@@ -162,7 +162,7 @@ class cmSettingsData {
         category: "General",
         subcategory: "Settings"
     })
-    stashMsg = true;
+    stashMsgEdit = true;
     @SelectorProperty({
         name: "Change stash action",
         description: "Clicking on the stash action will change whether it will open the /viewStash or do /pickupstash",
@@ -174,7 +174,7 @@ class cmSettingsData {
 
     @SelectorProperty({
         name: "Change stash open",
-        description: "Change if it will show items or material (/viewStash item or /viewStash material)",
+        description: "Change if it will show items or material (/viewStash item or /viewStash material) only work if /viewStash is selected above",
         category: "General",
         subcategory: "Settings",
         options: ["Material", "Item"]

@@ -44,32 +44,76 @@ const combinations = [
     `[VIP&r&7+&r&b] ${player}`, `[VIP&r&8+&r&b] ${player}`, `[VIP&r&9+&r&b] ${player}`
 ];
 
+
 register("chat", (msg, event) => {
-    if (!cmSettingsData.colorTagTrue) return
-    let message = ChatLib.getChatMessage(event, true);
-    if (msg.includes("MVP+") || msg.includes("VIP+")) {
+    let msg2 = ChatLib.getChatMessage(event, true);
+    if (!msg.includes("JudgementCorePls") && !msg.includes("MVP+") && !msg.includes("VIP+")) return
+    let msg = new Message(event).getMessageParts();
+    if (combinations.some(combination => msg2.includes(combination))) {
+        let matchingCombination = combinations.find(combination => msg2.includes(combination));
+        plusColor = matchingCombination.slice(6,8)
+        plusColor = plusColor.replace('&', '§')
         if (cmSettingsData.colorTagTrue) {
-        if (combinations.some(combination => message.includes(combination))) {
-            if (cmSettingsData.colorUserTrue) {
-            const matchingCombination = combinations.find(combination => message.includes(combination));
-            playerColor = colorDict[cmSettingsData.colorUser] + player + '&r'
-            message = message.replace(matchingCombination, (message.includes("MVP") ? `[MVP${colorDict[cmSettingsData.colorTag]}+&b] ${playerColor}` : `[VIP${colorDict[cmSettingsData.colorTag]}+&a] ${playerColor}`));
-            ChatLib.chat(message)
-            cancel(event);
-            } else {
-                const matchingCombination = combinations.find(combination => message.includes(combination));
-                message = message.replace(matchingCombination, (message.includes("MVP") ? `[MVP${colorDict[cmSettingsData.colorTag]}+&b] ${player}&r` : `[VIP${colorDict[cmSettingsData.colorTag]}+&a] ${player}&r`));
-                ChatLib.chat(message)
-                cancel(event);
-            }
+            msg.forEach(element => {
+                element.text = element.text.replace(player, `${colorDict[cmSettingsData.colorUser]}${player}`)
+            });
+        }
+        if (cmSettingsData.colorUserTrue) {
+            msg.forEach(element => {
+                element.text = element.text.replace(`${plusColor}+§r`, `${colorDict[cmSettingsData.colorTag]}+&r`)
+            });
         }
     }
-    } else {
-        if (cmSettingsData.colorTagTrue && msg.includes(player)) {
-            const playerColor = colorDict[cmSettingsData.colorUser] + player + '&r'
-            message = message.replace(player, playerColor);
-            ChatLib.chat(message)
-            cancel(event);
-        }
-    }
+    
+    new Message(msg).chat()
+    cancel(event)
 }).setCriteria("${msg}")
+
+// for item in msg:
+//     item.text.replace()
+
+// [TextComponent{text:§r§r, formatted:true, hoverAction:null, hoverValue:null, clickAction:null, clickValue:null}, TextComponent{text:§8[§r, formatted:true, hoverAction:show_text, hoverValue:§b[MVP§d+§b] JudgementCorePls§f
+
+//     §7SkyBlock Level: §8[§9291§8]
+//     §7Skill Average: §645.8
+
+//     §7Emblem: §6ჶ
+//     §8Golden Riftstalker Strange Time
+    
+//     §7§8Unlocked for Vampire Slayer 5.
+    
+//     §7Riftstalker Bloodfiend XP: §e15,910
+//     §7Total Tier V Kills: §576§r, clickAction:null, clickValue:null}, TextComponent{text:§9291§r, formatted:true, hoverAction:show_text, hoverValue:§b[MVP§d+§b] JudgementCorePls§f
+    
+//     §7SkyBlock Level: §8[§9291§8]
+//     §7Skill Average: §645.8
+    
+//     §7Emblem: §6ჶ
+//     §8Golden Riftstalker Strange Time
+    
+//     §7§8Unlocked for Vampire Slayer 5.
+    
+//     §7Riftstalker Bloodfiend XP: §e15,910
+//     §7Total Tier V Kills: §576§r, clickAction:null, clickValue:null}, TextComponent{text:§8] §r, formatted:true, hoverAction:show_text, hoverValue:§b[MVP§d+§b] JudgementCorePls§f
+    
+//     §7SkyBlock Level: §8[§9291§8]
+//     §7Skill Average: §645.8
+    
+//     §7Emblem: §6ჶ
+//     §8Golden Riftstalker Strange Time
+    
+//     §7§8Unlocked for Vampire Slayer 5.
+    
+//     §7Riftstalker Bloodfiend XP: §e15,910
+//     §7Total Tier V Kills: §576§r, clickAction:null, clickValue:null}, TextComponent{text:§6ჶ §r, formatted:true, hoverAction:show_text, hoverValue:§b[MVP§d+§b] JudgementCorePls§f
+    
+//     §7SkyBlock Level: §8[§9291§8]
+//     §7Skill Average: §645.8
+    
+//     §7Emblem: §6ჶ
+//     §8Golden Riftstalker Strange Time
+    
+//     §7§8Unlocked for Vampire Slayer 5.
+    
+//     §7Riftstalker Bloodfiend XP: §e15,910
+//     §7Total Tier V Kills: §576§r, clickAction:null, clickValue:null}, TextComponent{text:§6[The Owner] §r, formatted:true, hoverAction:null, hoverValue:null, clickAction:null, clickValue:null}, TextComponent{text:§b[MVP§r, formatted:true, hoverAction:null, hoverValue:null, clickAction:null, clickValue:null}, TextComponent{text:§d+§r, formatted:true, hoverAction:null, hoverValue:null, clickAction:null, clickValue:null}, TextComponent{text:§b] JudgementCorePls§r, formatted:true, hoverAction:null, hoverValue:null, clickAction:null, clickValue:null}, TextComponent{text:§f: me again§r, formatted:true, hoverAction:null, hoverValue:null, clickAction:null, clickValue:null}]

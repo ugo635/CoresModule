@@ -21,7 +21,7 @@ import {
         // or a positive number if b should be sorted before a.
 
         // In this case, we can put Not general! to be above general.
-        const categories = ['General', 'Diana'];
+        const categories = ['General', 'Diana', 'Credits'];
 
         return categories.indexOf(a.name) - categories.indexOf(b.name);
     },
@@ -50,11 +50,35 @@ class cmSettingsData {
     }
     //----------- General ----------------
     @SwitchProperty({
-        name: "My Setting",
-        description: "Enable or disable my setting (just for debugging purposes)",
+        name: "Color Tag replacor",
+        description: "Enable or disable the color tag replacor",
         category: "General",
         subcategory: "Settings"
     })
+    colorTagTrue = false;
+    @SelectorProperty({
+        name: "Color Tag",
+        description: "Choose color tag (/color for example)",
+        category: "General",
+        subcategory: "Settings",
+        options: ["Black", "Dark Blue", "Dark Green", "Dark Aqua", "Dark Red", "Dark Purple", "Gold", "Gray", "Dark Gray", "Blue", "Green", "Aqua", "Red", "Light Purple / Pink", "Yellow"]
+    })
+    colorTag = 0;
+    @SwitchProperty({
+        name: "Color Username replacor",
+        description: "Enable or disable the Username color replacor",
+        category: "General",
+        subcategory: "Settings"
+    })
+    colorUserTrue = false;
+    @SelectorProperty({
+        name: "Color Username",
+        description: "Choose color username (/color for example)",
+        category: "General",
+        subcategory: "Settings",
+        options: ["Black", "Dark Blue", "Dark Green", "Dark Aqua", "Dark Red", "Dark Purple", "Gold", "Gray", "Dark Gray", "Blue", "Green", "Aqua", "Red", "Light Purple / Pink", "Yellow"]
+    })
+    colorUser = 0;
     @SwitchProperty({
         name: "Party Invite Message Editor",
         description: "Edits party invite message to lyk if the guy is in your lobby",
@@ -91,6 +115,20 @@ class cmSettingsData {
     })
     darkAuction = true;
     @SwitchProperty({
+        name: "Jacob Start Alert",
+        description: "Send a message on screen when Jacob Starts",
+        category: "General",
+        subcategory: "Settings"
+    })
+    jacob = true;
+    @SwitchProperty({
+        name: "Disable Warp Message",
+        description: "Disable Warp messages ( » PLAYER is traveling to ISLAND FOLLOW)",
+        category: "General",
+        subcategory: "Settings"
+    })
+    follow = false;
+    @SwitchProperty({
         name: "Hide falling blocks",
         description: "Hides falling blocks (they won't appear on the screen)",
         category: "General",
@@ -105,12 +143,26 @@ class cmSettingsData {
     })
     replaceAhMsg = true;
     @SwitchProperty({
+        name: "Coin flip",
+        description: "Flip a coin",
+        category: "General",
+        subcategory: "Settings"
+    })
+    cf = true;
+    @SwitchProperty({
+        name: "Dice",
+        description: "Roll a dice",
+        category: "General",
+        subcategory: "Settings"
+    })
+    dice = true;
+    @SwitchProperty({
         name: "Stash message",
         description: "Replace the stash message",
         category: "General",
         subcategory: "Settings"
     })
-    stashMsg = true;
+    stashMsgEdit = true;
     @SelectorProperty({
         name: "Change stash action",
         description: "Clicking on the stash action will change whether it will open the /viewStash or do /pickupstash",
@@ -122,12 +174,23 @@ class cmSettingsData {
 
     @SelectorProperty({
         name: "Change stash open",
-        description: "Change if it will show items or material (/viewStash item or /viewStash material)",
+        description: "Change if it will show items or material (/viewStash item or /viewStash material) only work if /viewStash is selected above",
         category: "General",
         subcategory: "Settings",
         options: ["Material", "Item"]
     })
     vsMatOrItem = 0;
+    // ----------- Credits ----------------
+    @ButtonProperty({
+        name: "Diacyz",
+        description: "Found the module name <3",
+        category: "Credits",
+        subcategory: "Credits",
+        placeholder: "Click Me"
+    })
+    openGithub() {
+        java.awt.Desktop.getDesktop().browse(new java.net.URI("https://github.com/ugo635/CoresModule"));
+    }
 }
 
 export default new cmSettingsData();

@@ -2,6 +2,7 @@ import { getplayername, formatTime, getDianaMayorTotalProfitAndOfferType, calcPe
 import { data, dianaTrackerMayor } from "../../SBO/utils/variables";
 import { registerWhen } from "../../SBO/utils/variables";
 import cmSettingsData from "../settings";
+import { playCustomSound } from "../../SBO/utils/functions";
 
 
 // classes / function
@@ -57,7 +58,7 @@ register("command", () => {
     ChatLib.chat(`&eYellow: &e&lBold Yellow : &&ee`);
     ChatLib.chat(`&fWhite: &f&lBold White : &&ff`);
 
-    ChatLib.chat(`&kObfuscated : &&kk`);
+    ChatLib.chat(`&kObfuscated&r : &&kk`);
     ChatLib.chat(`&lBold : &&ll`);
     ChatLib.chat(`&mStrikethrough : &&mm`);
     ChatLib.chat(`&nUnderline : &&nn`);
@@ -100,26 +101,57 @@ ChatLib.command("warp base")
 
 let lastMinute = -1;
 
-register("tick", () => {
-    if (!cmSettingsData.darkAuction) return;
+
+register("step", () => {
+    if (!cmSettingsData.darkAuction || !cmSettingsData.jacob) return;
+    
     let currentMinute = new Date().getMinutes();
-    
-    if (currentMinute === 54 && lastMinute !== 54) {
+
+    if (currentMinute === 54 && lastMinute !== 54 && cmSettingsData.darkAuction) {
         Client.Companion.showTitle("&l&c Dark Auction", "", 0, 25, 35);
-        lastMinute = 54; // Prevent spam
+        lastMinute = 54;
+    } else if (currentMinute === 15 && lastMinute !== 15 && cmSettingsData.jacob) {
+        Client.Companion.showTitle("&l&d Jacob Starts!", "", 0, 25, 35);
+        lastMinute = 15;
     }
-    
-    if (currentMinute !== 54) {
-        lastMinute = currentMinute; // Reset tracker
+
+    if (currentMinute !== lastMinute) {
+        lastMinute = currentMinute;
     }
-})
+}, 30);
+
 
 register("chat", (player) => {
+    if (!cmSettingsData.cf) return
     coin = Math.random() < 0.5 ? "heads" : "tails";
     ChatLib.command(`pc ${player.split(" ").length > 0 ? player.split(" ")[1] : player} flipped ${coin}`);
 }).setCriteria("Party > ${player}: !cf")
 register("chat", (player) => {
+    if (!cmSettingsData.cf) return
     coin = Math.random() < 0.5 ? "heads" : "tails";
     ChatLib.command(`pc ${player.split(" ").length > 0 ? player.split(" ")[1] : player} flipped ${coin}`);
 }).setCriteria("Party > ${player}: !coinflip")
+
+register("chat", (player) => {
+    if (!cmSettingsData.dice) return
+    dice = Math.floor(Math.random() * 6) + 1;
+    ChatLib.command(`pc ${player.split(" ").length > 0 ? player.split(" ")[1] : player} rolled ${dice}`);
+}).setCriteria("Party > ${player}: !dice")
+
+register("chat", () => {
+    ChatLib.command('sboqueue', true)
+}).setCriteria("Party > ${player}: !sboqueue")
+
+register("chat", (player, island, event) => {
+    if (!cmSettingsData.follow) return
+    cancel(event);
+}).setCriteria(" » ${player} is traveling to ${island} FOLLOW")
+
+
+
+register("chat", (msg) => {
+    if (msg.includes("Aluakbar")) {
+        playCustomSound(AluakbarSound,100);
+    }
+}).setCriteria("${msg}")
 

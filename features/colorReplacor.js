@@ -53,14 +53,50 @@ register("chat", (msg, event) => {
         let matchingCombination = combinations.find(combination => msg2.includes(combination));
         plusColor = matchingCombination.slice(6,8)
         plusColor = plusColor.replace('&', '§')
-        if (cmSettingsData.colorTagTrue) {
+        if (cmSettingsData.colorUserTrue) {
             msg.forEach(element => {
                 element.text = element.text.replace(player, `${colorDict[cmSettingsData.colorUser]}${player}`)
             });
         }
-        if (cmSettingsData.colorUserTrue) {
+        if (cmSettingsData.colorTagTrue) {
             msg.forEach(element => {
-                element.text = element.text.replace(`${plusColor}+§r`, `${colorDict[cmSettingsData.colorTag]}+&r`)
+                if (element.text.match(/(\[[A-Za-z]+§[A-Za-z0-9]+\+§[A-Za-z0-9]+\]|\[[A-Za-z]+§[A-Za-z0-9]+\+§[A-Za-z0-9]+\])/g)) {
+                    element.text = element.text.replace(`MVP§0+§b`, `MVP${colorDict[cmSettingsData.colorTag]}+§b`)
+                    element.text = element.text.replace(`MVP§1+§b`, `MVP${colorDict[cmSettingsData.colorTag]}+§b`)
+                    element.text = element.text.replace(`MVP§2+§b`, `MVP${colorDict[cmSettingsData.colorTag]}+§b`)
+                    element.text = element.text.replace(`MVP§3+§b`, `MVP${colorDict[cmSettingsData.colorTag]}+§b`)
+                    element.text = element.text.replace(`MVP§4+§b`, `MVP${colorDict[cmSettingsData.colorTag]}+§b`)
+                    element.text = element.text.replace(`MVP§5+§b`, `MVP${colorDict[cmSettingsData.colorTag]}+§b`)
+                    element.text = element.text.replace(`MVP§6+§b`, `MVP${colorDict[cmSettingsData.colorTag]}+§b`)
+                    element.text = element.text.replace(`MVP§7+§b`, `MVP${colorDict[cmSettingsData.colorTag]}+§b`)
+                    element.text = element.text.replace(`MVP§8+§b`, `MVP${colorDict[cmSettingsData.colorTag]}+§b`)
+                    element.text = element.text.replace(`MVP§9+§b`, `MVP${colorDict[cmSettingsData.colorTag]}+§b`)
+                    element.text = element.text.replace(`MVP§a+§b`, `MVP${colorDict[cmSettingsData.colorTag]}+§b`)
+                    element.text = element.text.replace(`MVP§b+§b`, `MVP${colorDict[cmSettingsData.colorTag]}+§b`)
+                    element.text = element.text.replace(`MVP§c+§b`, `MVP${colorDict[cmSettingsData.colorTag]}+§b`)
+                    element.text = element.text.replace(`MVP§d+§b`, `MVP${colorDict[cmSettingsData.colorTag]}+§b`)
+                    element.text = element.text.replace(`MVP§e+§b`, `MVP${colorDict[cmSettingsData.colorTag]}+§b`)
+                    element.text = element.text.replace(`MVP§f+§b`, `MVP${colorDict[cmSettingsData.colorTag]}+§b`)
+                    element.text = element.text.replace(`VIP§0+§b`, `MVP${colorDict[cmSettingsData.colorTag]}+§b`)
+                    element.text = element.text.replace(`VIP§1+§b`, `MVP${colorDict[cmSettingsData.colorTag]}+§b`)
+                    element.text = element.text.replace(`VIP§2+§b`, `MVP${colorDict[cmSettingsData.colorTag]}+§b`)
+                    element.text = element.text.replace(`VIP§3+§b`, `MVP${colorDict[cmSettingsData.colorTag]}+§b`)
+                    element.text = element.text.replace(`VIP§4+§b`, `MVP${colorDict[cmSettingsData.colorTag]}+§b`)
+                    element.text = element.text.replace(`VIP§5+§b`, `MVP${colorDict[cmSettingsData.colorTag]}+§b`)
+                    element.text = element.text.replace(`VIP§6+§b`, `MVP${colorDict[cmSettingsData.colorTag]}+§b`)
+                    element.text = element.text.replace(`VIP§7+§b`, `MVP${colorDict[cmSettingsData.colorTag]}+§b`)
+                    element.text = element.text.replace(`VIP§8+§b`, `MVP${colorDict[cmSettingsData.colorTag]}+§b`)
+                    element.text = element.text.replace(`VIP§9+§b`, `MVP${colorDict[cmSettingsData.colorTag]}+§b`)
+                    element.text = element.text.replace(`VIP§a+§b`, `MVP${colorDict[cmSettingsData.colorTag]}+§b`)
+                    element.text = element.text.replace(`VIP§b+§b`, `MVP${colorDict[cmSettingsData.colorTag]}+§b`)
+                    element.text = element.text.replace(`VIP§c+§b`, `MVP${colorDict[cmSettingsData.colorTag]}+§b`)
+                    element.text = element.text.replace(`VIP§d+§b`, `MVP${colorDict[cmSettingsData.colorTag]}+§b`)
+                    element.text = element.text.replace(`VIP§e+§b`, `MVP${colorDict[cmSettingsData.colorTag]}+§b`)
+                    element.text = element.text.replace(`VIP§f+§b`, `MVP${colorDict[cmSettingsData.colorTag]}+§b`)
+                } else {
+                element.text = element.text.replace(`${plusColor}+§r`, `${colorDict[cmSettingsData.colorTag]}+§r`)
+                }
+                
             });
         }
     }
@@ -117,3 +153,71 @@ register("chat", (msg, event) => {
     
 //     §7Riftstalker Bloodfiend XP: §e15,910
 //     §7Total Tier V Kills: §576§r, clickAction:null, clickValue:null}, TextComponent{text:§6[The Owner] §r, formatted:true, hoverAction:null, hoverValue:null, clickAction:null, clickValue:null}, TextComponent{text:§b[MVP§r, formatted:true, hoverAction:null, hoverValue:null, clickAction:null, clickValue:null}, TextComponent{text:§d+§r, formatted:true, hoverAction:null, hoverValue:null, clickAction:null, clickValue:null}, TextComponent{text:§b] JudgementCorePls§r, formatted:true, hoverAction:null, hoverValue:null, clickAction:null, clickValue:null}, TextComponent{text:§f: me again§r, formatted:true, hoverAction:null, hoverValue:null, clickAction:null, clickValue:null}]
+
+
+
+
+// /Show: 
+
+// [TextComponent{text:§8[§9291§8] §6ჶ §r§r, formatted:true, hoverAction:show_text, hoverValue:§b[MVP§d+§b] JudgementCorePls§f
+
+//     §7SkyBlock Level: §8[§9291§8]
+//     §7Skill Average: §645.8
+    
+//     §7Emblem: §6ჶ
+//     §8Golden Riftstalker Strange Time
+    
+//     §7§8Unlocked for Vampire Slayer 5.
+    
+//     §7Riftstalker Bloodfiend XP: §e15,910
+//     §7Total Tier V Kills: §576§r, clickAction:null, clickValue:null}, TextComponent{text:§b[MVP§d+§b] JudgementCorePls§f§7 is holding §r, formatted:true, hoverAction:show_text, hoverValue:§b[MVP§d+§b] JudgementCorePls§f
+    
+//     §7SkyBlock Level: §8[§9291§8]
+//     §7Skill Average: §645.8
+    
+//     §7Emblem: §6ჶ
+//     §8Golden Riftstalker Strange Time
+    
+//     §7§8Unlocked for Vampire Slayer 5.
+    
+//     §7Riftstalker Bloodfiend XP: §e15,910
+//     §7Total Tier V Kills: §576§r, clickAction:null, clickValue:null}, TextComponent{text:§8[§dHeroic Hyperion §6✪✪✪✪✪§8]§r, formatted:true, hoverAction:show_text, hoverValue:§dHeroic Hyperion §r§6✪✪✪✪✪
+//     §r§7Gear Score: §r§d1165 §r§8(4381)
+//     §r§7Damage: §r§c+355 §r§e(+30) §r§8(+1,503.53)
+//     §r§7Strength: §r§c+245 §r§e(+30) §r§9(+50) §r§8(+1,051.1)
+//     §r§7Crit Damage: §r§c+70% §r§8(+319.9%)
+//     §r§7Bonus Attack Speed: §r§c+7% §r§9(+7%) §r§8(+10.78%)
+//     §r§7Intelligence: §r§a+628 §r§9(+125) §r§d(+40) §r§8(+2,710.01)
+//     §r§7Ferocity: §r§a+33 §r§8(+46.2)
+//      §r§5[§r§b✎§r§5] §r§5[§r§b⚔§r§5]
+    
+//     §r§d§lUltimate Wise V§r§9, §r§9Champion X§r§9, §r§9Cleave V
+//     §r§9Critical VI§r§9, §r§9Cubism V§r§9, §r§9Ender Slayer VI
+//     §r§9Execute V§r§9, §r§9Experience IV§r§9, §r§9Fire Aspect III
+//     §r§9First Strike IV§r§9, §r§9Giant Killer VI§r§9, §r§9Impaling III
+//     §r§9Lethality VI§r§9, §r§9Life Steal IV§r§9, §r§9Looting IV
+//     §r§9Luck VI§r§9, §r§9Scavenger V§r§9, §r§9Sharpness VI
+//     §r§9Smoldering III§r§9, §r§9Thunderlord V§r§9, §r§9Vampirism VI
+//     §r§9Venomous V
+    
+//     §r§b◆ Music Rune I
+    
+//     §r§7Deals §r§c+50% §r§7damage to Withers.
+//     §r§7Grants §r§c+1 §r§c❁ Damage §r§7and §r§a+2 §r§b✎
+//     §r§bIntelligence §r§7per §r§cCatacombs §r§7level.
+    
+//     §r§aScroll Abilities:
+//     §r§6Ability: Wither Impact  §r§e§lRIGHT CLICK
+//     §r§7Teleport §r§a10 blocks§r§7 ahead of you.
+//     §r§7Then implode dealing §r§c61,730.5 §r§7damage
+//     §r§7to nearby enemies. Also applies the
+//     §r§7wither shield scroll ability reducing
+//     §r§7damage taken and granting an
+//     §r§7absorption shield for §r§e5 §r§7seconds.
+//     §r§8Mana Cost: §r§3150
+    
+//     §r§fKills: §r§6200,771
+    
+//     §r§8§l* §r§8Co-op Soulbound §r§8§l*
+//     §r§d§l§ka§r§r §r§d§lMYTHIC DUNGEON SWORD §r§d§l§ka§r, clickAction:run_command, clickValue:/viewitem f1d7b704-62f8-483a-8e11-e1d7ffe20179}]
+    

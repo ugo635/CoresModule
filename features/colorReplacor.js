@@ -60,7 +60,8 @@ register("chat", (msg, event) => {
         }
         if (cmSettingsData.colorTagTrue) {
             msg.forEach(element => {
-                if (element.text.match(/(\[[A-Za-z]+§[A-Za-z0-9]+\+§[A-Za-z0-9]+\]|\[[A-Za-z]+§[A-Za-z0-9]+\+§[A-Za-z0-9]+\])/g)) {
+                    // For /show (I fuckin hate you !)
+                    if (element.text.match(/(\[[A-Za-z]+§[A-Za-z0-9]+\+§[A-Za-z0-9]+\]|\[[A-Za-z]+§[A-Za-z0-9]+\+§[A-Za-z0-9]+\])/g)) {
                     element.text = element.text.replace(`MVP§0+§b`, `MVP${colorDict[cmSettingsData.colorTag]}+§b`)
                     element.text = element.text.replace(`MVP§1+§b`, `MVP${colorDict[cmSettingsData.colorTag]}+§b`)
                     element.text = element.text.replace(`MVP§2+§b`, `MVP${colorDict[cmSettingsData.colorTag]}+§b`)

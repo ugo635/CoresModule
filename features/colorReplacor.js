@@ -48,7 +48,8 @@ const combinations = [
 register("chat", (msg, event) => {
     if (!cmSettingsData.colorUserTrue && !cmSettingsData.colorTagTrue) return;
     let msg2 = ChatLib.getChatMessage(event, true);
-    if (!msg.includes(player) && !msg.includes("MVP+") && !msg.includes("VIP+")) return;
+    if (!msg.includes("MVP+") && !msg.includes("VIP+")) return;
+    if (!msg.includes(player)) return;
     let msg = new Message(event).getMessageParts();
     if (combinations.some(combination => msg2.includes(combination))) {
         let matchingCombination = combinations.find(combination => msg2.includes(combination));

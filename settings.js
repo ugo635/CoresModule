@@ -46,6 +46,7 @@ class cmSettingsData {
         // this.addDependency("TheNameOfTheThingYouWannaAddDependencyTo", "TheNameOfTheDependency");
         this.addDependency("Change stash action", "Stash message");
         this.addDependency("Change stash open", "Stash message");
+        this.addDependency("Warps Shotcut Value", "Warps Shortcut");
 
     }
     //----------- General ----------------
@@ -148,6 +149,20 @@ class cmSettingsData {
         category: "General",
         subcategory: "Settings"
     })
+    @SwitchProperty({
+        name: "Warps Shortcut",
+        description: "Create shortcuts for warps",
+        category: "General",
+        subcategory: "Settings"
+    })
+    warpsCreate = false;
+    @TextProperty({
+        name: "Warps Shotcut Value",
+        description: "Make couple of warps with a comma between them following this template Ex: (warpName;shotcut),(warpName2;shotcut2) etc... Please /ct load for changes to be affective",
+        category: "General",
+        subcategory: "Settings"
+    })
+    warpsVal = "";
     cf = true;
     @SwitchProperty({
         name: "Dice",

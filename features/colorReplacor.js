@@ -46,6 +46,7 @@ const combinations = [
 
 
 register("chat", (msg, event) => {
+    if (!cmSettingsData.colorUserTrue && !cmSettingsData.colorTagTrue) return;
     let msg2 = ChatLib.getChatMessage(event, true);
     if (!msg.includes(player) && !msg.includes("MVP+") && !msg.includes("VIP+")) return;
     let msg = new Message(event).getMessageParts();
@@ -61,41 +62,10 @@ register("chat", (msg, event) => {
         if (cmSettingsData.colorTagTrue) {
             msg.forEach(element => {
                     // For /show (I fuckin hate you !)
-                    if (element.text.match(/(\[[A-Za-z]+§[A-Za-z0-9]+\+§[A-Za-z0-9]+\]|\[[A-Za-z]+§[A-Za-z0-9]+\+§[A-Za-z0-9]+\])/g)) {
-                    element.text = element.text.replace(`MVP§0+§b`, `MVP${colorDict[cmSettingsData.colorTag]}+§b`)
-                    element.text = element.text.replace(`MVP§1+§b`, `MVP${colorDict[cmSettingsData.colorTag]}+§b`)
-                    element.text = element.text.replace(`MVP§2+§b`, `MVP${colorDict[cmSettingsData.colorTag]}+§b`)
-                    element.text = element.text.replace(`MVP§3+§b`, `MVP${colorDict[cmSettingsData.colorTag]}+§b`)
-                    element.text = element.text.replace(`MVP§4+§b`, `MVP${colorDict[cmSettingsData.colorTag]}+§b`)
-                    element.text = element.text.replace(`MVP§5+§b`, `MVP${colorDict[cmSettingsData.colorTag]}+§b`)
-                    element.text = element.text.replace(`MVP§6+§b`, `MVP${colorDict[cmSettingsData.colorTag]}+§b`)
-                    element.text = element.text.replace(`MVP§7+§b`, `MVP${colorDict[cmSettingsData.colorTag]}+§b`)
-                    element.text = element.text.replace(`MVP§8+§b`, `MVP${colorDict[cmSettingsData.colorTag]}+§b`)
-                    element.text = element.text.replace(`MVP§9+§b`, `MVP${colorDict[cmSettingsData.colorTag]}+§b`)
-                    element.text = element.text.replace(`MVP§a+§b`, `MVP${colorDict[cmSettingsData.colorTag]}+§b`)
-                    element.text = element.text.replace(`MVP§b+§b`, `MVP${colorDict[cmSettingsData.colorTag]}+§b`)
-                    element.text = element.text.replace(`MVP§c+§b`, `MVP${colorDict[cmSettingsData.colorTag]}+§b`)
-                    element.text = element.text.replace(`MVP§d+§b`, `MVP${colorDict[cmSettingsData.colorTag]}+§b`)
-                    element.text = element.text.replace(`MVP§e+§b`, `MVP${colorDict[cmSettingsData.colorTag]}+§b`)
-                    element.text = element.text.replace(`MVP§f+§b`, `MVP${colorDict[cmSettingsData.colorTag]}+§b`)
-                    element.text = element.text.replace(`VIP§0+§b`, `MVP${colorDict[cmSettingsData.colorTag]}+§b`)
-                    element.text = element.text.replace(`VIP§1+§b`, `MVP${colorDict[cmSettingsData.colorTag]}+§b`)
-                    element.text = element.text.replace(`VIP§2+§b`, `MVP${colorDict[cmSettingsData.colorTag]}+§b`)
-                    element.text = element.text.replace(`VIP§3+§b`, `MVP${colorDict[cmSettingsData.colorTag]}+§b`)
-                    element.text = element.text.replace(`VIP§4+§b`, `MVP${colorDict[cmSettingsData.colorTag]}+§b`)
-                    element.text = element.text.replace(`VIP§5+§b`, `MVP${colorDict[cmSettingsData.colorTag]}+§b`)
-                    element.text = element.text.replace(`VIP§6+§b`, `MVP${colorDict[cmSettingsData.colorTag]}+§b`)
-                    element.text = element.text.replace(`VIP§7+§b`, `MVP${colorDict[cmSettingsData.colorTag]}+§b`)
-                    element.text = element.text.replace(`VIP§8+§b`, `MVP${colorDict[cmSettingsData.colorTag]}+§b`)
-                    element.text = element.text.replace(`VIP§9+§b`, `MVP${colorDict[cmSettingsData.colorTag]}+§b`)
-                    element.text = element.text.replace(`VIP§a+§b`, `MVP${colorDict[cmSettingsData.colorTag]}+§b`)
-                    element.text = element.text.replace(`VIP§b+§b`, `MVP${colorDict[cmSettingsData.colorTag]}+§b`)
-                    element.text = element.text.replace(`VIP§c+§b`, `MVP${colorDict[cmSettingsData.colorTag]}+§b`)
-                    element.text = element.text.replace(`VIP§d+§b`, `MVP${colorDict[cmSettingsData.colorTag]}+§b`)
-                    element.text = element.text.replace(`VIP§e+§b`, `MVP${colorDict[cmSettingsData.colorTag]}+§b`)
-                    element.text = element.text.replace(`VIP§f+§b`, `MVP${colorDict[cmSettingsData.colorTag]}+§b`)
+                if (element.text.match(/\[(MVP|VIP)§[0-9a-f]\+§b\]/g)) {
+                    element.text = element.text.replace(/\b(MVP|VIP)§[0-9a-f]\+§b\b/g, `MVP${colorDict[cmSettingsData.colorTag]}+§b`);
                 } else {
-                element.text = element.text.replace(`${plusColor}+§r`, `${colorDict[cmSettingsData.colorTag]}+§r`)
+                    element.text = element.text.replace(`${plusColor}+§r`, `${colorDict[cmSettingsData.colorTag]}+§r`);
                 }
                 
             });

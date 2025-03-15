@@ -47,7 +47,7 @@ const combinations = [
 
 register("chat", (msg, event) => {
     let msg2 = ChatLib.getChatMessage(event, true);
-    if (!msg.includes("JudgementCorePls") && !msg.includes("MVP+") && !msg.includes("VIP+")) return
+    if (!msg.includes(player) && !msg.includes("MVP+") && !msg.includes("VIP+")) return;
     let msg = new Message(event).getMessageParts();
     if (combinations.some(combination => msg2.includes(combination))) {
         let matchingCombination = combinations.find(combination => msg2.includes(combination));
@@ -60,7 +60,8 @@ register("chat", (msg, event) => {
         }
         if (cmSettingsData.colorTagTrue) {
             msg.forEach(element => {
-                if (element.text.match(/(\[[A-Za-z]+§[A-Za-z0-9]+\+§[A-Za-z0-9]+\]|\[[A-Za-z]+§[A-Za-z0-9]+\+§[A-Za-z0-9]+\])/g)) {
+                    // For /show (I fuckin hate you !)
+                    if (element.text.match(/(\[[A-Za-z]+§[A-Za-z0-9]+\+§[A-Za-z0-9]+\]|\[[A-Za-z]+§[A-Za-z0-9]+\+§[A-Za-z0-9]+\])/g)) {
                     element.text = element.text.replace(`MVP§0+§b`, `MVP${colorDict[cmSettingsData.colorTag]}+§b`)
                     element.text = element.text.replace(`MVP§1+§b`, `MVP${colorDict[cmSettingsData.colorTag]}+§b`)
                     element.text = element.text.replace(`MVP§2+§b`, `MVP${colorDict[cmSettingsData.colorTag]}+§b`)

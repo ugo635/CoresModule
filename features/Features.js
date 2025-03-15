@@ -5,7 +5,6 @@ import cmSettingsData from "../settings";
 import { playCustomSound } from "../../SBO/utils/functions";
 
 
-// classes / function
 
 class format {
     BLACK = '&0' // #000000
@@ -88,7 +87,7 @@ register("chat", (message) => {
 
 
 registerWhen(register("chat", (message, event) => {
-    const msg = ChatLib.getChatMessage(event, true); // get the raw msg with colors
+    const msg = ChatLib.getChatMessage(event, true);
     if (message.startsWith("You purchased") || message.startsWith("Visit the Auction House")) {
     new TextComponent(msg).setClick("run_command", "/ah").setHover("show_text", "&eClick To Open The AH").chat();
     cancel(event);
@@ -135,7 +134,7 @@ register("chat", (player) => {
 register("chat", (player) => {
     if (!cmSettingsData.dice) return
     dice = Math.floor(Math.random() * 6) + 1;
-    ChatLib.command(`pc ${player.split(" ").length > 0 ? player.split(" ")[1] : player} rolled ${dice}`);
+    ChatLib.command(`pc ${player.split(" ").length > 0 /* Because player is rank + player */ ? player.split(" ")[1] : player} rolled ${dice}`);
 }).setCriteria("Party > ${player}: !dice")
 
 register("chat", () => {
@@ -146,12 +145,4 @@ register("chat", (player, island, event) => {
     if (!cmSettingsData.follow) return
     cancel(event);
 }).setCriteria(" » ${player} is traveling to ${island} FOLLOW")
-
-
-
-register("chat", (msg) => {
-    if (msg.includes("Aluakbar")) {
-        playCustomSound(AluakbarSound,100);
-    }
-}).setCriteria("${msg}")
 

@@ -1,6 +1,6 @@
 import cmSettingsData from "../settings";
 
-function extractTuples(str) {
+export function extractTuples(str) {
     const regex = /\((\w+);(\w+)\)/g;
     let match;
     const result = [];
@@ -11,16 +11,23 @@ function extractTuples(str) {
 
     return result;
 }
-
-if (cmSettingsData.warpsCreate) {
-    let val = extractTuples(cmSettingsData.warpsVal);
-    // console.log("val: ", val);
-    val.forEach(warps => {
-    let [warpName, shortcut] = [warps[0], warps[1]];
-    // console.log("warpName: ", warpName);
-    // console.log("shotcut: ", shortcut);
-    register("command", () => {
-        ChatLib.command(`warp ${warpName}`)
-    }).setName(shortcut)
-});
+export function warp() {
+    try {
+        if (cmSettingsData.warpsCreate) {
+            let val = extractTuples(cmSettingsData.warpsVal);
+            // console.log("val: ", val);
+            val.forEach(warps => {
+            let [warpName, shortcut] = [warps[0], warps[1]];
+            // console.log("warpName: ", warpName);
+            // console.log("shotcut: ", shortcut);
+            register("command", () => {
+                ChatLib.command(`warp ${warpName}`);
+            }).setName(shortcut, true)
+            });
+        }
+    } catch(error) {
+        console.log("error: ", error);
+    }
 }
+
+warp();

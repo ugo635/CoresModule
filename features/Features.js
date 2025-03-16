@@ -146,3 +146,7 @@ register("chat", (player, island, event) => {
     cancel(event);
 }).setCriteria(" » ${player} is traveling to ${island} FOLLOW")
 
+register("command", () => {
+    ChatLib.clearChat();
+}).setName("clear")
+

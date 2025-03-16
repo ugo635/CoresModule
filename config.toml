@@ -5,7 +5,7 @@
 		color_username = 5
 		warps_shotcut_value = "(hub;h),(trapper;itsatrap)"
 		disable_warp_message = false
-		color_tag_replacor = true
+		color_tag_replacor = false
 		dice = true
 		color_tag = 5
 		party_invite_message_editor = true

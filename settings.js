@@ -110,6 +110,13 @@ class cmSettingsData {
     })
     printContainerOpen = false;
     @SwitchProperty({
+        name: "Hide Useless from Chest",
+        description: "Remove most useless messages from chest in crystal hollows to mainly show gemstone powder",
+        category: "General",
+        subcategory: "Settings"
+    })
+    hideUselessFromChest = false;
+    @SwitchProperty({
         name: "Dark Auction Alert",
         description: "Send a message on screen 1min before Dark Auction",
         category: "General",

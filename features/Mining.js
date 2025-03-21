@@ -1,10 +1,23 @@
-
+import cmSettingsData from "../settings";
 
 register("chat", (message, event) => {
-    if (message.startsWith("    ⸕ Rough Amber Gemstone") || message.startsWith("    ⸕ Flawed Amber Gemstone") || message.startsWith("    Gold Essence") ||
-    message.startsWith("    Diamond Essence") || message.startsWith("    Goblin Egg") || message.startsWith("    ❤ Rough Ruby Gemstone") || message.startsWith("    ❤ Flawed Ruby Gemstone")) {
-    cancel(event);
+    if (cmSettingsData.hideUselessFromChest) return;
+    let ignoreListChest = [
+        "⸕ Rough Amber Gemstone",
+        "⸕ Flawed Amber Gemstone",
+        "Gold Essence",
+        "Diamond Essence",
+        "Goblin Egg",
+        "❤ Rough Ruby Gemstone",
+        "❤ Flawed Ruby Gemstone",
+        "▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬",
+        "REWARDS",
+        "CHEST LOCKPICKED"
+    ];
+    if (ignoreListChest.some(item => message.includes(item)) && !message.includes("Party >")) {
+        cancel(event);
     }
+
 }).setCriteria("${message}");
 
 

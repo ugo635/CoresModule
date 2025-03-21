@@ -21,7 +21,7 @@ import {
         // or a positive number if b should be sorted before a.
 
         // In this case, we can put Not general! to be above general.
-        const categories = ['General', 'Diana', 'Credits'];
+        const categories = ['General', 'Diana', 'Warps', 'Credits'];
 
         return categories.indexOf(a.name) - categories.indexOf(b.name);
     },
@@ -47,6 +47,7 @@ class cmSettingsData {
         this.addDependency("Change stash action", "Stash message");
         this.addDependency("Change stash open", "Stash message");
         this.addDependency("Warps Shotcut Value", "Warps Shortcut");
+        this.addDependency("Update Warp", "Warps Shortcut");
 
     }
     //----------- General ----------------
@@ -152,17 +153,31 @@ class cmSettingsData {
     @SwitchProperty({
         name: "Warps Shortcut",
         description: "Create shortcuts for warps",
-        category: "General",
+        category: "Warps",
         subcategory: "Settings"
     })
     warpsCreate = false;
     @TextProperty({
         name: "Warps Shotcut Value",
-        description: "Make couple of warps with a comma between them following this template Ex: (warpName;shotcut),(warpName2;shotcut2) etc... Please /ct load for changes to be affective",
-        category: "General",
+        description: "Make couple of warps with a comma between them following this template Ex: (warpName;shotcut),(warpName2;shotcut2) etc... Please /ct load for changes to be affective or update warps with the button below",
+        category: "Warps",
         subcategory: "Settings"
     })
     warpsVal = "";
+    @ButtonProperty({
+        name: "Update Warp",
+        description: "Update the warps command, tho you MUST /ct load to if you want to remove old ones",
+        placeholder: "Update",
+        category: "Warps",
+        subcategory: "Settings"
+    })
+    updateWarp() {
+        import "./features/warps";
+        import { extractTuples, warp } from "./features/warps";
+        let val = extractTuples(this.warpsVal);
+        warp(val);
+    }
+
     cf = true;
     @SwitchProperty({
         name: "Dice",

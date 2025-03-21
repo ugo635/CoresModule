@@ -177,6 +177,13 @@ class cmSettingsData {
         let val = extractTuples(this.warpsVal);
         warp(val);
     }
+    @SwitchProperty({
+        name: "Warps on spawn of a Sea Creature",
+        description: "Warps on spawn of a Sea Creature, need FeeshNotifier",
+        category: "Warps",
+        subcategory: "Settings"
+    })
+    warpWhenCS = true;
 
     cf = true;
     @SwitchProperty({

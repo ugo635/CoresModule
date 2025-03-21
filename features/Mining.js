@@ -12,7 +12,12 @@ register("chat", (message, event) => {
         "❤ Flawed Ruby Gemstone",
         "▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬",
         "REWARDS",
-        "CHEST LOCKPICKED"
+        "CHEST LOCKPICKED",
+        "Ascension Rope",
+        "❈ Rough Amethyst Gemstone",
+        "❈ Flawed Amethyst Gemstone",
+        "✎ Rough Sapphire Gemstone",
+        "✎ Flawed Sapphire Gemstone"
     ];
     if (ignoreListChest.some(item => message.includes(item)) && !message.includes("Party >")) {
         cancel(event);

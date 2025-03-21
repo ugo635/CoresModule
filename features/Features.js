@@ -156,9 +156,10 @@ register("chat", (player, mob) => {
     if (!cmSettingsData.warpWhenCS) return
     ChatLib.chat("&6&l [Cm] The mob is: " + mob)
     willWarp = true;
+    ChatLib.command("pc Type !c if you don't want a warp to occur ! Otherwise, a warp will occur in 5 seconds")
     setTimeout(() => {
-        ChatLib.command("pc Type !c if you don't want a warp to occur ! Otherwise, a warp will occur in 3 seconds")
-    }, 3000)
+        // Just wait
+    }, 5000)
     if (!willWarp) return;
     ChatLib.command("pc !warp")
     willWarp = false;

@@ -166,7 +166,7 @@ class cmSettingsData {
     warpsCreate = false;
     @TextProperty({
         name: "Warps Shotcut Value",
-        description: "Make couple of warps with a comma between them following this template Ex: (warpName;shotcut),(warpName2;shotcut2) etc... Then use /shortcut to use. Please /ct load for changes to be affective or update warps with the button below",
+        description: "Make couple of warps with a comma between them following this template Ex: (warpName;shotcut),(warpName2;shotcut2) etc... Then use /shortcutName to use. Please /ct load for changes to be affective or update warps with the button below",
         category: "Warps",
         subcategory: "Settings"
     })

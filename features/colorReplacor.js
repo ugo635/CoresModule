@@ -57,7 +57,7 @@ register("chat", (msg, event) => {
         plusColor = plusColor.replace('&', '§')
         if (cmSettingsData.colorUserTrue) {
             msg.forEach(element => {
-                element.text = element.text.replace(player, `${colorDict[cmSettingsData.colorUser]}${player}`)
+                element.text = element.text.replace(player, `${colorDict[cmSettingsData.colorUser]}${player}§r`)
             });
         }
         if (cmSettingsData.colorTagTrue) {
@@ -75,6 +75,7 @@ register("chat", (msg, event) => {
     
     new Message(msg).chat()
     cancel(event)
+    
 }).setCriteria("${msg}")
 
 // for item in msg:

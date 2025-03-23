@@ -21,7 +21,7 @@ register("command", (raw) => {
 
 register("chat", (player, x, y, z) => {
     if (!cmSettingData.coords) return
-    ChatLib.chat(`&c&l[CoresModule] Coords Detected`)
+    // ChatLib.chat(`&c&l[CoresModule] Coords Detected`)
     playCustomSound(settings.inqSound,100);
 }).setCriteria("Party > ${player}: x: ${x}, y: ${y}, z:${z}")
 

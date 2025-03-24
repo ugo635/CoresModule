@@ -11,6 +11,7 @@ import "./features/Mining.js";
 import "./features/Party.js";
 import "./features/colorReplacor.js";
 import "./features/Warps.js";
+import "./features/Orb.js";
 
 // import "./settings.js"
 

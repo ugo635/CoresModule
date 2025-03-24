@@ -117,6 +117,13 @@ class cmSettingsData {
     })
     hideUselessFromChest = false;
     @SwitchProperty({
+        name: "Place Orb",
+        description: "Place Orb every 60s",
+        category: "General",
+        subcategory: "Settings"
+    })
+    orbs = false;
+    @SwitchProperty({
         name: "Dark Auction Alert",
         description: "Send a message on screen 1min before Dark Auction",
         category: "General",

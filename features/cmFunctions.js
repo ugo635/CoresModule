@@ -3,12 +3,10 @@ export function saveGuiSettings(guiSettings) {
 }
 
 export function initializeGuiSettings() {
-    let tempGuiSettings = {
+    return {
         // x, y, scale
         PotionsLoc: { "x": 15, "y": 22, "s": 1 },
     };
-    saveGuiSettings(tempGuiSettings);
-    return tempGuiSettings
 }
 
 export function loadGuiSettings() {

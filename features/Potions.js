@@ -41,7 +41,7 @@ function potionsTimerOverlay() {
         ]);
 
         time -= 1/20; // Decrease time every tick
-        console.log(time)
+        // console.log(time)
     }); // Runs every second
 }
 

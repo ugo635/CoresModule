@@ -48,6 +48,7 @@ class cmSettingsData {
         this.addDependency("Change stash open", "Stash message");
         this.addDependency("Warps Shotcut Value", "Warps Shortcut");
         this.addDependency("Update Warp", "Warps Shortcut");
+        this.addDependency("Potion", "Potion Reminder");
 
     }
     //----------- General ----------------
@@ -118,11 +119,18 @@ class cmSettingsData {
     hideUselessFromChest = false;
     @SwitchProperty({
         name: "Potion Reminder",
-        description: "Remember to drink your potions, after starting the timer with /potionsTimer [time] in minutes, require SBO and diana stats tracker and average magic find",
+        description: "Remember to drink your potions, after starting the timer with /potionsTimer [time] in minutes, this setting will only enable the overlay!",
         category: "General",
         subcategory: "Settings"
     })
-    potionsTimer = false;
+    potionsTimer = true;
+    @SwitchProperty({
+        name: "Potion",
+        description: "Is needed for potion reminder to work correctly, the switch does nothing for you!",
+        category: "General",
+        subcategory: "Settings"
+    })
+    UnregisterPotionsTimer = false;
     @SwitchProperty({
         name: "Dark Auction Alert",
         description: "Send a message on screen 1min before Dark Auction",

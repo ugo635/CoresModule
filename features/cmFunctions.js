@@ -23,3 +23,17 @@ export function loadGuiSettings() {
     }
     return loadedSettings;
 }
+
+function checkSettings(loadedSettings) {
+    // Get the default settings
+    const defaultSettings = initializeGuiSettings();
+
+    // Loop through default settings and ensure loaded settings have all properties
+    for (let key in defaultSettings) {
+        if (!loadedSettings.hasOwnProperty(key)) {
+            loadedSettings[key] = defaultSettings[key];
+        }
+    }
+    
+    return loadedSettings;
+}

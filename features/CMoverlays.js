@@ -1,7 +1,6 @@
 import { printDev, setTimeout } from "../../SBO/utils/functions";
-import { loadGuiSettings, saveGuiSettings } from "./Function";
+import { loadGuiSettings, saveGuiSettings } from "./cmFunctions";
 import { YELLOW, BOLD, GOLD, DARK_GREEN, LIGHT_PURPLE, DARK_PURPLE, GREEN, DARK_GRAY, GRAY, WHITE, AQUA, ITALIC, BLUE, UNDERLINE} from "../../SBO/utils/constants";
-import { registerWhen } from "../../SBO/utils/variables";
 import cmSettingsData from "../settings";
 
 const dragOffset = {x: 0, y: 0};
@@ -52,6 +51,7 @@ let editGui = new Gui();
 
 register('worldUnload', () => {
     closeEditing();
+    saveGuiSettings(guiSettings);
 });
 
 function closeEditing() {
@@ -353,11 +353,11 @@ export class hoverText {
 }
 
 export class CMsOverlay {
-    // Name you wanna give, condition to render, type of overlay, location name in guiSettings, example text, hoverable, allowed guis
-    constructor(name, condition, type, locName, example = "", hoverable = false, allowedGuis = ["GuiInventory"]) {
+    // Name you wanna give, setting to render (cmSettingData.theSettingIwant), type of overlay, location name in guiSettings, example text, hoverable, allowed guis
+    constructor(name, setting, type, locName, example = "", hoverable = false, allowedGuis = ["GuiInventory"]) {
         overLays.push(this);
         this.name = name;
-        this.condition = condition;
+        this.setting = setting;
         this.example = example;
         this.type = type;
         this.locName = locName;
@@ -386,7 +386,8 @@ export class CMsOverlay {
 
         this.gui = new Gui();
 
-        registerWhen(register("renderOverlay", () => {
+        register("renderOverlay", () => {
+            if (!cmSettingsData[this.setting]) return;
             if ((this.renderGui || editGui.isOpen()) && (this.type == "render" || (this.type == "inventory" && !isInInventory))) {
                 drawText(this);
                 if (editGui.isOpen()) {
@@ -397,9 +398,10 @@ export class CMsOverlay {
                     // Renderer.drawRect(Renderer.color(0, 0, 0, 100), this.X, this.Y, Renderer.getStringWidth(this.longestString) * this.scale + this.offsetX, 10 * this.scale * this.stringCount + this.offsetY);
                 }
             }
-        }), () => condition, this.condition);
+        });
 
-        registerWhen(register("postGuiRender", () => {
+        register("postGuiRender", () => {
+            if (!cmSettingsData[this.setting]) return;
             if ((this.renderGui || editGui.isOpen()) && this.type == "post") {
                 drawText(this)
                 if (editGui.isOpen()) {
@@ -410,15 +412,17 @@ export class CMsOverlay {
                     // Renderer.drawRect(Renderer.color(0, 0, 0, 100), this.X, this.Y, Renderer.getStringWidth(this.longestString) * this.scale + this.offsetX, 10 * this.scale * this.stringCount + this.offsetY);
                 }
             }
-        }), () => condition, this.condition);
+        });
 
-        registerWhen(register("guiRender", () => {
+        register("guiRender", () => {
+            if (!cmSettingsData[this.setting]) return;
             if ((this.renderGui || editGui.isOpen()) && (this.type == "inventory" && isInInventory)) {
                 drawText(this)
             }
-        }), () => condition, this.condition);
+        });
 
-        registerWhen(register("guiKey", (char, keyCode, gui, event) => {
+        register("guiKey", (char, keyCode, gui, event) => {
+            if (!cmSettingsData[this.setting]) return;
             if (editGui.isOpen() ) {
                 const mouseX = Client.getMouseX();
                 const mouseY = Client.getMouseY();
@@ -442,9 +446,10 @@ export class CMsOverlay {
                     saveGuiSettings(guiSettings);
                 }
             }
-        }), () => condition, this.condition);
+        });
         
-        registerWhen(register("tick", () => {
+        register("tick", () => {
+            if (!cmSettingsData[this.setting]) return;
             if (this.renderGui) {
                 if (this.textLines.length > 0 && !editGui.isOpen() && (this.isInAllowedGui() || this.someTextIsHovered)) {
                     const mouseX = Client.getMouseX();
@@ -471,9 +476,10 @@ export class CMsOverlay {
                     });
                 }
             }
-        }), () => condition, this.condition);
+        });
         
-        registerWhen(register("guiMouseClick" , (cx, cy, button, gui) => {
+        register("guiMouseClick" , (cx, cy, button, gui) => {
+            if (!cmSettingsData[this.setting]) return;
             if (this.renderGui) {
                 if (this.textLines.length > 0 && !editGui.isOpen() && this.isInAllowedGui()) {
                     this.textLines.forEach(text => {
@@ -483,7 +489,7 @@ export class CMsOverlay {
                     });
                 }
             }
-        }), () => condition, this.condition);
+        });
 
         loadSettings(this);
     }

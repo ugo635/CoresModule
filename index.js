@@ -2,6 +2,8 @@
 // OR 
 // import this file in the other files
 import cmSettingsData from "./settings";
+import "./features/Functions.js";
+import "./features/CMoverlays.js";
 import "./features/Features.js";
 import "./features/Inv.js";
 import "./features/Diana.js";
@@ -11,7 +13,7 @@ import "./features/Mining.js";
 import "./features/Party.js";
 import "./features/colorReplacor.js";
 import "./features/Warps.js";
-import "./features/Orb.js";
+import "./features/Potions.js";
 
 // import "./settings.js"
 

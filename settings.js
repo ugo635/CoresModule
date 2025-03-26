@@ -117,12 +117,12 @@ class cmSettingsData {
     })
     hideUselessFromChest = false;
     @SwitchProperty({
-        name: "Place Orb",
-        description: "Place Orb every 60s",
+        name: "Potion Reminder",
+        description: "Remember to drink your potions, after starting the timer with /potionsTimer [time] in minutes, require SBO and diana stats tracker and average magic find",
         category: "General",
         subcategory: "Settings"
     })
-    orbs = false;
+    potionsTimer = false;
     @SwitchProperty({
         name: "Dark Auction Alert",
         description: "Send a message on screen 1min before Dark Auction",
@@ -241,6 +241,16 @@ class cmSettingsData {
     })
     openGithub() {
         java.awt.Desktop.getDesktop().browse(new java.net.URI("https://github.com/ugo635/CoresModule"));
+    }
+    @ButtonProperty({
+        name: "SBO",
+        description: "Many Things",
+        category: "Credits",
+        subcategory: "Credits",
+        placeholder: "Click Me"
+    })
+    openGithub() {
+        java.awt.Desktop.getDesktop().browse(new java.net.URI("https://github.com/SkyblockOverhaul/SBO/"));
     }
 }
 

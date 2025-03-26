@@ -22,7 +22,7 @@ register("chat", (player, event) => {
     }
 
     if (color == "&7" && !isPlayerInLobby(player)) {
-        new TextComponent("&cThis dude is rankless, high chance it's a housing bot, check his skyblock data here").setClick("run_command", `/pv ${player}`).setHover("show_text", `&5&l /pv ${player}`).chat()
+        new TextComponent("&cThis dude is rankless, high chance it's a housing bot, check his skyblock data here").setClick("run_command", `/pv ${player}`).setHover("show_text", `&5&l/pv ${player}`).chat()
     }
 
 }).setCriteria("------------------------------------------------------>newLine<-${player} has invited you to join their party!->newLine<-You have 60 seconds to accept. Click here to join!->newLine<------------------------------------------------------")
@@ -89,6 +89,14 @@ register("command", (player) => {
         ChatLib.chat(`&c${player} is NOT in your lobby.`);
     }
 }).setName("checkLobby").setAliases("LobbyCheck");
+
+register("command", () => {
+    let playerInWorld = World.getAllPlayers();
+    for (let i=0; i<playerInWorld.length; i++) {
+        ChatLib.chat(playerInWorld[i].getName());
+    }
+}).setName("testPlayerWorld")
+
 
 register("chat", (player, number) => {
     if (number == 0 || number == 1 || number == 2 || number == 3 || number == 4) {

@@ -48,6 +48,7 @@ class cmSettingsData {
         this.addDependency("Change stash open", "Stash message");
         this.addDependency("Warps Shotcut Value", "Warps Shortcut");
         this.addDependency("Update Warp", "Warps Shortcut");
+        this.addDependency("Potion", "Potion Reminder");
 
     }
     //----------- General ----------------
@@ -110,6 +111,27 @@ class cmSettingsData {
     })
     printContainerOpen = false;
     @SwitchProperty({
+        name: "Hide Useless from Chest",
+        description: "Remove most useless messages from chest in crystal hollows to mainly show gemstone powder",
+        category: "General",
+        subcategory: "Settings"
+    })
+    hideUselessFromChest = false;
+    @SwitchProperty({
+        name: "Potion Reminder",
+        description: "Remember to drink your potions, after starting the timer with /potionsTimer [time] in minutes, this setting will only enable the overlay!",
+        category: "General",
+        subcategory: "Settings"
+    })
+    potionsTimer = true;
+    @SwitchProperty({
+        name: "Potion",
+        description: "Is needed for potion reminder to work correctly, the switch does nothing for you!",
+        category: "General",
+        subcategory: "Settings"
+    })
+    UnregisterPotionsTimer = false;
+    @SwitchProperty({
         name: "Dark Auction Alert",
         description: "Send a message on screen 1min before Dark Auction",
         category: "General",
@@ -159,7 +181,7 @@ class cmSettingsData {
     warpsCreate = false;
     @TextProperty({
         name: "Warps Shotcut Value",
-        description: "Make couple of warps with a comma between them following this template Ex: (warpName;shotcut),(warpName2;shotcut2) etc... Please /ct load for changes to be affective or update warps with the button below",
+        description: "Make couple of warps with a comma between them following this template Ex: (warpName;shotcut),(warpName2;shotcut2) etc... Then use /shortcutName to use. Please /ct load for changes to be affective or update warps with the button below",
         category: "Warps",
         subcategory: "Settings"
     })
@@ -177,6 +199,13 @@ class cmSettingsData {
         let val = extractTuples(this.warpsVal);
         warp(val);
     }
+    @SwitchProperty({
+        name: "Warps on spawn of a Sea Creature",
+        description: "Warps on spawn of a Sea Creature, need FeeshNotifier",
+        category: "Warps",
+        subcategory: "Settings"
+    })
+    warpWhenCS = true;
 
     cf = true;
     @SwitchProperty({
@@ -220,6 +249,16 @@ class cmSettingsData {
     })
     openGithub() {
         java.awt.Desktop.getDesktop().browse(new java.net.URI("https://github.com/ugo635/CoresModule"));
+    }
+    @ButtonProperty({
+        name: "SBO",
+        description: "Many Things",
+        category: "Credits",
+        subcategory: "Credits",
+        placeholder: "Click Me"
+    })
+    openGithub() {
+        java.awt.Desktop.getDesktop().browse(new java.net.URI("https://github.com/SkyblockOverhaul/SBO/"));
     }
 }
 

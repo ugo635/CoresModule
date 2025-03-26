@@ -149,4 +149,3 @@ register("chat", (player, island, event) => {
 register("command", () => {
     ChatLib.clearChat();
 }).setName("clear")
-

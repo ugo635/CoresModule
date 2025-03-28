@@ -35,3 +35,23 @@ function checkSettings(loadedSettings) {
     
     return loadedSettings;
 }
+
+
+const Runnable = Java.type("java.lang.Runnable");
+const Executors = Java.type("java.util.concurrent.Executors");
+const TimeUnit = Java.type("java.util.concurrent.TimeUnit");
+const scheduler = Executors.newSingleThreadScheduledExecutor();
+export function setTimeout(callback, delay, ...args) {
+    args = args || [];
+
+    const timer = scheduler.schedule(
+        new JavaAdapter(Runnable, {
+            run: function() {
+                callback(...args);
+            }
+        }),
+        delay,
+        TimeUnit.MILLISECONDS
+    );
+    return timer;
+}

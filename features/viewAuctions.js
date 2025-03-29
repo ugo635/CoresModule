@@ -70,3 +70,5 @@ register("command", (...args) => {
 
     fetchAuctions();
 }).setName("viewAuctionsForItem").setAliases("VAFI");
+
+// VAFI, no error when loading module

@@ -1,5 +1,21 @@
 import { request } from "../../requestV2";
 
+// Définition manuelle de Promise si non supporté (Rhino)
+if (typeof Promise === "undefined") {
+    function Promise(executor) {
+        let resolve, reject;
+        this.then = function (callback) {
+            resolve = callback;
+            return this;
+        };
+        this.catch = function (callback) {
+            reject = callback;
+            return this;
+        };
+        executor(resolve, reject);
+    }
+}
+
 const apiKey = "5fb0a367-989f-4b4f-b286-f3cc8467aa51";
 const apiUrl = `https://api.hypixel.net/skyblock/auctions?key=${apiKey}`;
 
@@ -36,32 +52,48 @@ register("command", (...args) => {
                                 continue;
                             }
                             itemsWantedFound++;
-                            const itemSeller = auction.auctioneer;
                             const itemAuctionId = auction.uuid;
                             const price = auction.starting_bid;
 
                             itemsList.push({
                                 item_name: itemName,
-                                seller: itemSeller,
                                 auction_id: itemAuctionId,
                                 price: price
                             });
                         }
                     }).catch((error) => {
                         console.error(`Error fetching auction data: ${error.message}`);
+                        return { error: error.message };
                     })
                 );
             }
 
-            Promise.all(promises).then(() => {
-                ChatLib.chat(`End of page, ${nbOfItems} items found, ${itemsWantedFound} items wanted found`);
-                itemsList.sort((a, b) => a.price - b.price);
-                for (const item of itemsList) {
-                    new TextComponent(`Item: ${item.item_name}, Seller: ${item.seller}, Auction ID: ${item.auction_id}, Price: ${item.price}`)
-                        .setClick("run_command", `/viewauction ${item.auction_id}`)
-                        .setHoverValue("&eClick to view auction")
-                        .chat();
-                }
+            // Remplacement de Promise.allSettled() par une boucle manuelle
+            let resolvedPromises = 0;
+            let errors = [];
+
+            promises.forEach((p) => {
+                p.then(() => {
+                    resolvedPromises++;
+                    if (resolvedPromises === promises.length) {
+                        if (errors.length > 0) {
+                            console.error("Errors encountered while fetching auction data:", errors);
+                        }
+
+                        ChatLib.chat(`&cEnd of page, ${nbOfItems} items found, ${itemsWantedFound} items wanted found`);
+                        itemsList.sort((a, b) => a.price - b.price);
+                        itemsList.reverse();
+                        for (const item of itemsList) {
+                            new TextComponent(`&eItem: &c${item.item_name}, &eAuction ID: &a ${item.auction_id}, &ePrice: &c${item.price}`)
+                                .setClick("run_command", `/viewauction ${item.auction_id}`)
+                                .setHoverValue("&eClick to view auction")
+                                .chat();
+                        }
+                    }
+                }).catch((error) => {
+                    errors.push(error);
+                    resolvedPromises++;
+                });
             });
         }).catch((error) => {
             console.error(`Error initializing auction data fetch: ${error.message}`);

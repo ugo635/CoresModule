@@ -158,7 +158,7 @@ register("command", () => {
         let uuid = nbt.getTag("tag")?.getTag("ExtraAttributes")?.getString("uuid");
 
         if (uuid) {
-            new TextComponent("&eItem UUID: &b" + uuid).setClick("run_command", `/ct copy uuid`).setHoverValue("&eClick to copy").chat();
+            new TextComponent("&eItem UUID: &b" + uuid).setClick("run_command", `/ct copy ${uuid}`).setHoverValue("&eClick to copy").chat();
         }
     } else {
         ChatLib.chat("You're not holding a valid item!");

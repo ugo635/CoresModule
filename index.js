@@ -14,6 +14,7 @@ import "./features/Party.js";
 import "./features/colorReplacor.js";
 import "./features/Warps.js";
 import "./features/Potions.js";
+import "./features/viewAuctions.js";
 
 // import "./settings.js"
 

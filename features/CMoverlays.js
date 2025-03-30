@@ -353,7 +353,17 @@ export class hoverText {
 }
 
 export class CMsOverlay {
-    // Name you wanna give, setting to render (cmSettingData.theSettingIwant), type of overlay, location name in guiSettings, example text, hoverable, allowed guis
+
+    /**
+     * @param {name} - **Name of the overlay**
+     * @param {setting} - **Setting (cmSettingData.theSettingIwant) only the theSettingIwant part to render the overlay**
+     * @param {type} - **Type of overlay (like render (always), inventory (always & better view in inventory))**
+     * @param {locName} - **Location name in guiSettings**
+     * @param {example} - **Example text =** ""
+     * @param {hoverable} - **Hoverable = false**
+     * @param {allowedGuis} - **Allowed guis =** ["GuiInventory"]
+    */
+
     constructor(name, setting, type, locName, example = "", hoverable = false, allowedGuis = ["GuiInventory"]) {
         overLays.push(this);
         this.name = name;

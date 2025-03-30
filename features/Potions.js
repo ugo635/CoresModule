@@ -1,24 +1,46 @@
-import { setTimeout } from "../../SBO/utils/functions";
-import { CMsOverlay, OverlayTextLine } from "./cmOverlays";
+// import { setTimeout } from "./cmFunctions";
+import { CMsOverlay, OverlayTextLine, OverlayButton } from "./cmOverlays";
 import cmSettingsData from "../settings"
 
-let time = 0;
-let potionsOverlay = new CMsOverlay("potions", "UnregisterPotionsTimer", "render", "PotionsLoc");
-let potionsText = new OverlayTextLine("", true);
+let time = -9999;
+let potionsOverlay = new CMsOverlay("potions", "UnregisterPotionsTimer", "inventory", "PotionsLoc", "", true, ["GuiInventory"]);
+let potionsText = new OverlayTextLine("", true, true);
 let timerRunning = false;
+let resetPotionButton = new OverlayButton("&cReset Session", true, true, true, true).onClick(() => {
+    ChatLib.command("delPotionsTimer", true);
+});
 
-function potionsTimerOverlay() {
+resetPotionButton.onMouseEnter(() => {
+    resetPotionButton.setText(`&c&nReset Session`);
+});
+
+resetPotionButton.onMouseLeave(() => {
+    resetPotionButton.setText(`&cReset Session`);
+})
+
+
+function potionsTimerOverlay(t) {
     if (timerRunning) return; // Prevent multiple timers from running at once
     timerRunning = true;
 
     register("tick", () => {
         if (time <= 0) {
             timerRunning = false;
-            return; // Stop updating when timer reaches 0
+            potionsOverlay.setLines([]);
+            console.log(time);
+            if (time <= -999) return;
+            setTimeout(() => {
+                if (time <= -999) return;
+                    time = -9999;
+                    Client.showTitle("&6Potion Timer", "&6Potions are now gone, drink one again", 0, 25, 35);
+                    ChatLib.chat(`&c&l[Cm] Timer for ${t} minutes is now OVER, remember to drink your potions!`);
+                    cmSettingsData.UnregisterPotionsTimer = false;
+            }, 500);
+            return;
         }
 
+        
         /*
-
         let message = "Hello sir!";
         let message2 = "Hello dear sir!";
 
@@ -27,24 +49,38 @@ function potionsTimerOverlay() {
             new OverlayTextLine(message2, true),
             new OverlayTextLine(`Time left: ${time} min`, true)
         ]);
-
         */
-
+        
+        color = (time > 60) ? "&a" : "&c";
         let message = `
-                        &6&lPotions Timer:  &c&l${(time/60).toFixed(2)} minutes
-                        &c&l${(time).toFixed(2)} seconds
-                        &c&l${(time * 1000).toFixed(2)} milliseconds
+&6&lPotions Timer:  &c&l${color + (time/60).toFixed(2)} minutes
+&c&l${color + (time).toFixed(2)} seconds
+&c&l${color +(time * 1000).toFixed(2)} milliseconds
                         `;
 
         potionsOverlay.setLines([
             potionsText.setText(message)
         ]);
 
-        time -= 1/20; // Decrease time every tick
+        let finalMessage = [];
+        finalMessage.push(potionsText);
+        finalMessage.push(resetPotionButton);
+
+        potionsOverlay.setLines(
+            finalMessage
+        )
+
+        
+        setTimeout(() => {
+            time -= 0.05;
+        }, 50);
+        
+        // Decrease time every tick
         // console.log(time)
     }); // Runs every second
-}
 
+    
+}
 
 register("command", (t) => {
     time = t * 60;
@@ -55,14 +91,34 @@ register("command", (t) => {
     }
 
     ChatLib.chat(`&a&l[Cm] Timer Started for ${t} minutes`);
-    potionsTimerOverlay();
 
+    potionsTimerOverlay(t);
+
+}).setName("potionsTimer").setAliases("potionTimer", "potTimer");
+
+
+
+register("command", (t) => {
     setTimeout(() => {
-        Client.showTitle("&6Potion Timer", "&6Potions are now gone, drink one again", 0, 25, 35);
-        ChatLib.chat(`&c&l[Cm] Timer for ${t} minutes is now OVER, remember to drink your potions!`);
+        time = -9999;
         cmSettingsData.UnregisterPotionsTimer = false;
-    }, time * 1000);  // Convert seconds to milliseconds
+        ChatLib.chat(`&c[Cm] Timer cancelled`);
+    }, 250);
+    
+    
 
+}).setName("delPotionsTimer").setAliases("delPotionTimer", "delPotTimer");
 
-}).setName("potionsTimer");
+register("command", (t) => {
+    if (cmSettingsData.UnregisterPotionsTimer == false) {ChatLib.chat(`&c&l[Cm] Timer is currently not running, you need to start one`); return;}
+    ChatLib.chat(`&c&l[Cm] Timer is currently now for ${t} minutes`);
+    time = t * 60;
+}).setName("updatePotionsTimer").setAliases("updatePotionTimer", "updatePotTimer");
 
+register("command", () => {
+    ChatLib.chat(time);
+}).setName("printTime")
+
+register("command", (t) => {
+    time = t
+}).setName("setTimePot")

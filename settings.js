@@ -119,7 +119,7 @@ class cmSettingsData {
     hideUselessFromChest = false;
     @SwitchProperty({
         name: "Potion Reminder",
-        description: "Remember to drink your potions, after starting the timer with /potionsTimer [time] in minutes, this setting will only enable the overlay!",
+        description: "Remember to drink your potions, after starting the timer with /potionsTimer [time] in minutes, this setting will only enable the overlay! /delPotionsTimer to cancel and remove the overlay",
         category: "General",
         subcategory: "Settings"
     })

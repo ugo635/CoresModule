@@ -1,4 +1,5 @@
 import { request } from "../../requestV2";
+import { formatNum } from "./cmFunctions";
 
 // Définition manuelle de Promise si non supporté (Rhino)
 if (typeof Promise === "undefined") {
@@ -84,7 +85,7 @@ register("command", (...args) => {
                         itemsList.sort((a, b) => a.price - b.price);
                         itemsList.reverse();
                         for (const item of itemsList) {
-                            new TextComponent(`&eItem: &c${item.item_name}, &eAuction ID: &a ${item.auction_id}, &ePrice: &c${item.price}`)
+                            new TextComponent(`&eItem: &c${item.item_name}, &eAuction ID: &a ${item.auction_id}, &ePrice: &c${formatNum(item.price)}`)
                                 .setClick("run_command", `/viewauction ${item.auction_id}`)
                                 .setHoverValue("&eClick to view auction")
                                 .chat();
@@ -167,7 +168,7 @@ register("command", (...args) => {
                         ChatLib.chat(`&cEnd of page, ${nbOfItems} items found, ${itemsWantedFound} items wanted found`);
                         itemsList.sort((a, b) => a.price - b.price);
                         let item = itemsList[0];
-                        new TextComponent(`&eItem: &c${item.item_name}, &eAuction ID: &a ${item.auction_id}, &ePrice: &c${item.price}`)
+                        new TextComponent(`&eItem: &c${item.item_name}, &eAuction ID: &a ${item.auction_id}, &ePrice: &c${formatNum(item.price)}`)
                         .setClick("run_command", `/viewauction ${item.auction_id}`)
                         .setHoverValue("&eClick to view auction")
                         .chat();
@@ -183,6 +184,6 @@ register("command", (...args) => {
     }
 
     fetchAuctions();
-}).setName("cheapestviewAuctionsForItem").setAliases("CVAFI");
+}).setName("cheapestviewAuctionsForItem").setAliases("CVAFI", "cVa");
 
 // VAFI, no error when loading module

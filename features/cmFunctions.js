@@ -56,3 +56,13 @@ export function setTimeout(callback, delay, ...args) {
     return timer;
 }
 
+export function formatNum(number) {
+    if (number >= 1e9) {
+        return (number / 1e9).toFixed(2).replace(/\.0$/, "") + "b";
+    } else if (number >= 1e6) {
+        return (number / 1e6).toFixed(2).replace(/\.0$/, "") + "m";
+    } else if (number >= 1e3) {
+        return (number / 1e3).toFixed(2).replace(/\.0$/, "") + "k";
+    }
+    return number.toString();
+}

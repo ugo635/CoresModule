@@ -22,7 +22,28 @@ register("gameLoad", () => {
     ChatLib.chat("&6&l[Cores Module] &r&7Module Loaded");
 });
 
-register("command", () => {
-    cmSettingsData.openGUI()
+const commands = [
+    {cmd: "cm", description: "Open the settings"},
+    {cmd: "cm help", description: "Show this message"}
+];
+
+register("command", (args1, ...args) => {
+    if (args1 == undefined ) {
+        cmSettingsData.openGUI();
+    } else {
+        switch (args1.toLowerCase()) {
+            case "help":
+                ChatLib.chat("&6[SBO] &eCommands:");
+                commands.forEach(({ cmd, description }) => {
+                    let text = new TextComponent("&7> &a/" + cmd + " &7- &e" + description)
+                    .setClick("run_command", "/" + cmd)
+                    .setHover("show_text", `&7Click to run &a/${cmd}`)
+                    text.chat()
+                }); break;
+            default:
+                ChatLib.chat("&6[Cm] &eUnknown command. Use /sbo help for a list of commands")
+                break;
+        }
+    }
 }).setName("CoresModule").setAliases(["Cores", "Core", "Cm"]);
 

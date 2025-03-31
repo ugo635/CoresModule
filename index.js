@@ -24,5 +24,5 @@ register("gameLoad", () => {
 
 register("command", () => {
     cmSettingsData.openGUI()
-}).setName("Cm")
+}).setName("CoresModule").setAliases(["Cm", "cores"]);
 

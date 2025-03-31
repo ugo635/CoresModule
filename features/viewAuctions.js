@@ -17,8 +17,7 @@ if (typeof Promise === "undefined") {
     }
 }
 
-const apiKey = "5fb0a367-989f-4b4f-b286-f3cc8467aa51";
-const apiUrl = `https://api.hypixel.net/skyblock/auctions?key=${apiKey}`;
+const apiUrl = `https://api.hypixel.net/skyblock/auctions?`;
 
 register("command", (...args) => {
     const lfItem = [args.join(" ")];

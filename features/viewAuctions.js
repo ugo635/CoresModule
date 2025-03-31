@@ -80,7 +80,7 @@ register("command", (...args) => {
                             console.error("Errors encountered while fetching auction data:", errors);
                         }
 
-                        ChatLib.chat(`&cEnd of page, ${nbOfItems} items found, ${itemsWantedFound} items wanted found`);
+                        ChatLib.chat(`&c${nbOfItems} items found, ${itemsWantedFound} items wanted found`);
                         itemsList.sort((a, b) => a.price - b.price);
                         itemsList.reverse();
                         for (const item of itemsList) {
@@ -164,7 +164,7 @@ register("command", (...args) => {
                             console.error("Errors encountered while fetching auction data:", errors);
                         }
 
-                        ChatLib.chat(`&cEnd of page, ${nbOfItems} items found, ${itemsWantedFound} items wanted found`);
+                        ChatLib.chat(`&c${nbOfItems} items found, ${itemsWantedFound} items wanted found`);
                         itemsList.sort((a, b) => a.price - b.price);
                         let item = itemsList[0];
                         new TextComponent(`&eItem: &c${item.item_name}, &eAuction ID: &a ${item.auction_id}, &ePrice: &c${formatNum(item.price)}`)
@@ -253,7 +253,7 @@ register("command", (...args) => {
                             console.error("Errors encountered while fetching auction data:", errors);
                         }
 
-                        ChatLib.chat(`&cEnd of page, ${nbOfItems} items found, ${itemsWantedFound} items wanted found`);
+                        ChatLib.chat(`&c${nbOfItems} items found, ${itemsWantedFound} items wanted found`);
                         itemsList.sort((a, b) => a.price - b.price);
                         itemsList.reverse();
                         for (const item of itemsList) {
@@ -337,7 +337,7 @@ register("command", (...args) => {
                             console.error("Errors encountered while fetching auction data:", errors);
                         }
 
-                        ChatLib.chat(`&cEnd of page, ${nbOfItems} items found, ${itemsWantedFound} items wanted found`);
+                        ChatLib.chat(`&c${nbOfItems} items found, ${itemsWantedFound} items wanted found`);
                         itemsList.sort((a, b) => a.price - b.price);
                         let item = itemsList[0];
                         new TextComponent(`&eItem: &c${item.item_name}, &eAuction ID: &a ${item.auction_id}, &ePrice: &c${formatNum(item.price)}`)

@@ -78,6 +78,8 @@ export function formatNum(number) {
  * @param {number} type - type of trace, calc is centering the line on the block
  * @param {number} lineWidth - width of the line
  */
+
+/*
 export function trace (x, y, z, red, green, blue, alpha, type, lineWidth) {
     if (type === "calc")
     {
@@ -118,4 +120,4 @@ function drawLine (x1, y1, z1, x2, y2, z2, red, green, blue, alpha, lineWidth) {
     GlStateManager.func_179084_k()
     GL11.glLineWidth(2);
 }
-
+*/

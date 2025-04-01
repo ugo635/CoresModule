@@ -99,8 +99,7 @@ export function trace (x, y, z, red, green, blue, alpha, type, lineWidth) {
         drawLine(Player.getRenderX(), Player.getRenderY() + 1.62, Player.getRenderZ(), x, y, z, red, green, blue, alpha, lineWidth)
 }
 
-function drawLine (x1, y1, z1, x2, y2, z2, red, green, blue, alpha, lineWidth)
-{
+function drawLine (x1, y1, z1, x2, y2, z2, red, green, blue, alpha, lineWidth) {
     GlStateManager.func_179112_b(770,771)
     GlStateManager.func_179147_l()
     GL11.glLineWidth(lineWidth)

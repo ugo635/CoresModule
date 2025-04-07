@@ -164,3 +164,17 @@ register("command", () => {
         ChatLib.chat("You're not holding a valid item!");
     }
 }).setName("getMyItemUUID");
+
+
+register('chat', (key) => {
+    new Thread(() => {
+        Thread.sleep(1000);
+        Client.showTitle("&cIn 4 sec", "&eGet Ready!", 0, 60, 0);
+
+        World.playSound("random.burp", 2, 1);
+        Thread.sleep(4000);
+        
+        Client.showTitle("&4NOW", "&eUSE THE Fire Freeze Staff", 0, 60, 0);
+		World.playSound("random.anvil_land", 2, 1);
+    }).start();
+}).setCriteria("[BOSS] The Professor: Oh? You found my Guardians' one weakness?").setContains();

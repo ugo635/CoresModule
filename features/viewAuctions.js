@@ -22,15 +22,9 @@ function loadingMsg() {
         }
 
         dots = dots.length < 3 ? dots + "." : "";
-        console.log(loadingMessage.getFormattedText());
         setTimeout(() => {
-            loadingMessage = new Message(loadingMessage.getFormattedText());
-            ChatLib.deleteChat("[Cm] Loading")
-            ChatLib.deleteChat("[Cm] Loading.")
-            ChatLib.deleteChat("[Cm] Loading..")
-            ChatLib.deleteChat("[Cm] Loading...")
-            loadingMessage.chat();
             loadingMessage.edit(new Message(`&6&l[Cm] &r&7Loading${dots}`));
+            loadingMessage = new Message(`&6&l[Cm] &r&7Loading${dots}`);
             animateDots();
         }, 500);
     }

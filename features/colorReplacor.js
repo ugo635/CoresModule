@@ -73,7 +73,7 @@ register("chat", (msg, event) => {
         }
     }
     
-    new Message(msg).chat()
+    new Message(msg).chat() // msg.edit(msg)
     cancel(event)
     
 }).setCriteria("${msg}")

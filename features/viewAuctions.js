@@ -3,6 +3,40 @@ import { formatNum } from "./cmFunctions";
 
 const apiUrl = `https://api.hypixel.net/skyblock/auctions?`;
 
+let loading = false;
+function loadingMsg() {
+    let loading2 = true;
+    ChatLib.chat("&6&l[Cm] &r&7Loading...");
+    let dots = "";
+        while (loading && loading2) {
+            loading2 = false;
+            setTimeout(() => {
+                ChatLib.editChat("&6&l[Cm] &r&7Loading", new Message(`&6&l[Cm] &r&7Loading${dots}`));
+                dots = dots.length < 3 ? dots + "." : "";
+                loading2 = true;
+            }, 500);
+        }
+}
+
+let test2 = true;
+
+register("command", () => {
+    let test = true;
+    while (test2 && test) {
+        test = false;
+        setTimeout(() => {
+            ChatLib.chat("In the delay")
+            test = true;
+        }, 1000)
+        ChatLib.chat("Out the delay")
+    }
+    
+}).setName("delayedMsg")
+
+register("command", () => {
+    test2 = false;
+}).setName("delayedMsg2")
+
 register("command", (...args) => {
     const lfItem = [args.join(" ")];
     fetchAuctionsAndDisplay(lfItem, "VAFI");

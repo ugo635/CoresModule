@@ -14,17 +14,15 @@ function loadingMsg() {
 
     function animateDots() {
         if (!loading) {
-            ChatLib.deleteChat("[Cm] Loading")
-            ChatLib.deleteChat("[Cm] Loading.")
-            ChatLib.deleteChat("[Cm] Loading..")
-            ChatLib.deleteChat("[Cm] Loading...")
+            ChatLib.deleteChat(loadingMessage);
             return;
         }
 
         dots = dots.length < 3 ? dots + "." : "";
         setTimeout(() => {
-            loadingMessage.edit(new Message(`&6&l[Cm] &r&7Loading${dots}`));
-            loadingMessage = new Message(`&6&l[Cm] &r&7Loading${dots}`);
+            newMsg = new Message(`&6&l[Cm] &r&7Loading${dots}`);
+            loadingMessage.edit(newMsg);
+            loadingMessage = newMsg;
             animateDots();
         }, 500);
     }
@@ -36,13 +34,6 @@ function loadingMsg() {
         loading = false;
     }, 5000);
 }
-
-
-
-register("command", () => {
-    loadingMsg();
-}).setName("delayedMsg");
-
 
 register("command", (...args) => {
     const lfItem = [args.join(" ")];
@@ -70,6 +61,8 @@ register("command", (...args) => {
 }).setName("cheapestviewAuctionsForItemMult2").setAliases("CVAFIM2", "cVam2");
 
 function fetchAuctionsAndDisplay(lfItem, src) {
+    loading = true;
+    loadingMsg();
     let itemsWantedFound = 0;
     let itemsList = [];
     request({
@@ -183,6 +176,7 @@ function fetchAuctionsAndDisplay(lfItem, src) {
                         .setHoverValue("&eClick to view auction")
                         .chat();
                 }
+                loading = false;
             }}).catch((error) => {
                 errors.push(error);
                 resolvedPromises++;

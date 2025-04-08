@@ -4,38 +4,51 @@ import { formatNum } from "./cmFunctions";
 const apiUrl = `https://api.hypixel.net/skyblock/auctions?`;
 
 let loading = false;
+
 function loadingMsg() {
-    let loading2 = true;
-    ChatLib.chat("&6&l[Cm] &r&7Loading...");
+    loading = true;
     let dots = "";
-        while (loading && loading2) {
-            loading2 = false;
-            setTimeout(() => {
-                ChatLib.editChat("&6&l[Cm] &r&7Loading", new Message(`&6&l[Cm] &r&7Loading${dots}`));
-                dots = dots.length < 3 ? dots + "." : "";
-                loading2 = true;
-            }, 500);
+    let loadingMessage = new Message("&6&l[Cm] &r&7Loading");
+    loadingMessage.chat();
+    //loadingMessage.setChatLineId(1); // Set a unique ID for the message
+
+    function animateDots() {
+        if (!loading) {
+            ChatLib.deleteChat("[Cm] Loading")
+            ChatLib.deleteChat("[Cm] Loading.")
+            ChatLib.deleteChat("[Cm] Loading..")
+            ChatLib.deleteChat("[Cm] Loading...")
+            return;
         }
+
+        dots = dots.length < 3 ? dots + "." : "";
+        console.log(loadingMessage.getFormattedText());
+        setTimeout(() => {
+            loadingMessage = new Message(loadingMessage.getFormattedText());
+            ChatLib.deleteChat("[Cm] Loading")
+            ChatLib.deleteChat("[Cm] Loading.")
+            ChatLib.deleteChat("[Cm] Loading..")
+            ChatLib.deleteChat("[Cm] Loading...")
+            loadingMessage.chat();
+            loadingMessage.edit(new Message(`&6&l[Cm] &r&7Loading${dots}`));
+            animateDots();
+        }, 500);
+    }
+
+    animateDots();
+
+    // Stop after a certain time (e.g., 5 seconds)
+    setTimeout(() => {
+        loading = false;
+    }, 5000);
 }
 
-let test2 = true;
+
 
 register("command", () => {
-    let test = true;
-    while (test2 && test) {
-        test = false;
-        setTimeout(() => {
-            ChatLib.chat("In the delay")
-            test = true;
-        }, 1000)
-        ChatLib.chat("Out the delay")
-    }
-    
-}).setName("delayedMsg")
+    loadingMsg();
+}).setName("delayedMsg");
 
-register("command", () => {
-    test2 = false;
-}).setName("delayedMsg2")
 
 register("command", (...args) => {
     const lfItem = [args.join(" ")];

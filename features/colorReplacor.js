@@ -44,25 +44,34 @@ const combinations = [
     `[VIP&r&7+&r&b] ${player}`, `[VIP&r&8+&r&b] ${player}`, `[VIP&r&9+&r&b] ${player}`
 ];
 
+try {
+const S02PacketChat = Java.type("net.minecraft.network.play.server.S02PacketChat")
+const ChatComponentText = Java.type("net.minecraft.util.ChatComponentText")
+const HoverEvent = Java.type("net.minecraft.event.HoverEvent")
+const ChatStyle = Java.type("net.minecraft.util.ChatStyle")
+const connection = Client.getMinecraft().func_147114_u();
+let toBreak = false;
 
 register("chat", (msg, event) => {
-    if (!cmSettingsData.colorUserTrue && !cmSettingsData.colorTagTrue) return;
+    if (toBreak) {toBreak = false; return};
+    toBreak = true;
+    if (!cmSettingsData.colorUserTrue && !cmSettingsData.colorTagTrue) {toBreak = false; return};
     let msg2 = ChatLib.getChatMessage(event, true);
-    if (!msg.includes("MVP+") && !msg.includes("VIP+")) return;
-    if (!msg.includes(player)) return;
-    let msg = new Message(event).getMessageParts();
+    if (!msg.includes("MVP+") && !msg.includes("VIP+")) {toBreak = false; return};
+    if (!msg.includes(player)) {toBreak = false; return};
+    let msg3 = new Message(event).getMessageParts();
     if (combinations.some(combination => msg2.includes(combination))) {
         let matchingCombination = combinations.find(combination => msg2.includes(combination));
         plusColor = matchingCombination.slice(6,8)
         plusColor = plusColor.replace('&', '§')
         if (cmSettingsData.colorUserTrue) {
-            msg.forEach(element => {
+            msg3.forEach(element => {
                 element.text = element.text.replace(player, `${colorDict[cmSettingsData.colorUser]}${player}§r`)
             });
         }
         if (cmSettingsData.colorTagTrue) {
-            msg.forEach(element => {
-                    // For /show (I fuckin hate you !)
+            msg3.forEach(element => {
+                    // For /show (I fuckin hate you ! You took me way too long)
                 if (element.text.match(/\[(MVP|VIP)§[0-9a-f]\+§b\]/g)) {
                     element.text = element.text.replace(/\b(MVP|VIP)§[0-9a-f]\+§b\b/g, `MVP${colorDict[cmSettingsData.colorTag]}+§b`);
                 } else {
@@ -73,10 +82,63 @@ register("chat", (msg, event) => {
         }
     }
     
-    new Message(msg).chat()
-    cancel(event)
-    
+    if (msg2.includes("&r&9Party &8>")) {
+        let msg4 = new ChatComponentText(new Message(msg3).getFormattedText().replace("§r§r§r§r§r§r§9Party §8>", "§r§9Party §8>")/* I fuckin hate you replace, I still don't know why I need you */)
+        let packet = new S02PacketChat(msg4);
+        console.log(msg4)
+        packet.func_148833_a(connection);
+        cancel(event)
+    } else {
+        new Message(msg3).chat()
+        cancel(event)
+    }
+
+    toBreak = false;
 }).setCriteria("${msg}")
+
+} catch(e) {
+    console.error(e)
+    register("chat", (msg, event) => {
+        if (!cmSettingsData.colorUserTrue && !cmSettingsData.colorTagTrue) return;
+        let msg2 = ChatLib.getChatMessage(event, true);
+        if (!msg.includes("MVP+") && !msg.includes("VIP+")) return;
+        if (!msg.includes(player)) return;
+        let msg3 = new Message(event).getMessageParts();
+        if (combinations.some(combination => msg2.includes(combination))) {
+            let matchingCombination = combinations.find(combination => msg2.includes(combination));
+            plusColor = matchingCombination.slice(6,8)
+            plusColor = plusColor.replace('&', '§')
+            if (cmSettingsData.colorUserTrue) {
+                msg3.forEach(element => {
+                    element.text = element.text.replace(player, `${colorDict[cmSettingsData.colorUser]}${player}§r`)
+                });
+            }
+            if (cmSettingsData.colorTagTrue) {
+                msg3.forEach(element => {
+                        // For /show (I fuckin hate you ! You took me way too long)
+                    if (element.text.match(/\[(MVP|VIP)§[0-9a-f]\+§b\]/g)) {
+                        element.text = element.text.replace(/\b(MVP|VIP)§[0-9a-f]\+§b\b/g, `MVP${colorDict[cmSettingsData.colorTag]}+§b`);
+                    } else {
+                        element.text = element.text.replace(`${plusColor}+§r`, `${colorDict[cmSettingsData.colorTag]}+§r`);
+                    }
+                    
+                });
+            }
+        }
+    
+        new Message(msg3).chat()
+        cancel(event)
+    }).setCriteria("${msg}")
+}
+
+
+// TextComponent{text='§r§9Party §8> i hate humanity', siblings=[], style=Style{hasParent=false, color=null, bold=null, italic=null, underlined=null, obfuscated=null, clickEvent=null, hoverEvent=null, insertion=null}}
+
+
+
+
+
+
 
 // for item in msg:
 //     item.text.replace()

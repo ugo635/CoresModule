@@ -44,7 +44,7 @@ const combinations = [
     `[VIP&r&7+&r&b] ${player}`, `[VIP&r&8+&r&b] ${player}`, `[VIP&r&9+&r&b] ${player}`
 ];
 
-try {
+
 const S02PacketChat = Java.type("net.minecraft.network.play.server.S02PacketChat")
 const ChatComponentText = Java.type("net.minecraft.util.ChatComponentText")
 const HoverEvent = Java.type("net.minecraft.event.HoverEvent")
@@ -52,7 +52,9 @@ const ChatStyle = Java.type("net.minecraft.util.ChatStyle")
 const connection = Client.getMinecraft().func_147114_u();
 let toBreak = false;
 
+
 register("chat", (msg, event) => {
+    try {
     if (toBreak) {toBreak = false; return};
     toBreak = true;
     if (!cmSettingsData.colorUserTrue && !cmSettingsData.colorTagTrue) {toBreak = false; return};
@@ -93,11 +95,8 @@ register("chat", (msg, event) => {
     }
 
     toBreak = false;
-}).setCriteria("${msg}")
-
-} catch(e) {
-    console.error(e)
-    register("chat", (msg, event) => {
+    } catch(e) {
+        console.error(e)
         if (!cmSettingsData.colorUserTrue && !cmSettingsData.colorTagTrue) return;
         let msg2 = ChatLib.getChatMessage(event, true);
         if (!msg.includes("MVP+") && !msg.includes("VIP+")) return;
@@ -127,8 +126,8 @@ register("chat", (msg, event) => {
     
         new Message(msg3).chat()
         cancel(event)
-    }).setCriteria("${msg}")
-}
+    }
+}).setCriteria("${msg}")
 
 
 // TextComponent{text='§r§9Party §8> i hate humanity', siblings=[], style=Style{hasParent=false, color=null, bold=null, italic=null, underlined=null, obfuscated=null, clickEvent=null, hoverEvent=null, insertion=null}}

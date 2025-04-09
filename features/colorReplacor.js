@@ -85,7 +85,6 @@ register("chat", (msg, event) => {
     if (msg2.includes("&r&9Party &8>")) {
         let msg4 = new ChatComponentText(new Message(msg3).getFormattedText().replace("§r§r§r§r§r§r§9Party §8>", "§r§9Party §8>")/* I fuckin hate you replace, I still don't know why I need you */)
         let packet = new S02PacketChat(msg4);
-        console.log(msg4)
         packet.func_148833_a(connection);
         cancel(event)
     } else {

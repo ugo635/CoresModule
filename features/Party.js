@@ -108,3 +108,43 @@ register("chat", (player, number) => {
 register("chat", (player, event) => {
     ChatLib.command("chat p")
 }).setCriteria("You have joined ${player}'s party!")
+
+
+let partyMembers = [];
+const playerOwner = Player.getName()
+
+register("chat", (msg) => {
+    const match = msg.match(/^(Party (Moderators|Leader|Members)):\s?(.*)$/i)
+    if (!match) return;
+    let players = match[3].split("●").map(player => player.replace("[VIP] ","").replace("[VIP+] ", "").replace("[MVP] ", "").replace("[MVP+] ", "").replace("[MVP++] ", "").replace(" ", ""))
+    players = players.slice(0, players.length - 1) /* Remove last one which is blank */
+    for (let i = 0; i < players.length; i++) {
+        if (!partyMembers.includes(players[i]) && players[i] !== playerOwner) {
+            partyMembers.push(players[i]);
+        }
+    }
+}).setCriteria("${msg}")
+
+register("command", (...args /* Players to not add */) => {
+    partyMembers = [];
+    args = args || [];
+    if (args != []) args.map(arg => arg.toLowerCase())
+    setTimeout(() => {
+    ChatLib.command("pl")
+    }, 100)
+    setTimeout(() => {
+        for (let i = 0; i < partyMembers.length; i++) {
+            if (!args.includes(partyMembers[i].toLowerCase())) {
+                setTimeout(() => {
+                    ChatLib.command(`f ${partyMembers[i-1]}`)
+                }, 500 + 750 * i)
+            }
+            if (i == partyMembers.length - 1) {
+                setTimeout(() => {
+                    partyMembers = [];
+                }, 500 + 750 * partyMembers.length+1)
+            }
+        }
+    }, 1000)
+    
+}).setName("fParty").setAliases("fp")

@@ -134,8 +134,7 @@ register("chat", (msg) => {
 
 register("command", (...args /* Players to not add */) => {
     partyMembers = [];
-    args = args || [];
-    if (args != []) args.map(arg => arg.toLowerCase().replace(" ", ""))
+    args = (args || []).map(arg => arg.toLowerCase().replace(" ", ""));
     setTimeout(() => {
     ChatLib.command("pl")
     }, 100)

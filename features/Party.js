@@ -100,10 +100,17 @@ register("command", () => {
 
 register("chat", (player, number) => {
     if (number == 0 || number == 1 || number == 2 || number == 3 || number == 4) {
-    let choice = ["basic", "hot", "burning", "fiery", "infernal"]
     ChatLib.command(`joininstance kuudra_${choice[number-1]}`)
     }
 }).setCriteria("Party > ${player}: !t${number}")
+
+register("chat", (player, number) => {
+    number = parseInt(number.replace(" ", ""))
+    if ([1, 2, 3, 4, 5, 6, 7].includes(number)) {
+        const choice = ["ONE", "TWO", "THREE", "FOUR", "FIVE", "SIX", "SEVEN"]
+        ChatLib.command(`joindungeon master_catacombs_floor_${choice[number-1]}`)
+    }
+}).setCriteria("Party > ${player}: !m${number}")
 
 register("chat", (player, event) => {
     ChatLib.command("chat p")
@@ -128,23 +135,28 @@ register("chat", (msg) => {
 register("command", (...args /* Players to not add */) => {
     partyMembers = [];
     args = args || [];
-    if (args != []) args.map(arg => arg.toLowerCase())
+    if (args != []) args.map(arg => arg.toLowerCase().replace(" ", ""))
     setTimeout(() => {
     ChatLib.command("pl")
     }, 100)
     setTimeout(() => {
-        for (let i = 0; i < partyMembers.length; i++) {
-            if (!args.includes(partyMembers[i].toLowerCase())) {
+        console.log(`Pm list: ${partyMembers}`)
+        partyMembers.forEach((pMember) => {
+            if (!args.includes(pMember.toLowerCase().replace(" ", ""))) {
                 setTimeout(() => {
-                    ChatLib.command(`f ${partyMembers[i-1]}`)
-                }, 500 + 750 * i)
+                    console.log(`Adding ${pMember} to fl with args = ${args}`)
+                    ChatLib.command(`f ${pMember}`)
+                }, 500 + 750 * partyMembers.indexOf(pMember))
+            } else {
+                console.log(`Player ${pMember} refused cuz args`)
             }
-            if (i == partyMembers.length - 1) {
+            if (pMember == partyMembers.length - 1) {
                 setTimeout(() => {
+                    console.log("Cleaned")
                     partyMembers = [];
-                }, 500 + 750 * partyMembers.length+1)
+                }, 500 + 2000 * partyMembers.length+1)
             }
-        }
+        })
     }, 1000)
     
 }).setName("fParty").setAliases("fp")

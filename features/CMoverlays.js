@@ -1,6 +1,4 @@
-import { printDev, setTimeout } from "../../SBO/utils/functions";
 import { loadGuiSettings, saveGuiSettings } from "./cmFunctions";
-import { YELLOW, BOLD, GOLD, DARK_GREEN, LIGHT_PURPLE, DARK_PURPLE, GREEN, DARK_GRAY, GRAY, WHITE, AQUA, ITALIC, BLUE, UNDERLINE} from "../../SBO/utils/constants";
 import cmSettingsData from "../settings";
 
 const dragOffset = {x: 0, y: 0};

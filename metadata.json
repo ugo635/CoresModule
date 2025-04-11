@@ -3,5 +3,8 @@
     "creator": "JudgementCorePls",
     "description": "My first module!",
     "version": "1.21.0",
-    "entry": "index.js"
+    "entry": "index.js",
+    "requires": [
+        "SBO"
+    ]
 }

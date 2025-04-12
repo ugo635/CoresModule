@@ -2,9 +2,10 @@
     "name": "CoresModule",
     "creator": "JudgementCorePls | ugo635",
     "description": "My first module!",
-    "version": "1.24.0",
+    "version": "1.25.0",
     "entry": "index.js",
     "requires": [
-        "SBO"
+        "FileUtilities",
+        "PogObject"
     ]
 }

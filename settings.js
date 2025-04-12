@@ -90,12 +90,19 @@ class cmSettingsData {
     })
     partyEdit = true;
     @SwitchProperty({
-        name: "Inq detector",
+        name: "Coords Detector",
         description: "Sends a message when coords are detected and play a (loud) sound effect",
         category: "General",
         subcategory: "Settings"
     })
     coords = true
+    @SwitchProperty({
+        name: "Coords sound",
+        description: "Choose the sound for the Coord detector",
+        category: "General",
+        subcategory: "Settings"
+    })
+    coordsSound = "emergencyMeeting"
     @SwitchProperty({
         name: "Show container inventory on click",
         description: "Shows every item of a container when clicking with the container open",

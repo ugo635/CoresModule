@@ -206,7 +206,20 @@ class cmSettingsData {
         subcategory: "Settings"
     })
     warpWhenCS = true;
-
+    @SwitchProperty({
+        name: "Spooky Warning",
+        description: "Send a message on screen when a spooky treat or trick chest spawn",
+        category: "Warps",
+        subcategory: "Settings"
+    })
+    SpookyWarning = true;
+    @SwitchProperty({
+        name: "Fire Freeze Staff Warning",
+        description: "Send a message on screen when to use Fire Freeze Staff on F3/M3",
+        category: "Warps",
+        subcategory: "Settings"
+    })
+    FFWarning = true;
     cf = true;
     @SwitchProperty({
         name: "Dice",
@@ -224,10 +237,10 @@ class cmSettingsData {
     stashMsgEdit = true;
     @SelectorProperty({
         name: "Change stash action",
-        description: "Clicking on the stash action will change whether it will open the /viewStash or do /pickupstash",
+        description: "Clicking on the stash action will change whether it will open the /viewStash or do /pickupstash or hides it",
         category: "General",
         subcategory: "Settings",
-        options: ["/viewStash", "/pickupStash"]
+        options: ["/viewStash", "/pickupStash", "Hide"]
     })
     changeStashClickAction = 0;
 

@@ -31,12 +31,6 @@ class format {
     RESET = '&r'
 }
 
-
-// setTimeout(() => {
-//     ChatLib.command(`pc ${statsMsg}`);
-// }, 200)
-
-
 // Commands #00ff00
 
 register("command", () => {
@@ -71,28 +65,30 @@ register("command", () => {
     //ChatLib.command("pc Wut this?" + "test"); // Send message in chat -> /pc Wut this? test 
     ChatLib.chat("&6&lYipee");
     
-}).setName("MyModuleTestMsg").setAliases("mmtm");
+}).setName("CmTestMsg").setAliases("cmtm");
 
 
 // Chat reactions #00ff00
 
 
 register("chat", (message) => {
-        if (message == "SPOOKY! A Trick or Treat Chest has appeared!") {
-        ChatLib.chat(`&6&l[Cm] Sooky Chest!`);
-        Client.Companion.showTitle("&6&lSpooky Chest", "", 0, 25, 35);
-        }
-    
+    if (!cmSettingsData.SpookyWarning) return
+    if (message == "SPOOKY! A Trick or Treat Chest has appeared!") {
+    ChatLib.chat(`&6&l[Cm] Sooky Chest!`);
+    Client.Companion.showTitle("&6&lSpooky Chest", "", 0, 25, 35);
+    }
+
 }).setCriteria("${message}");
 
 
-registerWhen(register("chat", (message, event) => {
+register("chat", (message, event) => {
+    if (!cmSettingsData.replaceAhMsg) return;
     const msg = ChatLib.getChatMessage(event, true);
     if (message.startsWith("You purchased") || message.startsWith("Visit the Auction House")) {
     new TextComponent(msg).setClick("run_command", "/ah").setHover("show_text", "&eClick To Open The AH").chat();
     cancel(event);
     }
-}).setCriteria("${message}"), () => cmSettingsData.replaceAhMsg);
+}).setCriteria("${message}");
 
 register("command", () => {
 ChatLib.command("warp base")
@@ -119,33 +115,6 @@ register("step", () => {
     }
 }, 30);
 
-
-register("chat", (player) => {
-    if (!cmSettingsData.cf) return
-    coin = Math.random() < 0.5 ? "heads" : "tails";
-    ChatLib.command(`pc ${player.split(" ").length > 0 ? player.split(" ")[1] : player} flipped ${coin}`);
-}).setCriteria("Party > ${player}: !cf")
-register("chat", (player) => {
-    if (!cmSettingsData.cf) return
-    coin = Math.random() < 0.5 ? "heads" : "tails";
-    ChatLib.command(`pc ${player.split(" ").length > 0 ? player.split(" ")[1] : player} flipped ${coin}`);
-}).setCriteria("Party > ${player}: !coinflip")
-
-register("chat", (player) => {
-    if (!cmSettingsData.dice) return
-    dice = Math.floor(Math.random() * 6) + 1;
-    ChatLib.command(`pc ${player.split(" ").length > 0 /* Because player is rank + player */ ? player.split(" ")[1] : player} rolled ${dice}`);
-}).setCriteria("Party > ${player}: !dice")
-
-register("chat", () => {
-    ChatLib.command('sboqueue', true)
-}).setCriteria("Party > ${player}: !sboqueue")
-
-register("chat", (player, island, event) => {
-    if (!cmSettingsData.follow) return
-    cancel(event);
-}).setCriteria(" » ${player} is traveling to ${island} FOLLOW")
-
 register("command", () => {
     ChatLib.clearChat();
 }).setName("clear")
@@ -167,6 +136,7 @@ register("command", () => {
 
 
 register('chat', (key) => {
+    if (!cmSettingsData.FFWarning)
     new Thread(() => {
         Thread.sleep(1000);
         Client.showTitle("&cIn 4 sec", "&eGet Ready!", 0, 60, 0);

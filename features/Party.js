@@ -62,20 +62,6 @@ register("chat", (player, player2, event) => {
 // ->newLine<-
 // Line Jump
 
-// dupe it for in case where it's 
-// -----------------------------------------------------
-// [MVP+] hecatombs has invited you to join [MVP+] Froide's party!
-// You have 60 seconds to accept. Click here to join!
-// -----------------------------------------------------
-// Also edit TextComponent
-
-
-
-// -----------------------------------------------------
-// [MVP+] Froide has invited you to join their party!
-// You have 60 seconds to accept. Click here to join!
-// -----------------------------------------------------
-
 function isPlayerInLobby(playerName) {
     playerName = playerName.toLowerCase();
     return World.getAllPlayers().some(player => player.getName().toLowerCase() === playerName);
@@ -158,4 +144,30 @@ register("command", (...args /* Players to not add */) => {
         })
     }, 1000)
     
-}).setName("fParty").setAliases("fp")
+}).setName("fParty").setAliases("fp") // I'm so lonely 😭
+
+register("chat", (player) => {
+    if (!cmSettingsData.cf) return
+    coin = Math.random() < 0.5 ? "heads" : "tails";
+    ChatLib.command(`pc ${player.split(" ").length > 0 ? player.split(" ")[1] : player} flipped ${coin}`);
+}).setCriteria("Party > ${player}: !cf")
+register("chat", (player) => {
+    if (!cmSettingsData.cf) return
+    coin = Math.random() < 0.5 ? "heads" : "tails";
+    ChatLib.command(`pc ${player.split(" ").length > 0 ? player.split(" ")[1] : player} flipped ${coin}`);
+}).setCriteria("Party > ${player}: !coinflip")
+
+register("chat", (player) => {
+    if (!cmSettingsData.dice) return
+    dice = Math.floor(Math.random() * 6) + 1;
+    ChatLib.command(`pc ${player.split(" ").length > 0 /* Because player is rank + player */ ? player.split(" ")[1] : player} rolled ${dice}`);
+}).setCriteria("Party > ${player}: !dice")
+
+register("chat", () => {
+    ChatLib.command('sboqueue', true)
+}).setCriteria("Party > ${player}: !sboqueue")
+
+register("chat", (player, island, event) => {
+    if (!cmSettingsData.follow) return
+    cancel(event);
+}).setCriteria(" » ${player} is traveling to ${island} FOLLOW")

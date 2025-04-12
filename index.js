@@ -86,7 +86,7 @@ const changeLogReg = register("step", () => {
         return
     }
     ChatLib.chat(ChatLib.getChatBreak("&b-"))
-    ChatLib.chat(`&6[SBO] &r&bVersion &e${newVersion}&r`)
+    ChatLib.chat(`&6[CoresModule] &r&bVersion &e${newVersion}&r`)
     ChatLib.chat(`&aChangelog:`)
     changelog.forEach(({ header, description }) => {
         if (header == "+") ChatLib.chat(`&7> &a${header} Added: &e${description}`)

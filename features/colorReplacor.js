@@ -48,7 +48,7 @@ const S02PacketChat = Java.type("net.minecraft.network.play.server.S02PacketChat
 const ChatComponentText = Java.type("net.minecraft.util.ChatComponentText")
 const HoverEvent = Java.type("net.minecraft.event.HoverEvent")
 const ChatStyle = Java.type("net.minecraft.util.ChatStyle")
-const connection = Client.getMinecraft().func_147114_u();
+let connection = Client.getMinecraft().func_147114_u();
 let toBreak = false;
 
 
@@ -86,7 +86,19 @@ register("chat", (msg, event) => {
     if (msg2.includes("&r&9Party &8>")) {
         let msg4 = new ChatComponentText(new Message(msg3).getFormattedText().replace("§r§r§r§r§r§r§9Party §8>", "§r§9Party §8>")/* I fuckin hate you replace, I still don't know why I need you */)
         let packet = new S02PacketChat(msg4);
-        packet.func_148833_a(connection);
+        try {
+            packet.func_148833_a(connection);
+        } catch(e) {
+            setTimeout(() => {
+                const delayedConnection = Client.getMinecraft().func_147114_u();
+                try {
+                    packet.func_148833_a(delayedConnection);
+                } catch (err) {
+                    console.error(`[Cm Error] You have an error! Why? Bc am a bad coder! Here's the error: ${err}`)
+                }
+                packet.func_148833_a(connection);
+            }, 100)
+        }
         cancel(event)
     } else {
         new Message(msg3).chat()

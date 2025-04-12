@@ -1,10 +1,4 @@
-import { getplayername, formatTime, getDianaMayorTotalProfitAndOfferType, calcPercentOne, getBurrowsPerHour, getMobsPerHour, setTimeout } from "../../SBO/utils/functions";
-import { data, dianaTrackerMayor } from "../../SBO/utils/variables";
-import { registerWhen } from "../../SBO/utils/variables";
 import cmSettingsData from "../settings";
-import { playCustomSound } from "../../SBO/utils/functions";
-
-
 
 class format {
     BLACK = '&0' // #000000
@@ -60,7 +54,7 @@ register("command", () => {
 }).setName("color").setAliases("format");
 
 register("command", () => {
-    new TextComponent(`&6[SBO] &r&eTook &r&c${data.minotaursSinceStick} &r&eMinotaurs to get a Daedalus Stick!`).setClick("run_command", `/ct copy [SBO] Took ${data.minotaursSinceStick} Minotaurs to get a Daedalus Stick!`).setHover("show_text", "&eClick To Copy").chat();
+    new TextComponent(`&6[CM] &r&eThis should appear`).setClick("run_command", `/ct copy Copy this`).setHover("show_text", "&eClick To Copy").chat();
     Client.Companion.showTitle(`&6&lBro we're showing msg on screen?`, "", 0, 25, 35);
     //ChatLib.command("pc Wut this?" + "test"); // Send message in chat -> /pc Wut this? test 
     ChatLib.chat("&6&lYipee");

@@ -1,5 +1,3 @@
-import { getplayername, formatTime, getDianaMayorTotalProfitAndOfferType, calcPercentOne, getBurrowsPerHour, getMobsPerHour, setTimeout } from "../../SBO/utils/functions";
-import { registerWhen } from "../../SBO/utils/variables";
 import cmSettingsData from "../settings";
 
 register("command", () => {

@@ -1,5 +1,3 @@
-import { getplayername, formatTime, getDianaMayorTotalProfitAndOfferType, calcPercentOne, getBurrowsPerHour, getMobsPerHour, setTimeout } from "../../SBO/utils/functions";
-import { data, dianaTrackerMayor } from "../../SBO/utils/variables";
 import { playCustomSound } from "../../SBO/utils/functions";
 import settings from "../../SBO/settings";
 import cmSettingData from "../settings";
@@ -22,7 +20,7 @@ register("command", (raw) => {
 register("chat", (player, x, y, z) => {
     if (!cmSettingData.coords) return
     // ChatLib.chat(`&c&l[CoresModule] Coords Detected`)
-    playCustomSound(settings.inqSound,100);
+    playCustomSound(settings.inqSound, 100);
 }).setCriteria("Party > ${player}: x: ${x}, y: ${y}, z:${z}")
 
 

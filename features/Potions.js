@@ -56,7 +56,7 @@ function potionsTimerOverlay(t) {
 &6&lPotions Timer:  &c&l${color + (time/60).toFixed(2)} minutes
 &c&l${color + (time).toFixed(2)} seconds
 &c&l${color +(time * 1000).toFixed(2)} milliseconds
-                        `;
+`;
 
         potionsOverlay.setLines([
             potionsText.setText(message)
@@ -75,9 +75,7 @@ function potionsTimerOverlay(t) {
             time -= 0.05;
         }, 50);
         
-        // Decrease time every tick
-        // console.log(time)
-    }); // Runs every second
+    });
 
     
 }

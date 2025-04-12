@@ -1,5 +1,4 @@
 import { playCustomSound } from "../../SBO/utils/functions";
-import settings from "../../SBO/settings";
 import cmSettingData from "../settings";
 
 
@@ -20,12 +19,12 @@ register("command", (raw) => {
 register("chat", (player, x, y, z) => {
     if (!cmSettingData.coords) return
     // ChatLib.chat(`&c&l[CoresModule] Coords Detected`)
-    playCustomSound(settings.inqSound, 100);
+    playCustomSound("emergencyMeeting", 100);
 }).setCriteria("Party > ${player}: x: ${x}, y: ${y}, z:${z}")
 
 
 register("command", () => {
-    playCustomSound(settings.inqSound,100);
+    playCustomSound("emergencyMeeting", 100);
 }).setName("soundTest")
 
 register("chat", (message) => {

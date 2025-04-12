@@ -1,4 +1,3 @@
-import { registerWhen } from "../../SBO/utils/variables";
 import cmSettingsData from "../settings";
 
 

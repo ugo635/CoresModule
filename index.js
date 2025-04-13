@@ -32,8 +32,9 @@ const commands = [
 
 const changelog = [
     {header: "+", description: "Fixed color replacor to work with skytils"},
-    {header: "=", description: "Made it more user friendly"},
-    {header: "-", description: "Nothing, I just need to test changelogs"}
+    {header: "+", description: "Updated /mymf and !mymf to work with kill combos (see /cm help)"},
+    {header: "+", description: "Updated /cm help"},
+    {header: "=", description: "Made it more user friendly"}
 ]
 
 const newVersion = "1.25.0"

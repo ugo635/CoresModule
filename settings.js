@@ -49,6 +49,7 @@ class cmSettingsData {
         this.addDependency("Warps Shotcut Value", "Warps Shortcut");
         this.addDependency("Update Warp", "Warps Shortcut");
         this.addDependency("Potion", "Potion Reminder");
+        this.addDependency("Coords Sound", "Coords Detector")
 
     }
     //----------- General ----------------
@@ -96,8 +97,8 @@ class cmSettingsData {
         subcategory: "Settings"
     })
     coords = true
-    @SwitchProperty({
-        name: "Coords sound",
+    @TextProperty({
+        name: "Coords Sound",
         description: "Choose the sound for the Coord detector",
         category: "General",
         subcategory: "Settings"
@@ -267,8 +268,8 @@ class cmSettingsData {
         subcategory: "Credits",
         placeholder: "Click Me"
     })
-    openGithub() {
-        java.awt.Desktop.getDesktop().browse(new java.net.URI("https://github.com/ugo635/CoresModule"));
+    doNothing() {
+        // Do nothing
     }
     @ButtonProperty({
         name: "SBO",
@@ -289,7 +290,7 @@ export default new cmSettingsData();
 
 
 // import PogObject from "../PogData";
-// export let cmSettingsData = new PogObject("Cm", {
+// export let cmSettingsData = new PogObject("CoresModule", {
 //     "printContainerClick": 0,
 //     "printContainerOpen": 0,
 //     "hideFallingBlocks": 0,

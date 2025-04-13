@@ -24,9 +24,10 @@ register("gameLoad", () => {
 });
 
 const commands = [
-    {cmd: "cm", description: "Open the settings"},
-    {cmd: "cm help", description: "Show this message"},
-    {cmd: "mymf <Number>", description: ""}
+    {cmd: "cm", description: "Open the settings", ph: ""},
+    {cmd: "cm help", description: "Show this message", ph: ""},
+    {cmd: "mymf <Number>", description: "Gives your mf on inquisitors for the following case: \n &cInput ur mf with renowned sorrow / mf 10 kuudra armor, fragged dae axe, mf pet, no1 arround so legion isn't active (must have max be, legion V, renowned, shuriken) e.g: /mymf 300", ph: "mymf 300"},
+    {cmd: "mymf <Number> <MF From Kill Combo>", description: "Gives your mf on inquisitors for the following case: \n &cInput ur mf with renowned sorrow / mf 10 kuudra armor, fragged dae axe, mf pet, no1 arround so legion isn't active (must have max be, legion V, renowned, shuriken) \n &cInput the mf you gain from kill combo e.g: /mymf 300 6 (15 kill combo)", ph: "mymf 300 6"}
 ];
 
 const changelog = [
@@ -43,15 +44,27 @@ register("command", (args1, ...args) => {
     } else {
         switch (args1.toLowerCase()) {
             case "help":
-                ChatLib.chat("&6[SBO] &eCommands:");
-                commands.forEach(({ cmd, description }) => {
-                    let text = new TextComponent("&7> &a/" + cmd + " &7- &e" + description)
-                    .setClick("run_command", "/" + cmd)
-                    .setHover("show_text", `&7Click to run &a/${cmd}`)
-                    text.chat()
-                }); break;
+                ChatLib.chat(ChatLib.getChatBreak("&b-"))
+                ChatLib.chat("&6[Cm] &eCommands:");
+                commands.forEach(({ cmd, description, ph }) => {
+                    if (ph == "") {
+                        let text = new TextComponent("&7> &a/" + cmd + " &7- &e" + description)
+                        .setClick("run_command", "/" + cmd)
+                        .setHover("show_text", `&7Click to run &a/${cmd}`)
+                        text.chat()
+                    } else {
+                        ph = ph.replace("/", "")
+                        let text = new TextComponent("&7> &a/" + cmd + " &7- &e" + description)
+                        .setClick("suggest_command", "/" + ph)
+                        .setHover("show_text", `&7Click to run &a/${cmd}`)
+                        text.chat()
+                    }
+                    
+                });
+                ChatLib.chat(ChatLib.getChatBreak("&b-"));
+                break;
             default:
-                ChatLib.chat("&6[Cm] &eUnknown command. Use /sbo help for a list of commands")
+                ChatLib.chat("&6[Cm] &eUnknown command. Use /cm help for a list of commands")
                 break;
         }
     }

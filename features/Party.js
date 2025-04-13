@@ -118,34 +118,6 @@ register("chat", (msg) => {
     }
 }).setCriteria("${msg}")
 
-register("command", (...args /* Players to not add */) => {
-    partyMembers = [];
-    args = (args || []).map(arg => arg.toLowerCase().replace(" ", ""));
-    setTimeout(() => {
-    ChatLib.command("pl")
-    }, 100)
-    setTimeout(() => {
-        console.log(`Pm list: ${partyMembers}`)
-        partyMembers.forEach((pMember) => {
-            if (!args.includes(pMember.toLowerCase().replace(" ", ""))) {
-                setTimeout(() => {
-                    console.log(`Adding ${pMember} to fl with args = ${args}`)
-                    ChatLib.command(`f ${pMember}`)
-                }, 500 + 750 * partyMembers.indexOf(pMember))
-            } else {
-                console.log(`Player ${pMember} refused cuz args`)
-            }
-            if (pMember == partyMembers.length - 1) {
-                setTimeout(() => {
-                    console.log("Cleaned")
-                    partyMembers = [];
-                }, 500 + 2000 * partyMembers.length+1)
-            }
-        })
-    }, 1000)
-    
-}).setName("fParty").setAliases("fp") // I'm so lonely 😭
-
 let t1 = null
 let t2 = null
 let t3 = null
@@ -161,7 +133,6 @@ register("command", (...args /* Players to not add */) => {
         ChatLib.command("pl")
     }, 100)
     setTimeout(() => {
-        console.log(`Pm list: ${partyMembers}`)
         pLength = partyMembers.length
         if (partyMembers.length > 7 || partyMembers.length == 0) return
         partyMembers.forEach((pMember) => {
@@ -196,7 +167,6 @@ register("command", (...args /* Players to not add */) => {
 
             if (partyMembers.indexOf(pMember) == partyMembers.length - 1) {
                 setTimeout(() => {
-                    console.log("Cleaned")
                     partyMembers = [];
                 }, 500 + 2000 * partyMembers.length+1)
             }
@@ -220,7 +190,7 @@ register("command", (...args /* Players to not add */) => {
         t5 = null
         t6 = null
         t7 = null
-    }, 1000)
+    }, 500)
     
 }).setName("fParty").setAliases("fp") // I'm so lonely 😭
 

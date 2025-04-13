@@ -118,31 +118,79 @@ register("chat", (msg) => {
     }
 }).setCriteria("${msg}")
 
+let t1 = null
+let t2 = null
+let t3 = null
+let t4 = null
+let t5 = null
+let t6 = null
+let t7 = null
+
 register("command", (...args /* Players to not add */) => {
     partyMembers = [];
     args = (args || []).map(arg => arg.toLowerCase().replace(" ", ""));
     setTimeout(() => {
-    ChatLib.command("pl")
+        ChatLib.command("pl")
     }, 100)
     setTimeout(() => {
-        console.log(`Pm list: ${partyMembers}`)
+        pLength = partyMembers.length
+        if (partyMembers.length > 7 || partyMembers.length == 0) return
         partyMembers.forEach((pMember) => {
             if (!args.includes(pMember.toLowerCase().replace(" ", ""))) {
-                setTimeout(() => {
-                    console.log(`Adding ${pMember} to fl with args = ${args}`)
-                    ChatLib.command(`f ${pMember}`)
-                }, 500 + 750 * partyMembers.indexOf(pMember))
-            } else {
-                console.log(`Player ${pMember} refused cuz args`)
+                    index = partyMembers.indexOf(pMember)
+                    switch(index) {
+                        case 0:
+                            t1 = new TextComponent("&a" + pMember).setHover("show_text", `&eadd &c${pMember}`).setClick("run_command", `/f add ${pMember}`)
+                            break
+                        case 1:
+                            t2 = new TextComponent("&a" + pMember).setHover("show_text", `&eadd &c${pMember}`).setClick("run_command", `/f add ${pMember}`)
+                            break
+                        case 2:
+                            t3 = new TextComponent("&a" + pMember).setHover("show_text", `&eadd &c${pMember}`).setClick("run_command", `/f add ${pMember}`)
+                            break
+                        case 3:
+                            t4 = new TextComponent("&a" + pMember).setHover("show_text", `&eadd &c${pMember}`).setClick("run_command", `/f add ${pMember}`)
+                            break
+                        case 4:
+                            t5 = new TextComponent("&a" + pMember).setHover("show_text", `&eadd &c${pMember}`).setClick("run_command", `/f add ${pMember}`)
+                            break
+                        case 5:
+                            t6 = new TextComponent("&a" + pMember).setHover("show_text", `&eadd &c${pMember}`).setClick("run_command", `/f add ${pMember}`)
+                            break
+                        case 6:
+                            t7 = new TextComponent("&a" + pMember).setHover("show_text", `&eadd &c${pMember}`).setClick("run_command", `/f add ${pMember}`)
+                            break
+                    }
             }
-            if (pMember == partyMembers.length - 1) {
+
+
+
+            if (partyMembers.indexOf(pMember) == partyMembers.length - 1) {
                 setTimeout(() => {
-                    console.log("Cleaned")
                     partyMembers = [];
                 }, 500 + 2000 * partyMembers.length+1)
             }
         })
-    }, 1000)
+
+        let components = [t1, t2, t3, t4, t5, t6, t7].filter(Boolean);
+        if (components.length > 0) {
+            let msg = new Message("&e[CM] Click to the user to add!\n");
+            components.forEach((comp, i) => {
+                msg.addTextComponent(comp);
+                if (i !== components.length - 1) msg.addTextComponent(new TextComponent(" &c|&r "));
+            });
+            msg.chat();
+        }
+
+        pLength = 0
+        t1 = null
+        t2 = null
+        t3 = null
+        t4 = null
+        t5 = null
+        t6 = null
+        t7 = null
+    }, 500)
     
 }).setName("fParty").setAliases("fp") // I'm so lonely 😭
 

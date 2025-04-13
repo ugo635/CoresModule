@@ -45,7 +45,6 @@ class cmSettingsData {
         this.initialize(this);
         // this.addDependency("TheNameOfTheThingYouWannaAddDependencyTo", "TheNameOfTheDependency");
         this.addDependency("Change stash action", "Stash message");
-        this.addDependency("Change stash open", "Stash message");
         this.addDependency("Warps Shotcut Value", "Warps Shortcut");
         this.addDependency("Update Warp", "Warps Shortcut");
         this.addDependency("Potion", "Potion Reminder");
@@ -181,40 +180,6 @@ class cmSettingsData {
         subcategory: "Settings"
     })
     @SwitchProperty({
-        name: "Warps Shortcut",
-        description: "Create shortcuts for warps",
-        category: "Warps",
-        subcategory: "Settings"
-    })
-    warpsCreate = false;
-    @TextProperty({
-        name: "Warps Shotcut Value",
-        description: "Make couple of warps with a comma between them following this template Ex: (warpName;shotcut),(warpName2;shotcut2) etc... Then use /shortcutName to use. Please /ct load for changes to be affective or update warps with the button below",
-        category: "Warps",
-        subcategory: "Settings"
-    })
-    warpsVal = "";
-    @ButtonProperty({
-        name: "Update Warp",
-        description: "Update the warps command, tho you MUST /ct load to if you want to remove old ones",
-        placeholder: "Update",
-        category: "Warps",
-        subcategory: "Settings"
-    })
-    updateWarp() {
-        import "./features/warps";
-        import { extractTuples, warp } from "./features/warps";
-        let val = extractTuples(this.warpsVal);
-        warp(val);
-    }
-    @SwitchProperty({
-        name: "Warps on spawn of a Sea Creature",
-        description: "Warps on spawn of a Sea Creature, need FeeshNotifier",
-        category: "Warps",
-        subcategory: "Settings"
-    })
-    warpWhenCS = true;
-    @SwitchProperty({
         name: "Spooky Warning",
         description: "Send a message on screen when a spooky treat or trick chest spawn",
         category: "Warps",
@@ -252,14 +217,42 @@ class cmSettingsData {
     })
     changeStashClickAction = 0;
 
-    @SelectorProperty({
-        name: "Change stash open",
-        description: "Change if it will show items or material (/viewStash item or /viewStash material) only work if /viewStash is selected above",
-        category: "General",
-        subcategory: "Settings",
-        options: ["Material", "Item"]
+    // ----------- Warps  ----------------
+    @SwitchProperty({
+        name: "Warps Shortcut",
+        description: "Create shortcuts for warps",
+        category: "Warps",
+        subcategory: "Settings"
     })
-    vsMatOrItem = 0;
+    warpsCreate = false;
+    @TextProperty({
+        name: "Warps Shotcut Value",
+        description: "Make couple of warps with a comma between them following this template Ex: (warpName;shotcut),(warpName2;shotcut2) etc... Then use /shortcutName to use. Please /ct load for changes to be affective or update warps with the button below",
+        category: "Warps",
+        subcategory: "Settings"
+    })
+    warpsVal = "";
+    @ButtonProperty({
+        name: "Update Warp",
+        description: "Update the warps command, tho you MUST /ct load to if you want to remove old ones",
+        placeholder: "Update",
+        category: "Warps",
+        subcategory: "Settings"
+    })
+    updateWarp() {
+        import "./features/warps";
+        import { extractTuples, warp } from "./features/warps";
+        let val = extractTuples(this.warpsVal);
+        warp(val);
+    }
+    @SwitchProperty({
+        name: "Warps on spawn of a Sea Creature",
+        description: "Warps on spawn of a Sea Creature, need FeeshNotifier",
+        category: "Warps",
+        subcategory: "Settings"
+    })
+    warpWhenCS = true;
+
     // ----------- Credits ----------------
     @ButtonProperty({
         name: "Diacyz",

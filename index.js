@@ -25,7 +25,8 @@ register("gameLoad", () => {
 
 const commands = [
     {cmd: "cm", description: "Open the settings"},
-    {cmd: "cm help", description: "Show this message"}
+    {cmd: "cm help", description: "Show this message"},
+    {cmd: "mymf <Number>", description: ""}
 ];
 
 const changelog = [

@@ -4,14 +4,14 @@ import cmSettingData from "../settings";
 
 function calculatemymffrome(raw) {
     trueraw = raw/1.04;
-    return ((trueraw*1.11)*1.05 + (130*1.05));
+    return ((trueraw*1.11/* Renowned + Legion */)*1.05 /* Shuriken */+ (130 /* Max Bestiary */ * 1.05 /* Shuriken */));
 }
 
 register("command", (raw) => { 
     let r = parseFloat(raw);
     let mf = calculatemymffrome(raw);
 
-    ChatLib.chat(`&6&l[Cm] Your magic find is ${mf} on Inquisitors`); // input ur mf with renowned sorrow, dae axe, greg avc // must have max be, legion V, renowned, shuriken
+    ChatLib.chat(`&6&l[Cm] Your magic find is ${mf.toFixed(2)} on Inquisitors`); // input ur mf with renowned sorrow, dae axe, mf pet // must have max be, legion V, renowned, shuriken
 
 }).setName("mymf");
 
@@ -38,11 +38,11 @@ register("chat", (message) => {
 
         setTimeout(() => { 
             ChatLib.command(`pc [Cm] Your magic find is ${mf} on Inquisitors`);
-        }, 200);
+        }, 500);
     } else {
         setTimeout(() => {
             ChatLib.command(`pc Usage: !mymf <number> (Go in mf set with no1 around (so legion ISNT active) with renowned armor, it will give your mf if you used shuriken, fragged dae axe with max bestiary)`);
-        }, 200);
+        }, 500);
     }
 
 }).setCriteria("${message}");

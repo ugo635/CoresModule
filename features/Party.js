@@ -204,7 +204,7 @@ register("command", (...args /* Players to not add */) => {
 
         let components = [t1, t2, t3, t4, t5, t6, t7].filter(Boolean);
         if (components.length > 0) {
-            let msg = new Message();
+            let msg = new Message("&e[CM] Click to the user to add!\n &e");
             components.forEach((comp, i) => {
                 msg.addTextComponent(comp);
                 if (i !== components.length - 1) msg.addTextComponent(new TextComponent(" | "));

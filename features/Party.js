@@ -169,25 +169,25 @@ register("command", (...args /* Players to not add */) => {
                     index = partyMembers.indexOf(pMember)
                     switch(index) {
                         case 0:
-                            t1 = new TextComponent(pMember).setHover("show_text", `add ${pMember}`).setClick("run_command", `f add ${pMember}`)
+                            t1 = new TextComponent("&a" + pMember).setHover("show_text", `&eadd &c${pMember}`).setClick("run_command", `f add ${pMember}`)
                             break
                         case 1:
-                            t2 = new TextComponent(pMember).setHover("show_text", `add ${pMember}`).setClick("run_command", `f add ${pMember}`)
+                            t2 = new TextComponent("&a" + pMember).setHover("show_text", `&eadd &c${pMember}`).setClick("run_command", `f add ${pMember}`)
                             break
                         case 2:
-                            t3 = new TextComponent(pMember).setHover("show_text", `add ${pMember}`).setClick("run_command", `f add ${pMember}`)
+                            t3 = new TextComponent("&a" + pMember).setHover("show_text", `&eadd &c${pMember}`).setClick("run_command", `f add ${pMember}`)
                             break
                         case 3:
-                            t4 = new TextComponent(pMember).setHover("show_text", `add ${pMember}`).setClick("run_command", `f add ${pMember}`)
+                            t4 = new TextComponent("&a" + pMember).setHover("show_text", `&eadd &c${pMember}`).setClick("run_command", `f add ${pMember}`)
                             break
                         case 4:
-                            t5 = new TextComponent(pMember).setHover("show_text", `add ${pMember}`).setClick("run_command", `f add ${pMember}`)
+                            t5 = new TextComponent("&a" + pMember).setHover("show_text", `&eadd &c${pMember}`).setClick("run_command", `f add ${pMember}`)
                             break
                         case 5:
-                            t6 = new TextComponent(pMember).setHover("show_text", `add ${pMember}`).setClick("run_command", `f add ${pMember}`)
+                            t6 = new TextComponent("&a" + pMember).setHover("show_text", `&eadd &c${pMember}`).setClick("run_command", `f add ${pMember}`)
                             break
                         case 6:
-                            t7 = new TextComponent(pMember).setHover("show_text", `add ${pMember}`).setClick("run_command", `f add ${pMember}`)
+                            t7 = new TextComponent("&a" + pMember).setHover("show_text", `&eadd &c${pMember}`).setClick("run_command", `f add ${pMember}`)
                             break
                     }
             }
@@ -204,10 +204,10 @@ register("command", (...args /* Players to not add */) => {
 
         let components = [t1, t2, t3, t4, t5, t6, t7].filter(Boolean);
         if (components.length > 0) {
-            let msg = new Message("&e[CM] Click to the user to add!\n &e");
+            let msg = new Message("&e[CM] Click to the user to add!\n");
             components.forEach((comp, i) => {
                 msg.addTextComponent(comp);
-                if (i !== components.length - 1) msg.addTextComponent(new TextComponent(" | "));
+                if (i !== components.length - 1) msg.addTextComponent(new TextComponent(" &c|&r "));
             });
             msg.chat();
         }

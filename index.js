@@ -37,7 +37,7 @@ const changelog = [
     {header: "=", description: "Made it more user friendly"}
 ]
 
-const newVersion = "1.25.0"
+const newVersion = "1.26.0"
 
 register("command", (args1, ...args) => {
     if (args1 == undefined ) {

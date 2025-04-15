@@ -99,8 +99,8 @@ register("chat", (msg, event) => {
                 try {
                 packet.func_148833_a(connection);
                 } catch(error) {
-                    new Message(msg3).chat()
-                    cancel(event)
+                    console.log(error);
+                    return;
                 }
             }, 500)
         }

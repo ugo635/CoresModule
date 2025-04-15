@@ -94,10 +94,15 @@ register("chat", (msg, event) => {
                 try {
                     packet.func_148833_a(delayedConnection);
                 } catch (err) {
-                    console.error(`[Cm Error] You have an error! Why? Bc am a bad coder! Here's the error: ${err}`)
+                    console.error(`[Cm Error]: ${err}`)
                 }
+                try {
                 packet.func_148833_a(connection);
-            }, 100)
+                } catch(error) {
+                    new Message(msg3).chat()
+                    cancel(event)
+                }
+            }, 500)
         }
         cancel(event)
     } else {

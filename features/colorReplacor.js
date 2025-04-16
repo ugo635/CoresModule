@@ -97,10 +97,10 @@ register("chat", (msg, event) => {
                     console.error(`[Cm Error]: ${err}`)
                 }
                 try {
-                packet.func_148833_a(connection);
+                    packet.func_148833_a(connection);
                 } catch(error) {
                     console.log(error);
-                    return;
+                    throw new Error("Skip")
                 }
             }, 500)
         }

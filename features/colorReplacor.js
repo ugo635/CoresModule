@@ -100,7 +100,6 @@ register("chat", (msg, event) => {
                     packet.func_148833_a(connection);
                 } catch(error) {
                     console.log(error);
-                    throw new Error("Skip")
                 }
             }, 500)
         }
@@ -144,6 +143,25 @@ register("chat", (msg, event) => {
         cancel(event)
     }
 }).setCriteria("${msg}")
+
+// const ChatComponentText = Java.type("net.minecraft.util.ChatComponentText")
+// const IChatComponent = Java.type("net.minecraft.util.IChatComponent")
+// const HoverEvent = Java.type("net.minecraft.event.HoverEvent")
+// const ChatStyle = Java.type("net.minecraft.util.ChatStyle")
+
+// let finalMessage = new Message(msg3)
+// let ListOfClicksAndHover = [];
+// finalMessage.getMessageParts().forEach((part) => {
+//     const clickEvent = part.clickEvent
+//     const hoverEvent = part.hoverEvent
+//     ListOfClicksAndHover.push([clickEvent, hoverEvent])
+// })
+
+// event.message =  new ChatComponentText("Hello :3")
+// // IChatComponent can't be used for event.message
+
+
+
 
 
 // TextComponent{text='§r§9Party §8> i hate humanity', siblings=[], style=Style{hasParent=false, color=null, bold=null, italic=null, underlined=null, obfuscated=null, clickEvent=null, hoverEvent=null, insertion=null}}

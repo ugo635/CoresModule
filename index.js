@@ -34,7 +34,7 @@ const changelog = [
     {header: "+", description: "Color Replacor works now with Skytil chat tabs!"}
 ]
 
-const newVersion = "1.3.0"
+const newVersion = "1.30.0"
 
 register("command", (args1, ...args) => {
     if (args1 == undefined ) {

@@ -134,7 +134,7 @@ function textCompToChatComponent(comp) {
             hoverAction = hoverAction
             clickAction = clickAction
             const hover = new HoverEvent(hoverAction, new ChatComponentText(hoverValue));
-            const click = new ClickEvent(clickAction, new ChatComponentText(clickValue))
+            const click = new ClickEvent(clickAction, clickValue);
             componentText.func_150255_a(new ChatStyle().func_150209_a(hover).func_150241_a(click))
         } else if (hoverAction && hoverValue && !clickAction && !clickValue) {
             hoverAction = hoverAction
@@ -142,7 +142,7 @@ function textCompToChatComponent(comp) {
             componentText.func_150255_a(new ChatStyle().func_150209_a(hover))
         } else if (!hoverAction && !hoverValue && clickAction && clickValue) {
             clickAction = clickAction
-            const click = new ClickEvent(clickAction, new ChatComponentText(clickValue))
+            const click = new ClickEvent(clickAction, clickValue)
             componentText.func_150255_a(new ChatStyle().func_150241_a(click))
         }
 

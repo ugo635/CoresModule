@@ -2,7 +2,7 @@
     "name": "CoresModule",
     "creator": "JudgementCorePls | ugo635",
     "description": "My first module!",
-    "version": "1.26.0",
+    "version": "1.3.0",
     "entry": "index.js",
     "requires": [
         "FileUtilities",

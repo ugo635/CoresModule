@@ -2,22 +2,22 @@ import cmSettingsData from "../settings";
 
 
 const colorDict = {
-    0 : '&0', // #000000
-    1 : '&1', // #0000AA
-    2 : '&2', // #00AA00
-    3 : '&3', // #00AAAA
-    4 : '&4', // #AA0000
-    5 : '&5', // #AA00AA
-    6 : '&6', // #FFAA00
-    7 : '&7', // #AAAAAA
-    8 : '&8', // #555555
-    9 : '&9', // #5555FF
-    a : '&a', // #55FF55
-    b : '&b', // #55FFFF
-    c : '&c', // #FF5555
-    d : '&d', // #FF55FF
-    e : '&e', // #FFFF55
-    f : '&f' // #FFFFFF
+    0 : '§0', // #000000
+    1 : '§1', // #0000AA
+    2 : '§2', // #00AA00
+    3 : '§3', // #00AAAA
+    4 : '§4', // #AA0000
+    5 : '§5', // #AA00AA
+    6 : '§6', // #FFAA00
+    7 : '§7', // #AAAAAA
+    8 : '§8', // #555555
+    9 : '§9', // #5555FF
+    a : '§a', // #55FF55
+    b : '§b', // #55FFFF
+    c : '§c', // #FF5555
+    d : '§d', // #FF55FF
+    e : '§e', // #FFFF55
+    f : '§f' // #FFFFFF
 }
 
 let player = Player.getName()
@@ -43,129 +43,116 @@ const combinations = [
     `[VIP&r&7+&r&b] ${player}`, `[VIP&r&8+&r&b] ${player}`, `[VIP&r&9+&r&b] ${player}`
 ];
 
+register("chat", (msg, event) => {
+        if (!cmSettingsData.colorUserTrue && !cmSettingsData.colorTagTrue) return;
+        let msg2 = ChatLib.getChatMessage(event, true);
+        if (!msg.includes("MVP+") && !msg.includes("VIP+")) return;
+        if (!msg.includes(player)) return;
+        let msg3 = new Message(event).getMessageParts();
+        if (combinations.some(combination => msg2.includes(combination))) {
+            let matchingCombination = combinations.find(combination => msg2.includes(combination));
+            plusColor = matchingCombination.slice(6,8)
+            plusColor = plusColor.replace('&', '§')
+            if (cmSettingsData.colorUserTrue) {
+                msg3.forEach(element => {
+                    element.text = element.text.replace(player, `${colorDict[cmSettingsData.colorUser]}${player}§r`)
+                });
+            }
+            if (cmSettingsData.colorTagTrue) {
+                msg3.forEach(element => {
+                        // For /show (I fuckin hate you ! You took me way too long)
+                    if (element.text.match(/\[(MVP|VIP)§[0-9a-f]\+§b\]/g)) {
+                        element.text = element.text.replace(/\b(MVP|VIP)§[0-9a-f]\+§b\b/g, `MVP${colorDict[cmSettingsData.colorTag]}+§b`);
+                    } else {
+                        element.text = element.text.replace(`${plusColor}+§r`, `${colorDict[cmSettingsData.colorTag]}+§r`);
+                    }
+                });
+            }
+        }
+        let fmsg = textCompToChatComponent(new Message(msg3).getMessageParts())
+        fmsg = replaceDupe(fmsg)
+        event.message = fmsg
+}).setCriteria("${msg}")
 
-const S02PacketChat = Java.type("net.minecraft.network.play.server.S02PacketChat")
 const ChatComponentText = Java.type("net.minecraft.util.ChatComponentText")
+const IChatComponent = Java.type("net.minecraft.util.IChatComponent")
 const HoverEvent = Java.type("net.minecraft.event.HoverEvent")
+const ClickEvent = Java.type("net.minecraft.event.ClickEvent")
 const ChatStyle = Java.type("net.minecraft.util.ChatStyle")
-let connection = Client.getMinecraft().func_147114_u();
-let toBreak = false;
-
-
-// register("chat", (msg, event) => {
-//     try {
-//     if (toBreak) {toBreak = false; return};
-//     toBreak = true;
-//     if (!cmSettingsData.colorUserTrue && !cmSettingsData.colorTagTrue) {toBreak = false; return};
-//     let msg2 = ChatLib.getChatMessage(event, true);
-//     if (!msg.includes("MVP+") && !msg.includes("VIP+")) {toBreak = false; return};
-//     if (!msg.includes(player)) {toBreak = false; return};
-//     let msg3 = new Message(event).getMessageParts();
-//     if (combinations.some(combination => msg2.includes(combination))) {
-//         let matchingCombination = combinations.find(combination => msg2.includes(combination));
-//         plusColor = matchingCombination.slice(6,8)
-//         plusColor = plusColor.replace('&', '§')
-//         if (cmSettingsData.colorUserTrue) {
-//             msg3.forEach(element => {
-//                 element.text = element.text.replace(player, `${colorDict[cmSettingsData.colorUser]}${player}§r`)
-//             });
-//         }
-//         if (cmSettingsData.colorTagTrue) {
-//             msg3.forEach(element => {
-//                     // For /show (I fuckin hate you ! You took me way too long)
-//                 if (element.text.match(/\[(MVP|VIP)§[0-9a-f]\+§b\]/g)) {
-//                     element.text = element.text.replace(/\b(MVP|VIP)§[0-9a-f]\+§b\b/g, `MVP${colorDict[cmSettingsData.colorTag]}+§b`);
-//                 } else {
-//                     element.text = element.text.replace(`${plusColor}+§r`, `${colorDict[cmSettingsData.colorTag]}+§r`);
-//                 }
-                
-//             });
-//         }
-//     }
-    
-//     if (msg2.includes("&r&9Party &8>")) {
-//         let msg4 = new ChatComponentText(new Message(msg3).getFormattedText().replace("§r§r§r§r§r§r§9Party §8>", "§r§9Party §8>")/* I fuckin hate you replace, I still don't know why I need you */)
-//         let packet = new S02PacketChat(msg4);
-//         try {
-//             packet.func_148833_a(connection);
-//         } catch(e) {
-//             setTimeout(() => {
-//                 const delayedConnection = Client.getMinecraft().func_147114_u();
-//                 try {
-//                     packet.func_148833_a(delayedConnection);
-//                 } catch (err) {
-//                     console.error(`[Cm Error]: ${err}`)
-//                 }
-//                 try {
-//                     packet.func_148833_a(connection);
-//                 } catch(error) {
-//                     console.log(error);
-//                 }
-//             }, 500)
-//         }
-//         cancel(event)
-//     } else {
-//         new Message(msg3).chat()
-//         cancel(event)
-//     }
-
-//     toBreak = false;
-//     } catch(e) {
-//         console.error(e)
-//         if (!cmSettingsData.colorUserTrue && !cmSettingsData.colorTagTrue) return;
-//         let msg2 = ChatLib.getChatMessage(event, true);
-//         if (!msg.includes("MVP+") && !msg.includes("VIP+")) return;
-//         if (!msg.includes(player)) return;
-//         let msg3 = new Message(event).getMessageParts();
-//         if (combinations.some(combination => msg2.includes(combination))) {
-//             let matchingCombination = combinations.find(combination => msg2.includes(combination));
-//             plusColor = matchingCombination.slice(6,8)
-//             plusColor = plusColor.replace('&', '§')
-//             if (cmSettingsData.colorUserTrue) {
-//                 msg3.forEach(element => {
-//                     element.text = element.text.replace(player, `${colorDict[cmSettingsData.colorUser]}${player}§r`)
-//                 });
-//             }
-//             if (cmSettingsData.colorTagTrue) {
-//                 msg3.forEach(element => {
-//                         // For /show (I fuckin hate you ! You took me way too long)
-//                     if (element.text.match(/\[(MVP|VIP)§[0-9a-f]\+§b\]/g)) {
-//                         element.text = element.text.replace(/\b(MVP|VIP)§[0-9a-f]\+§b\b/g, `MVP${colorDict[cmSettingsData.colorTag]}+§b`);
-//                     } else {
-//                         element.text = element.text.replace(`${plusColor}+§r`, `${colorDict[cmSettingsData.colorTag]}+§r`);
-//                     }
-                    
-//                 });
-//             }
-//         }
-    
-//         new Message(msg3).chat()
-//         cancel(event)
-//     }
-// }).setCriteria("${msg}")
 
 function stringToChatComponent(message) {
     return new ChatComponentText(message).func_150257_a(new ChatComponentText(""));;
 }
 
-register("chat", (msg, event) => {
-    // console.log(new Message(event.message).getMessageParts())
-    // console.log("\n\n\n\n\n")
-    const ChatComponentText = Java.type("net.minecraft.util.ChatComponentText")
-    const IChatComponent = Java.type("net.minecraft.util.IChatComponent")
-    const HoverEvent = Java.type("net.minecraft.event.HoverEvent")
-    const ClickEvent = Java.type("net.minecraft.event.ClickEvent")
-    const ChatStyle = Java.type("net.minecraft.util.ChatStyle")
+function eventAction(act) {
+    switch(act) {
+        case "show_text":
+            return HoverEvent.Action.SHOW_TEXT;
+        case "show _item":
+            return HoverEvent.Action.SHOW_ITEM;
+        case "show_entity":
+            return HoverEvent.Action.SHOW_ENTITY;
+        case "show_achievement":
+            return HoverEvent.Action.SHOW_ACHIEVEMENT;
+        case "run_command":
+            return ClickEvent.Action.RUN_COMMAND;
+        case "suggest_command":
+            return ClickEvent.Action.SUGGEST_COMMAND;
+        case "open_url":
+            return ClickEvent.Action.OPEN_URL;
+        case "change_page":
+            return ClickEvent.Action.CHANGE_PAGE;
+        case "open_file":
+            return ClickEvent.Action.OPEN_FILE;
+        default:
+            return null;
+    }
+}
 
-    let msg = new ChatComponentText("§5Hello ").func_150257_a(new ChatComponentText("§b:3")); // Makes it an IChatComponent
-    let hover = new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText("UwU"))
-    let click = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/UwU")
-    msg.func_150255_a(new ChatStyle().func_150209_a(hover).func_150241_a(click))
+function replaceDupe(comp) {
+    comp.forEach((textComponent) => {
+        console.log("Here's the text:", textComponent.text)
+        textComponent.text = textComponent.text.replace("§r§r§r§r§r§r§r", "").replace("§r§r§r§r§r§r", "").replace("§r§r§r§r§r", "").replace("§r§r§r§r","").replace("§r§r§r","").replace("§r§r","").replace("§r","").replace("&", "§")
+        console.log("Here's the text after update:", textComponent.text)
+        if (textComponent.func_150253_a()/* getSiblings */.length > 0) {
+            textComponent.func_150253_a().forEach((siblings) => {
+                replaceDupe(siblings)
+            })
+        }
+    })
+    return comp
+}
 
-    console.log(new Message(event.message).getFormattedText().replace("&", "§"))
-    event.message = stringToChatComponent(new Message(event.message).getFormattedText().replace("&", "§"))
+function textCompToChatComponent(comp) {
+    let fullComponent = new ChatComponentText(comp[0].text);
+    comp.slice(1).forEach((textComponent) => {
+        let componentText = new ChatComponentText(textComponent.text);
+        let hoverAction = eventAction(textComponent.hoverAction);
+        const hoverValue = textComponent.hoverValue;
+        let clickAction = eventAction(textComponent.clickAction);
+        const clickValue = textComponent.clickValue;
 
-}).setCriteria("${msg}")
+        if (hoverAction && hoverValue && clickAction && clickValue) {
+            hoverAction = hoverAction
+            clickAction = clickAction
+            const hover = new HoverEvent(hoverAction, new ChatComponentText(hoverValue));
+            const click = new ClickEvent(clickAction, new ChatComponentText(clickValue))
+            componentText.func_150255_a(new ChatStyle().func_150209_a(hover).func_150241_a(click))
+        } else if (hoverAction && hoverValue && !clickAction && !clickValue) {
+            hoverAction = hoverAction
+            const hover = new HoverEvent(hoverAction, new ChatComponentText(hoverValue));
+            componentText.func_150255_a(new ChatStyle().func_150209_a(hover))
+        } else if (!hoverAction && !hoverValue && clickAction && clickValue) {
+            clickAction = clickAction
+            const click = new ClickEvent(clickAction, new ChatComponentText(clickValue))
+            componentText.func_150255_a(new ChatStyle().func_150241_a(click))
+        }
+
+        fullComponent.func_150257_a(componentText)
+    })
+    if (fullComponent.func_150253_a().length == 0) fullComponent.func_150257_a(new ChatComponentText(""))
+    return fullComponent
+}
 
 
 // const ChatComponentText = Java.type("net.minecraft.util.ChatComponentText")
@@ -341,3 +328,4 @@ register("chat", (msg, event) => {
 //       clickValue: null
 //     }
 // ]
+

@@ -31,13 +31,10 @@ const commands = [
 ];
 
 const changelog = [
-    {header: "+", description: "Fixed color replacor to work with skytils"},
-    {header: "+", description: "Updated /mymf and !mymf to work with kill combos (see /cm help)"},
-    {header: "+", description: "Updated /cm help"},
-    {header: "=", description: "Made it more user friendly"}
+    {header: "+", description: "Color Replacor works now with Skytil chat tabs!"}
 ]
 
-const newVersion = "1.26.0"
+const newVersion = "1.30.0"
 
 register("command", (args1, ...args) => {
     if (args1 == undefined ) {

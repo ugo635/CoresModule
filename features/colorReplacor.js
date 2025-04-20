@@ -111,9 +111,7 @@ function eventAction(act) {
 
 function replaceDupe(comp) {
     comp.forEach((textComponent) => {
-        console.log("Here's the text:", textComponent.text)
         textComponent.text = textComponent.text.replace("§r§r§r§r§r§r§r", "").replace("§r§r§r§r§r§r", "").replace("§r§r§r§r§r", "").replace("§r§r§r§r","").replace("§r§r§r","").replace("§r§r","").replace("§r","")
-        console.log("Here's the text after update:", textComponent.text)
         if (textComponent.func_150253_a()/* getSiblings */.length > 0) {
             textComponent.func_150253_a().forEach((siblings) => {
                 replaceDupe(siblings)
@@ -136,7 +134,7 @@ function textCompToChatComponent(comp) {
             hoverAction = hoverAction
             clickAction = clickAction
             const hover = new HoverEvent(hoverAction, new ChatComponentText(hoverValue));
-            const click = new ClickEvent(clickAction, new ChatComponentText(clickValue))
+            const click = new ClickEvent(clickAction, clickValue);
             componentText.func_150255_a(new ChatStyle().func_150209_a(hover).func_150241_a(click))
         } else if (hoverAction && hoverValue && !clickAction && !clickValue) {
             hoverAction = hoverAction
@@ -144,7 +142,7 @@ function textCompToChatComponent(comp) {
             componentText.func_150255_a(new ChatStyle().func_150209_a(hover))
         } else if (!hoverAction && !hoverValue && clickAction && clickValue) {
             clickAction = clickAction
-            const click = new ClickEvent(clickAction, new ChatComponentText(clickValue))
+            const click = new ClickEvent(clickAction, clickValue)
             componentText.func_150255_a(new ChatStyle().func_150241_a(click))
         }
 

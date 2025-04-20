@@ -12,21 +12,19 @@ const colorDict = {
     7 : '§7', // #AAAAAA
     8 : '§8', // #555555
     9 : '§9', // #5555FF
-    a : '§a', // #55FF55
-    b : '§b', // #55FFFF
-    c : '§c', // #FF5555
-    d : '§d', // #FF55FF
-    e : '§e', // #FFFF55
-    f : '§f' // #FFFFFF
+    10 : '§a', // #55FF55
+    11 : '§b', // #55FFFF
+    12 : '§c', // #FF5555
+    13 : '§d', // #FF55FF
+    14 : '§e', // #FFFF55
+    15 : '§f' // #FFFFFF
 }
 
 let player = Player.getName()
 const combinations = [
-    `[VIP&a+&b] ${player}`, `[VIP&b+&b] ${player}`, `[VIP&c+&b] ${player}`, `[VIP&d+&b] ${player}`, 
-    `[VIP&e+&b] ${player}`, `[VIP&0+&b] ${player}`, `[VIP&1+&b] ${player}`, `[VIP&2+&b] ${player}`, 
-    `[VIP&3+&b] ${player}`, `[VIP&4+&b] ${player}`, `[VIP&5+&b] ${player}`, `[VIP&6+&b] ${player}`, 
-    `[VIP&7+&b] ${player}`, `[VIP&8+&b] ${player}`, `[VIP&9+&b] ${player}`,
-    
+    `[VIP&r&6+&r&a] ${player}`,
+    `[VIP&6+&a] ${player}`,
+
     `[MVP&a+&b] ${player}`, `[MVP&b+&b] ${player}`, `[MVP&c+&b] ${player}`, `[MVP&d+&b] ${player}`, 
     `[MVP&e+&b] ${player}`, `[MVP&0+&b] ${player}`, `[MVP&1+&b] ${player}`, `[MVP&2+&b] ${player}`, 
     `[MVP&3+&b] ${player}`, `[MVP&4+&b] ${player}`, `[MVP&5+&b] ${player}`, `[MVP&6+&b] ${player}`, 
@@ -36,17 +34,31 @@ const combinations = [
     `[MVP&r&1+&r&b] ${player}`, `[MVP&r&2+&r&b] ${player}`, `[MVP&r&3+&r&b] ${player}`, 
     `[MVP&r&4+&r&b] ${player}`, `[MVP&r&5+&r&b] ${player}`, `[MVP&r&6+&r&b] ${player}`, 
     `[MVP&r&7+&r&b] ${player}`, `[MVP&r&8+&r&b] ${player}`, `[MVP&r&9+&r&b] ${player}`,
+
+    `[MVP&a++&b] ${player}`, `[MVP&b++&b] ${player}`, `[MVP&c++&b] ${player}`, `[MVP&d++&b] ${player}`, 
+    `[MVP&e++&b] ${player}`, `[MVP&0++&b] ${player}`, `[MVP&1++&b] ${player}`, `[MVP&2++&b] ${player}`, 
+    `[MVP&3++&b] ${player}`, `[MVP&4++&b] ${player}`, `[MVP&5++&b] ${player}`, `[MVP&6++&b] ${player}`, 
+    `[MVP&7++&b] ${player}`, `[MVP&8++&b] ${player}`, `[MVP&9++&b] ${player}`,
     
-    `[VIP&r&d+&r&b] ${player}`, `[VIP&r&e+&r&b] ${player}`, `[VIP&r&0+&r&b] ${player}`, 
-    `[VIP&r&1+&r&b] ${player}`, `[VIP&r&2+&r&b] ${player}`, `[VIP&r&3+&r&b] ${player}`, 
-    `[VIP&r&4+&r&b] ${player}`, `[VIP&r&5+&r&b] ${player}`, `[VIP&r&6+&r&b] ${player}`, 
-    `[VIP&r&7+&r&b] ${player}`, `[VIP&r&8+&r&b] ${player}`, `[VIP&r&9+&r&b] ${player}`
+    `[MVP&r&d++&r&b] ${player}`, `[MVP&r&e++&r&b] ${player}`, `[MVP&r&0++&r&b] ${player}`, 
+    `[MVP&r&1++&r&b] ${player}`, `[MVP&r&2++&r&b] ${player}`, `[MVP&r&3++&r&b] ${player}`, 
+    `[MVP&r&4++&r&b] ${player}`, `[MVP&r&5++&r&b] ${player}`, `[MVP&r&6++&r&b] ${player}`, 
+    `[MVP&r&7++&r&b] ${player}`, `[MVP&r&8++&r&b] ${player}`, `[MVP&r&9++&r&b] ${player}`
 ];
 
 register("chat", (msg, event) => {
         if (!cmSettingsData.colorUserTrue && !cmSettingsData.colorTagTrue) return;
         let msg2 = ChatLib.getChatMessage(event, true);
-        if (!msg.includes("MVP+") && !msg.includes("VIP+")) return;
+        if (!msg.includes("MVP+") && !msg.includes("VIP+") && !msg.includes("MVP++")) return;
+        let rank;
+        if (msg.includes("MVP+")) {
+            rank = "MVP+"
+        } else if (msg.includes("VIP+")) {
+            rank = "VIP+"
+        } else {
+            rank = "MVP++"
+        }
+        rank = (msg.includes("MVP+")) ? "MVP+" : (msg.includes("VIP+")) ? "VIP+" : "MVP++"
         if (!msg.includes(player)) return;
         let msg3 = new Message(event).getMessageParts();
         if (combinations.some(combination => msg2.includes(combination))) {
@@ -61,8 +73,14 @@ register("chat", (msg, event) => {
             if (cmSettingsData.colorTagTrue) {
                 msg3.forEach(element => {
                         // For /show (I fuckin hate you ! You took me way too long)
-                    if (element.text.match(/\[(MVP|VIP)§[0-9a-f]\+§b\]/g)) {
-                        element.text = element.text.replace(/\b(MVP|VIP)§[0-9a-f]\+§b\b/g, `MVP${colorDict[cmSettingsData.colorTag]}+§b`);
+                    if (element.text.match(/\[(MVP|VIP)§[0-9a-f]\+§b\]/g) || element.text.match(/\[(MVP|VIP)§[0-9a-f]\+§a\]/g) || element.text.match(/\[(MVP|VIP)§[0-9a-f]\+§6\]/g)) {
+                        if (rank == "MVP+") {
+                            element.text = element.text.replace(/\b(MVP|VIP)§[0-9a-f]\+§b\b/g, `MVP${colorDict[cmSettingsData.colorTag]}+§b`);
+                        } else if (rank == "VIP+") {
+                            element.text = element.text.replace(/\b(MVP|VIP)§[0-9a-f]\+§a\b/g, `VIP${colorDict[cmSettingsData.colorTag]}+§a`);
+                        } else {
+                            element.text = element.text.replace(/\b(MVP|VIP)§[0-9a-f]\+§6\b/g, `MVP${colorDict[cmSettingsData.colorTag]}++§6`)
+                        }
                     } else {
                         element.text = element.text.replace(`${plusColor}+§r`, `${colorDict[cmSettingsData.colorTag]}+§r`);
                     }

@@ -26,8 +26,8 @@ register("gameLoad", () => {
 const commands = [
     {cmd: "cm", description: "Open the settings", ph: ""},
     {cmd: "cm help", description: "Show this message", ph: ""},
-    {cmd: "mymf <Number>", description: "Gives your mf on inquisitors for the following case: \n &cInput ur mf with renowned sorrow / mf 10 kuudra armor, fragged dae axe, mf pet, no1 arround so legion isn't active (must have max be, legion V, renowned, shuriken) e.g: /mymf 300", ph: "mymf 300"},
-    {cmd: "mymf <Number> <MF From Kill Combo>", description: "Gives your mf on inquisitors for the following case: \n &cInput ur mf with renowned sorrow / mf 10 kuudra armor, fragged dae axe, mf pet, no1 arround so legion isn't active (must have max be, legion V, renowned, shuriken) \n &cInput the mf you gain from kill combo e.g: /mymf 300 6 (15 kill combo)", ph: "mymf 300 6"}
+    {cmd: "mymf <Number>", description: "Gives your mf on inquisitors for the following input: \n &cInput ur mf with renowned sorrow / mf 10 kuudra armor, fragged dae axe, mf pet, no1 arround so legion isn't active (must have max be, legion V, renowned, shuriken) e.g: /mymf 300", ph: "mymf 300"},
+    {cmd: "mymf <Number> <MF From Kill Combo>", description: "Gives your mf on inquisitors for the following input: \n &cInput ur mf with renowned sorrow / mf 10 kuudra armor, fragged dae axe, mf pet, no1 arround so legion isn't active (must have max be, legion V, renowned, shuriken) \n &cInput the mf you gain from kill combo e.g: /mymf 300 6 (15 kill combo)", ph: "mymf 300 6"}
 ];
 
 const changelog = [

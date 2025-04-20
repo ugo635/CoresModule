@@ -111,9 +111,7 @@ function eventAction(act) {
 
 function replaceDupe(comp) {
     comp.forEach((textComponent) => {
-        console.log("Here's the text:", textComponent.text)
         textComponent.text = textComponent.text.replace("§r§r§r§r§r§r§r", "").replace("§r§r§r§r§r§r", "").replace("§r§r§r§r§r", "").replace("§r§r§r§r","").replace("§r§r§r","").replace("§r§r","").replace("§r","")
-        console.log("Here's the text after update:", textComponent.text)
         if (textComponent.func_150253_a()/* getSiblings */.length > 0) {
             textComponent.func_150253_a().forEach((siblings) => {
                 replaceDupe(siblings)

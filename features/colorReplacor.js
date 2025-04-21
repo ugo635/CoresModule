@@ -49,36 +49,37 @@ const combinations = [
 register("chat", (msg, event) => {
         if (!cmSettingsData.colorUserTrue && !cmSettingsData.colorTagTrue) return;
         let msg2 = ChatLib.getChatMessage(event, true);
-        if (!msg.includes("MVP+") && !msg.includes("VIP+") && !msg.includes("MVP++")) return;
-        let rank;
-        if (msg.includes("MVP+")) {
-            rank = "MVP+"
-        } else if (msg.includes("VIP+")) {
-            rank = "VIP+"
-        } else {
-            rank = "MVP++"
-        }
-        rank = (msg.includes("MVP+")) ? "MVP+" : (msg.includes("VIP+")) ? "VIP+" : "MVP++"
-        if (!msg.includes(player)) return;
+        if (!msg.includes("MVP+") && !msg.includes("VIP+") && !msg.includes("MVP++") && !msg.includes(player)) return;
+        let rank = (msg.includes("MVP+")) ? "MVP+" : (msg.includes("VIP+")) ? "VIP+" : (msg.includes("MVP++")) ? "MVP++" : (msg.includes("VIP")) ? "VIP" : (msg.includes("MVP")) ? "MVP" : null;
         let msg3 = new Message(event).getMessageParts();
+
+        // Player Replace
+        if (cmSettingsData.colorUserTrue) {
+            if (rank != null) {
+                msg3.forEach(element => {
+                    element.text = element.text.replace(player, `${colorDict[cmSettingsData.colorUser]}${player}§f`)
+                });
+            } else {
+                msg3.forEach(element => {
+                    element.text = element.text.replace(player, `${colorDict[cmSettingsData.colorUser]}${player}§7`)
+                });
+            }
+            
+        }
+
+        // Tag Replace
         if (combinations.some(combination => msg2.includes(combination))) {
             let matchingCombination = combinations.find(combination => msg2.includes(combination));
             plusColor = matchingCombination.slice(6,8)
             plusColor = plusColor.replace('&', '§')
-            if (cmSettingsData.colorUserTrue) {
-                msg3.forEach(element => {
-                    element.text = element.text.replace(player, `${colorDict[cmSettingsData.colorUser]}${player}§r`)
-                });
-            }
             if (cmSettingsData.colorTagTrue) {
                 msg3.forEach(element => {
-                        // For /show (I fuckin hate you ! You took me way too long)
                     if (element.text.match(/\[(MVP|VIP)§[0-9a-f]\+§b\]/g) || element.text.match(/\[(MVP|VIP)§[0-9a-f]\+§a\]/g) || element.text.match(/\[(MVP|VIP)§[0-9a-f]\+§6\]/g)) {
                         if (rank == "MVP+") {
                             element.text = element.text.replace(/\b(MVP|VIP)§[0-9a-f]\+§b\b/g, `MVP${colorDict[cmSettingsData.colorTag]}+§b`);
                         } else if (rank == "VIP+") {
                             element.text = element.text.replace(/\b(MVP|VIP)§[0-9a-f]\+§a\b/g, `VIP${colorDict[cmSettingsData.colorTag]}+§a`);
-                        } else {
+                        } else if (rank == "MVP++") {
                             element.text = element.text.replace(/\b(MVP|VIP)§[0-9a-f]\+§6\b/g, `MVP${colorDict[cmSettingsData.colorTag]}++§6`)
                         }
                     } else {
@@ -87,6 +88,8 @@ register("chat", (msg, event) => {
                 });
             }
         }
+
+        // Send the message
         let fmsg = textCompToChatComponent(new Message(msg3).getMessageParts())
         fmsg = replaceDupe(fmsg)
         event.message = fmsg

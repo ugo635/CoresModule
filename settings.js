@@ -21,7 +21,7 @@ import {
         // or a positive number if b should be sorted before a.
 
         // In this case, we can put Not general! to be above general.
-        const categories = ['General', 'Diana', 'Warps', 'Credits'];
+        const categories = ['Color Replacor', 'General', 'Diana', 'Warps', 'Credits'];
 
         return categories.indexOf(a.name) - categories.indexOf(b.name);
     },
@@ -49,20 +49,21 @@ class cmSettingsData {
         this.addDependency("Update Warp", "Warps Shortcut");
         this.addDependency("Potion", "Potion Reminder");
         this.addDependency("Coords Sound", "Coords Detector")
+        this.addDependency("Replace MVP+ by MVP++", "Color Tag replacor")
 
     }
     //----------- General ----------------
     @SwitchProperty({
         name: "Color Username replacor",
         description: "Enable or disable the Username color replacor",
-        category: "General",
+        category: "Color Replacor",
         subcategory: "Settings"
     })
     colorUserTrue = false;
     @SelectorProperty({
         name: "Color Username",
         description: "Choose color username (/color for example)",
-        category: "General",
+        category: "Color Replacor",
         subcategory: "Settings",
         options: ["Black", "Dark Blue", "Dark Green", "Dark Aqua", "Dark Red", "Dark Purple", "Gold", "Gray", "Dark Gray", "Blue", "Green", "Aqua", "Red", "Light Purple / Pink", "Yellow"]
     })
@@ -70,18 +71,25 @@ class cmSettingsData {
     @SwitchProperty({
         name: "Color Tag replacor",
         description: "Enable or disable the color tag replacor",
-        category: "General",
+        category: "Color Replacor",
         subcategory: "Settings"
     })
     colorTagTrue = false;
     @SelectorProperty({
         name: "Color Tag",
         description: "Choose color tag (/color for example)",
-        category: "General",
+        category: "Color Replacor",
         subcategory: "Settings",
         options: ["Black", "Dark Blue", "Dark Green", "Dark Aqua", "Dark Red", "Dark Purple", "Gold", "Gray", "Dark Gray", "Blue", "Green", "Aqua", "Red", "Light Purple / Pink", "Yellow"]
     })
     colorTag = 0;
+    @SwitchProperty({
+        name: "Replace MVP+ by MVP++",
+        description: "Enable or disable the &b[MVP+]&7 to &6[MVP++]&7 replacor",
+        category: "Color Replacor",
+        subcategory: "Settings"
+    })
+    newTag = false;
     @SwitchProperty({
         name: "Party Invite Message Editor",
         description: "Edits party invite message to lyk if the guy is in your lobby",

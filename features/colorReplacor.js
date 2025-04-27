@@ -26,24 +26,24 @@ const combinations = [
     `[VIP&6+&a] ${player}`,
 
     `[MVP&a+&b] ${player}`, `[MVP&b+&b] ${player}`, `[MVP&c+&b] ${player}`, `[MVP&d+&b] ${player}`, 
-    `[MVP&e+&b] ${player}`, `[MVP&0+&b] ${player}`, `[MVP&1+&b] ${player}`, `[MVP&2+&b] ${player}`, 
-    `[MVP&3+&b] ${player}`, `[MVP&4+&b] ${player}`, `[MVP&5+&b] ${player}`, `[MVP&6+&b] ${player}`, 
-    `[MVP&7+&b] ${player}`, `[MVP&8+&b] ${player}`, `[MVP&9+&b] ${player}`,
+    `[MVP&e+&b] ${player}`, `[MVP&f+&b] ${player}`, `[MVP&0+&b] ${player}`, `[MVP&1+&b] ${player}`, 
+    `[MVP&2+&b] ${player}`, `[MVP&3+&b] ${player}`, `[MVP&4+&b] ${player}`, `[MVP&5+&b] ${player}`,
+    `[MVP&6+&b] ${player}`, `[MVP&7+&b] ${player}`, `[MVP&8+&b] ${player}`, `[MVP&9+&b] ${player}`,
     
-    `[MVP&r&d+&r&b] ${player}`, `[MVP&r&e+&r&b] ${player}`, `[MVP&r&0+&r&b] ${player}`, 
-    `[MVP&r&1+&r&b] ${player}`, `[MVP&r&2+&r&b] ${player}`, `[MVP&r&3+&r&b] ${player}`, 
-    `[MVP&r&4+&r&b] ${player}`, `[MVP&r&5+&r&b] ${player}`, `[MVP&r&6+&r&b] ${player}`, 
-    `[MVP&r&7+&r&b] ${player}`, `[MVP&r&8+&r&b] ${player}`, `[MVP&r&9+&r&b] ${player}`,
+    `[MVP&r&a+&r&b] ${player}`, `[MVP&r&b+&r&b] ${player}`, `[MVP&r&c+&r&b] ${player}`, `[MVP&r&d+&r&b] ${player}`,
+    `[MVP&r&e+&r&b] ${player}`, `[MVP&r&f+&r&b] ${player}`, `[MVP&r&0+&r&b] ${player}`, `[MVP&r&1+&r&b] ${player}`,
+    `[MVP&r&2+&r&b] ${player}`, `[MVP&r&3+&r&b] ${player}`, `[MVP&r&4+&r&b] ${player}`, `[MVP&r&5+&r&b] ${player}`,
+    `[MVP&r&6+&r&b] ${player}`, `[MVP&r&7+&r&b] ${player}`, `[MVP&r&8+&r&b] ${player}`, `[MVP&r&9+&r&b] ${player}`,
 
-    `[MVP&a++&b] ${player}`, `[MVP&b++&b] ${player}`, `[MVP&c++&b] ${player}`, `[MVP&d++&b] ${player}`, 
-    `[MVP&e++&b] ${player}`, `[MVP&0++&b] ${player}`, `[MVP&1++&b] ${player}`, `[MVP&2++&b] ${player}`, 
-    `[MVP&3++&b] ${player}`, `[MVP&4++&b] ${player}`, `[MVP&5++&b] ${player}`, `[MVP&6++&b] ${player}`, 
-    `[MVP&7++&b] ${player}`, `[MVP&8++&b] ${player}`, `[MVP&9++&b] ${player}`,
+    `[MVP&a++&6] ${player}`, `[MVP&b++&6] ${player}`, `[MVP&c++&6] ${player}`, `[MVP&d++&6] ${player}`, 
+    `[MVP&e++&6] ${player}`, `[MVP&f++&6] ${player}`, `[MVP&0++&6] ${player}`, `[MVP&1++&6] ${player}`,
+    `[MVP&2++&6] ${player}`, `[MVP&3++&6] ${player}`, `[MVP&4++&6] ${player}`, `[MVP&5++&6] ${player}`,
+    `[MVP&6++&6] ${player}`, `[MVP&7++&6] ${player}`, `[MVP&8++&6] ${player}`, `[MVP&9++&6] ${player}`,
     
-    `[MVP&r&d++&r&b] ${player}`, `[MVP&r&e++&r&b] ${player}`, `[MVP&r&0++&r&b] ${player}`, 
-    `[MVP&r&1++&r&b] ${player}`, `[MVP&r&2++&r&b] ${player}`, `[MVP&r&3++&r&b] ${player}`, 
-    `[MVP&r&4++&r&b] ${player}`, `[MVP&r&5++&r&b] ${player}`, `[MVP&r&6++&r&b] ${player}`, 
-    `[MVP&r&7++&r&b] ${player}`, `[MVP&r&8++&r&b] ${player}`, `[MVP&r&9++&r&b] ${player}`
+    `[MVP&r&a++&r&6] ${player}`, `[MVP&r&b++&r&6] ${player}`, `[MVP&r&c++&r&6] ${player}`, `[MVP&r&d++&r&6] ${player}`,
+    `[MVP&r&e++&r&6] ${player}`, `[MVP&r&f++&r&6] ${player}`, `[MVP&r&0++&r&6] ${player}`, `[MVP&r&1++&r&6] ${player}`,
+    `[MVP&r&2++&r&6] ${player}`, `[MVP&r&3++&r&6] ${player}`, `[MVP&r&4++&r&6] ${player}`, `[MVP&r&5++&r&6] ${player}`,
+    `[MVP&r&6++&r&6] ${player}`,  `[MVP&r&7++&r&6] ${player}`, `[MVP&r&8++&r&6] ${player}`, `[MVP&r&9++&r&6] ${player}`
 ];
 
 register("chat", (msg, event) => {

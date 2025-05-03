@@ -43,8 +43,8 @@ register("command", () => {
         testing_list.forEach((test_msg) => {
         ChatLib.command(`ct simulate ${test_msg}`, true)
         })
-        cmSettingsData.newRank += 1
-        if (cmSettingsData.newRank > 5) cmSettingsData.newRank = 0
+        cmSettingsData.newRank += 1;
+        if (cmSettingsData.newRank > 5) cmSettingsData.newRank = 0;
     }, 500 * i)
     }
 }).setName("colorTests2").setAliases("colorTest2")
@@ -178,22 +178,23 @@ register("chat", (msg, event) => {
                         break;
                 }} else {
                 UpdateInfos()
-                matchingCombination += " "
+                matchingCombination += ""
                 switch (rank) {
                     case "MVP++":
-                        element.text = element.text.replace(matchingCombination, "");
+                        console.log(matchingCombination, element.text)
+                        element.text = element.text.replace(matchingCombination, "").replace(" ", "");
                         break;
                     case "MVP+":
-                        element.text = element.text.replace(matchingCombination, "");
+                        element.text = element.text.replace(matchingCombination, "").replace(" ", "");
                         break;
                     case "MVP":
-                        element.text = element.text.replace(matchingCombination, "");
+                        element.text = element.text.replace(matchingCombination, "").replace(" ", "");
                         break;
                     case "VIP+":
-                        element.text = element.text.replace(matchingCombination, "");
+                        element.text = element.text.replace(matchingCombination, "").replace(" ", "");
                         break;
                     case "VIP":
-                        element.text = element.text.replace(matchingCombination, "");
+                        element.text = element.text.replace(matchingCombination, "").replace(" ", "");
                         break;
                     case "rankless":
                         break;
@@ -309,32 +310,8 @@ function textCompToChatComponent(comp) {
 }
 
 
-// const ChatComponentText = Java.type("net.minecraft.util.ChatComponentText")
-// const IChatComponent = Java.type("net.minecraft.util.IChatComponent")
-// const HoverEvent = Java.type("net.minecraft.event.HoverEvent")
-// const ChatStyle = Java.type("net.minecraft.util.ChatStyle")
-
-// let finalMessage = new Message(msg3)
-// let ListOfClicksAndHover = [];
-// finalMessage.getMessageParts().forEach((part) => {
-//     const clickEvent = part.clickEvent
-//     const hoverEvent = part.hoverEvent
-//     ListOfClicksAndHover.push([clickEvent, hoverEvent])
-// })
-
-// event.message =  new ChatComponentText("Hello :3")
-// // IChatComponent can't be used for event.message
-
-
-
-
 
 // TextComponent{text='§r§9Party §8> i hate humanity', siblings=[], style=Style{hasParent=false, color=null, bold=null, italic=null, underlined=null, obfuscated=null, clickEvent=null, hoverEvent=null, insertion=null}}
-
-
-
-
-
 
 
 // for item in msg:

@@ -49,12 +49,15 @@ class cmSettingsData {
         this.addDependency("Update Warp", "Warps Shortcut");
         this.addDependency("Potion", "Potion Reminder");
         this.addDependency("Coords Sound", "Coords Detector")
-        this.addDependency("Replace MVP+ by MVP++", "Color Tag replacor")
+        this.addDependency("Replace Rank", "Color Tag Replacor")
+        this.addDependency("Rank Replacor", "Replace Rank")
+        this.addDependency("Color Username", "Color Username Replacor")
+        this.addDependency("Color Tag", "Color Tag Replacor")
 
     }
     //----------- General ----------------
     @SwitchProperty({
-        name: "Color Username replacor",
+        name: "Color Username Replacor",
         description: "Enable or disable the Username color replacor",
         category: "Color Replacor",
         subcategory: "Settings"
@@ -69,7 +72,7 @@ class cmSettingsData {
     })
     colorUser = 0;
     @SwitchProperty({
-        name: "Color Tag replacor",
+        name: "Color Tag Replacor",
         description: "Enable or disable the color tag replacor",
         category: "Color Replacor",
         subcategory: "Settings"
@@ -84,12 +87,20 @@ class cmSettingsData {
     })
     colorTag = 0;
     @SwitchProperty({
-        name: "Replace MVP+ by MVP++",
+        name: "Replace Rank",
         description: "Enable or disable the &b[MVP+]&7 to &6[MVP++]&7 replacor",
         category: "Color Replacor",
         subcategory: "Settings"
     })
     newTag = false;
+    @SelectorProperty({
+        name: "Rank Replacor",
+        description: "Replace your rank with any desired rank ex: &b[MVP+]&7 to &6[MVP++]&7",
+        category: "Color Replacor",
+        subcategory: "Settings",
+        options: ["MVP++", "MVP+", "MVP", "VIP+", "VIP", "rankless"]
+    })
+    newRank = 0;
     @SwitchProperty({
         name: "Party Invite Message Editor",
         description: "Edits party invite message to lyk if the guy is in your lobby",

@@ -23,12 +23,12 @@ let player = Player.getName()
 
 // Color Test
 testing_list = [
-    `&6[MVP&d++&6] ${player}`,
-    `&b[MVP&d+&b] ${player}`,
-    `&a[VIP&6+&a] ${player}`,
-    `&b[MVP&b] ${player}`,
-    `&a[VIP&a] ${player}`,
-    `&7${player}`
+    `&6[MVP&d++&6] ${player}&r: &fHi, I'm M++`,
+    `&b[MVP&d+&b] ${player}&r: &fHi, I'm M+`,
+    `&a[VIP&6+&a] ${player}&r: &fHi, I'm V+`,
+    `&b[MVP&b] ${player}&r: &fHi, I'm M`,
+    `&a[VIP&a] ${player}&r: &fHi, I'm V`,
+    `&7${player}&r&7: Hi, I'm rankless!`
 ]
 
 register("command", () => {
@@ -38,11 +38,35 @@ register("command", () => {
 }).setName("colorTests")
 
 
+const newRankDict = {
+    0: `§6[MVP${colorDict[cmSettingsData.colorTag]}++§6]`,
+    1 : `§b[MVP${colorDict[cmSettingsData.colorTag]}+§b]`,
+    2 : `§b[MVP]`,
+    3 : `[VIP${colorDict[cmSettingsData.colorTag]}+§a]`,
+    4 : `§b[VIP]`,
+    5 : `${player}`,
+}
 
+const rankDict = {
+    0: `MVP++`,
+    1 : `MVP+`,
+    2 : `MVP`,
+    3 : `VIP+`,
+    4 : `VIP`,
+    5 : `rankless`,
+}
+
+const newPlayerRank = `${newRankDict[cmSettingsData.newRank]}`
+const wantRank = rankDict[cmSettingsData.newRank] != "rankless"
 
 const combinations = [
     `[VIP&r&6+&r&a] ${player}`,
     `[VIP&6+&a] ${player}`,
+    `[MVP&r&b] ${player}`,
+    `[MVP&b] ${player}`,
+    `[VIP&r&a] ${player}`,
+    `[VIP&a] ${player}`,
+    `${player}`,
 
     `[MVP&a+&b] ${player}`, `[MVP&b+&b] ${player}`, `[MVP&c+&b] ${player}`, `[MVP&d+&b] ${player}`, 
     `[MVP&e+&b] ${player}`, `[MVP&f+&b] ${player}`, `[MVP&0+&b] ${player}`, `[MVP&1+&b] ${player}`, 
@@ -68,23 +92,9 @@ const combinations = [
 register("chat", (msg, event) => {
         if (!cmSettingsData.colorUserTrue && !cmSettingsData.colorTagTrue) return;
         let msg2 = ChatLib.getChatMessage(event, true);
-        if (!msg.includes("MVP+") && !msg.includes("VIP+") && !msg.includes("MVP++") && !msg.includes(player)) return;
+        if (!msg.includes("MVP+") && !msg.includes("VIP+") && !msg.includes("MVP++") && !msg.includes("MVP") && !msg.includes("VIP") && !msg.includes(player)) return;
         let rank = msg.includes("MVP++") ? "MVP++" : msg.includes("MVP+") ? "MVP+" : msg.includes("MVP") ? "MVP" : msg.includes("VIP+") ? "VIP+" : msg.includes("VIP") ? "VIP" : "rankless";
         let msg3 = new Message(event).getMessageParts();
-
-        // Player Replace
-        if (cmSettingsData.colorUserTrue) {
-            if (rank != null) {
-                msg3.forEach(element => {
-                    element.text = element.text.replace(player, `${colorDict[cmSettingsData.colorUser]}${player}§f`)
-                });
-            } else {
-                msg3.forEach(element => {
-                    element.text = element.text.replace(player, `${colorDict[cmSettingsData.colorUser]}${player}§7`)
-                });
-            }
-            
-        }
 
         // Tag Replace
         if (combinations.some(combination => msg2.includes(combination))) {
@@ -93,39 +103,92 @@ register("chat", (msg, event) => {
             plusColor = plusColor.replace('&', '§')
             if (cmSettingsData.colorTagTrue) {
                 msg3.forEach(element => {
-                    if (element.text.match(/\[MVP§[0-9a-f]\+§b\]/g) || element.text.match(/\[VIP§[0-9a-f]\+§a\]/g) || element.text.match(/\[MVP§[0-9a-f]\++§6\]/g)) {
+                    if (element.text.match(/\[MVP§[0-9a-f]\+§b\]/g) || element.text.match(/\[VIP§[0-9a-f]\+§a\]/g) || element.text.match(/\[MVP§[0-9a-f]\++§6\]/g) || element.text.includes("[MVP§b]") || element.text.includes("[VIP§a]") || (element.text.includes(player) && rank == "rankless")) {
+                        if (cmSettingsData.newRank != 5) {
                         switch (rank) {
                             case "MVP++":
-                                element.text = element.text.replace(/\b(MVP|VIP)§[0-9a-f]\++§6\b/g, `MVP${colorDict[cmSettingsData.colorTag]}++§6`);
+                                if (cmSettingsData.newTag) {
+                                    element.text = element.text.replace(/§6\[MVP§[0-9a-f]\++§6\]/g, newPlayerRank);
+                                } else {
+                                    element.text = element.text.replace(/\bMVP§[0-9a-f]\++§6\b/g, `MVP${colorDict[cmSettingsData.colorTag]}++§6`);
+                                }
                                 break;
                             case "MVP+":
                                 if (cmSettingsData.newTag) {
-                                    element.text = element.text.replace(/§b\[MVP§[0-9a-f]\+§b\]/g, `§6[MVP${colorDict[cmSettingsData.colorTag]}++§6]`);
+                                    element.text = element.text.replace(/§b\[MVP§[0-9a-f]\+§b\]/g, newPlayerRank);
                                 } else {
-                                    element.text = element.text.replace(/\b(MVP|VIP)§[0-9a-f]\+§b\b/g, `MVP${colorDict[cmSettingsData.colorTag]}+§b`);
+                                    element.text = element.text.replace(/\bMVP§[0-9a-f]\+§b\b/g, `MVP${colorDict[cmSettingsData.colorTag]}+§b`);
                                 }
                                 break;
                             case "MVP":
+                                if (cmSettingsData.newTag) {
+                                    element.text = element.text.replace("§b[MVP§b]", newPlayerRank);
+                                }
                                 break;
                             case "VIP+":
                                 if (cmSettingsData.newTag) {
-                                    element.text = element.text.replace(/§a\[VIP§[0-9a-f]\+§a\]/g, `§6[MVP${colorDict[cmSettingsData.colorTag]}++§6]`);
+                                    element.text = element.text.replace(/§a\[VIP§[0-9a-f]\+§a\]/g, newPlayerRank);
                                 } else {
-                                    element.text = element.text.replace(/\b(MVP|VIP)§[0-9a-f]\+§a\b/g, `VIP${colorDict[cmSettingsData.colorTag]}+§a`);
+                                    element.text = element.text.replace(/\bVIP§[0-9a-f]\+§a\b/g, `VIP${colorDict[cmSettingsData.colorTag]}+§a`);
                                 }
                                 break;
                             case "VIP":
+                                if (cmSettingsData.newTag) {
+                                    element.text = element.text.replace("§a[VIP§a]", newPlayerRank);
+                                }
+                                break;
+                            case "rankless":
+                                if (cmSettingsData.newTag) {
+                                    element.text = element.text.replace(player, `${newPlayerRank} ${player}`);
+                                }
+                                break;
+                        }} /*else {
+                        switch (rank) {
+                            case "MVP++":
+                                element.text = element.text.replace(/§6\[MVP§[0-9a-f]\++§6\]/g, "");
+                                break;
+                            case "MVP+":
+                                element.text = element.text.replace(/§b\[MVP§[0-9a-f]\+§b\]/g, "");
+                                break;
+                            case "MVP":
+                                element.text = element.text.replace("§b[MVP§b]", "");
+                                break;
+                            case "VIP+":
+                                element.text = element.text.replace(/§a\[VIP§[0-9a-f]\+§a\]/g, "");
+                                break;
+                            case "VIP":
+                                element.text = element.text.replace("§a[VIP§a]", "");
                                 break;
                             case "rankless":
                                 break;
-                        }
-                        
+                        }}*/
                     } else {
                         element.text = element.text.replace(`${plusColor}+§r`, `${colorDict[cmSettingsData.colorTag]}+§r`);
                     }
                 });
             }
         }
+
+        // Player Replace
+        if (cmSettingsData.colorUserTrue) {
+            if (rank != "rankless") {
+                msg3.forEach(element => {
+                    element.text = element.text.replace(player, `${colorDict[cmSettingsData.colorUser]}${player}§f`)
+                });
+            } else {
+                msg3.forEach(element => {
+                    if (!wantRank) {
+                    element.text = element.text.replace(player, `${colorDict[cmSettingsData.colorUser]}${player}`)
+                    } else {
+                    element.text = element.text.replace(`${player}§7`, `${colorDict[cmSettingsData.colorUser]}${player}§r`)
+                    element.text = element.text.replace(`${player}§r§7`, `${colorDict[cmSettingsData.colorUser]}${player}§r`)
+                    element.text = element.text.replace(`${player}§7§r§7`, `${colorDict[cmSettingsData.colorUser]}${player}§r`)
+                    }
+                });
+            }
+            
+        }
+
 
         // Send the message
         let fmsg = textCompToChatComponent(new Message(msg3).getMessageParts())

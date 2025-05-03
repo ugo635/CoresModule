@@ -136,15 +136,30 @@ register("chat", (msg, event) => {
     let msg3 = new Message(event).getMessageParts();
 
     // Fuse Message
-    let toFuse = []
-    for (let i = 0; i < msg3.length-1; i++) {
-        let elem = msg3[i];
-        let elem2 = msg3[i + 1]
-        if (elem.getHoverAction() == null && elem.getHoverValue() == null && elem.getClickAction() == null && elem.getClickValue() == null
-            && elem2.getHoverAction() == null && elem2.getHoverValue() == null && elem2.getClickAction() == null && elem2.getClickValue() == null) {
-            toFuse.push(i).push(i+1);
+    function fuse() {
+    let fused = false;
+    for (let i = 0; i < msg3.length - 1; i++) {
+        const elem = msg3[i];
+        const elem2 = msg3[i + 1];
+
+        const noActions = (e) =>
+            e.getHoverAction() == null &&
+            e.getHoverValue() == null &&
+            e.getClickAction() == null &&
+            e.getClickValue() == null;
+
+        if (noActions(elem) && noActions(elem2)) {
+            elem.text += elem2.text;
+            msg3.splice(i + 1, 1);
+            fused = true;
+            i--; // pour ne pas sauter le nouvel élément fusionné
         }
     }
+
+    if (fused) {
+        fuse(); // on recommence si une fusion a eu lieu
+    }
+}
     
 
 

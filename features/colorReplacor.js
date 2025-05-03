@@ -21,6 +21,10 @@ const colorDict = {
 
 let player = Player.getName()
 
+register("command", (...args) => {
+    ChatLib.chat("If you want to add colors to your rank, a color is a '&' follow by a number from 0 to 9 or a letter from a to f, f being white (default)")
+}).setName("customRankHelp")
+
 // Color Test
 testing_list = [
     `&6[MVP&d++&6] ${player}&r: &fHi, I'm M++`,
@@ -55,7 +59,7 @@ let newRankDict = {
     2 : `§b[MVP]`,
     3 : `[VIP${colorDict[cmSettingsData.colorTag]}+§a]`,
     4 : `§b[VIP]`,
-    5 : `${player}`,
+    5 : `${player}`
 }
 
 let rankDict = {
@@ -67,7 +71,7 @@ let rankDict = {
     5 : `rankless`,
 }
 
-let newPlayerRank = `${newRankDict[cmSettingsData.newRank]}`
+let newPlayerRank = (cmSettingsData.customRank) ? cmSettingsData.rankText.replaceAll("&", "§") : newRankDict[cmSettingsData.newRank]
 let wantRank = rankDict[cmSettingsData.newRank] != "rankless"
 
 function UpdateInfos() {
@@ -88,7 +92,7 @@ function UpdateInfos() {
         4 : `VIP`,
         5 : `rankless`,
     }
-    newPlayerRank = `${newRankDict[cmSettingsData.newRank]}`
+    newPlayerRank = (cmSettingsData.customRank) ? cmSettingsData.rankText.replaceAll("&", "§") : newRankDict[cmSettingsData.newRank]
     wantRank = rankDict[cmSettingsData.newRank] != "rankless"
 }
 
@@ -131,54 +135,49 @@ register("chat", (msg, event) => {
     let rank = msg.includes("MVP++") ? "MVP++" : msg.includes("MVP+") ? "MVP+" : msg.includes("MVP") ? "MVP" : msg.includes("VIP+") ? "VIP+" : msg.includes("VIP") ? "VIP" : "rankless";
     let msg3 = new Message(event).getMessageParts();
 
+    // Fuse Message
+    let toFuse = []
+    for (let i = 0; i < msg3.length-1; i++) {
+        let elem = msg3[i];
+        let elem2 = msg3[i + 1]
+        if (elem.getHoverAction() == null && elem.getHoverValue() == null && elem.getClickAction() == null && elem.getClickValue() == null
+            && elem2.getHoverAction() == null && elem2.getHoverValue() == null && elem2.getClickAction() == null && elem2.getClickValue() == null) {
+            toFuse.push(i).push(i+1);
+        }
+    }
+    
+
+
     // Tag Replace
     if (combinations.some(combination => msg2.includes(combination))) {
         let matchingCombination = combinations.find(combination => msg2.includes(combination));
         if (cmSettingsData.colorTagTrue) {
             matchingCombination = matchingCombination.slice(0, matchingCombination.length - (player.length + 1)).replaceAll("&", "§")
+            UpdateInfos()
             msg3.forEach(element => {
+                console.log(matchingCombination, element, "\n\n\n")
                 if ((cmSettingsData.newRank != 5 && cmSettingsData.newTag) || !cmSettingsData.newTag) {
-                UpdateInfos()
-                switch (rank) {
-                    case "MVP++":
-                        if (cmSettingsData.newTag) {
-                            element.text = element.text.replace(matchingCombination, newPlayerRank);
-                        } else {
+                if (cmSettingsData.newTag || cmSettingsData.customRank) {
+                    if (rank === "rankless") {
+                        element.text = element.text.replace(player, `${newPlayerRank} ${player}`);
+                    } else {
+                        element.text = element.text.replace(matchingCombination, newPlayerRank);
+                    }
+                } else {
+                    switch (rank) {
+                        case "MVP++":
                             element.text = element.text.replace(matchingCombination, `[MVP${colorDict[cmSettingsData.colorTag]}++§6]`);
-                        }
-                        break;
-                    case "MVP+":
-                        if (cmSettingsData.newTag) {
-                            element.text = element.text.replace(matchingCombination, newPlayerRank);
-                        } else {
+                            break;
+                        case "MVP+":
                             element.text = element.text.replace(matchingCombination, `[MVP${colorDict[cmSettingsData.colorTag]}+§b]`);
-                        }
-                        break;
-                    case "MVP":
-                        if (cmSettingsData.newTag) {
-                            element.text = element.text.replace(matchingCombination, newPlayerRank);
-                        }
-                        break;
-                    case "VIP+":
-                        if (cmSettingsData.newTag) {
-                            element.text = element.text.replace(matchingCombination, newPlayerRank);
-                        } else {
+                            break;
+                        case "VIP+":
                             element.text = element.text.replace(matchingCombination, `[VIP${colorDict[cmSettingsData.colorTag]}+§a]`);
-                        }
-                        break;
-                    case "VIP":
-                        if (cmSettingsData.newTag) {
-                            element.text = element.text.replace(matchingCombination, newPlayerRank);
-                        }
-                        break;
-                    case "rankless":
-                        if (cmSettingsData.newTag) {
-                            element.text = element.text.replace(player, `${newPlayerRank} ${player}`);
-                        }
-                        break;
+                            break;
+                        default:
+                            break;
+                    }
                 }} else {
-                UpdateInfos()
-                matchingCombination += ""
                 switch (rank) {
                     case "MVP++":
                         console.log(matchingCombination, element.text)
@@ -212,7 +211,7 @@ register("chat", (msg, event) => {
             });
         } else {
             msg3.forEach(element => {
-                if (!(wantRank && cmSettingsData.newTag)) {
+                if (!(wantRank && (cmSettingsData.newTag || cmSettingsData.customRank))) {
                 element.text = element.text.replace(player, `${colorDict[cmSettingsData.colorUser]}${player}`)
                 } else {
                 element.text = element.text.replace(`${player}§7`, `${colorDict[cmSettingsData.colorUser]}${player}§r`)

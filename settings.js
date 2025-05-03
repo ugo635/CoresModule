@@ -53,6 +53,7 @@ class cmSettingsData {
         this.addDependency("Rank Replacor", "Replace Rank")
         this.addDependency("Color Username", "Color Username Replacor")
         this.addDependency("Color Tag", "Color Tag Replacor")
+        this.addDependency("Custom Rank", "Replace Rank with Custom")
 
     }
     //----------- General ----------------
@@ -101,6 +102,20 @@ class cmSettingsData {
         options: ["MVP++", "MVP+", "MVP", "VIP+", "VIP", "rankless"]
     })
     newRank = 0;
+    @SwitchProperty({
+        name: "Replace Rank with Custom",
+        description: "Replace your current rank with any custom rank",
+        category: "Color Replacor",
+        subcategory: "Settings"
+    })
+    customRank = false;
+    @TextProperty({
+        name: "Custom Rank",
+        description: `Replace your rank with any custom rank, do /color for available colors, to make a color use '&' then the desired color use /customRankHelp for help`,
+        category: "Color Replacor",
+        subcategory: "Settings"
+    })
+    rankText = "&c[&fYOUTUBE&c]"
     @SwitchProperty({
         name: "Party Invite Message Editor",
         description: "Edits party invite message to lyk if the guy is in your lobby",

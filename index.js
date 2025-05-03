@@ -31,7 +31,7 @@ const commands = [
 ];
 
 const changelog = [
-    {header: "+", description: "Color Replacor works now with Skytil chat tabs!"}
+    {header: "+", description: "New Custom Rank Replacor"}
 ]
 
 const newVersion = "1.31.0"

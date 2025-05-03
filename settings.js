@@ -88,7 +88,7 @@ class cmSettingsData {
     colorTag = 0;
     @SwitchProperty({
         name: "Replace Rank",
-        description: "Enable or disable the &b[MVP+]&7 to &6[MVP++]&7 replacor",
+        description: "Replace your current rank with any desired rank ex: &b[MVP+]&7 to &6[MVP++]&7",
         category: "Color Replacor",
         subcategory: "Settings"
     })

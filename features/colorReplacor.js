@@ -136,32 +136,33 @@ register("chat", (msg, event) => {
     let msg3 = new Message(event).getMessageParts();
 
     // Fuse Message
-    function fuse() {
-    let fused = false;
-    for (let i = 0; i < msg3.length - 1; i++) {
+    let i = 0;
+    let iterations = 0;
+    const maxIterations = 1000;
+
+    while (i < msg3.length - 1 && iterations < maxIterations) {
+        iterations++;
         const elem = msg3[i];
         const elem2 = msg3[i + 1];
 
         const noActions = (e) =>
-            e.getHoverAction() == null &&
-            e.getHoverValue() == null &&
-            e.getClickAction() == null &&
-            e.getClickValue() == null;
+            e.getHoverAction?.() == null &&
+            e.getHoverValue?.() == null &&
+            e.getClickAction?.() == null &&
+            e.getClickValue?.() == null;
 
         if (noActions(elem) && noActions(elem2)) {
             elem.text += elem2.text;
-            msg3.splice(i + 1, 1);
-            fused = true;
-            i--; // pour ne pas sauter le nouvel élément fusionné
+            msg3[i + 1] = null;
+        } else {
+            i++;
         }
+        msg3 = msg3.filter(item => item !== null);
     }
 
-    if (fused) {
-        fuse(); // on recommence si une fusion a eu lieu
+    if (iterations === maxIterations) {
+        console.warn("Fusion stopped after reaching max iterations (possible infinite loop).");
     }
-}
-    
-
 
     // Tag Replace
     if (combinations.some(combination => msg2.includes(combination))) {
@@ -170,7 +171,6 @@ register("chat", (msg, event) => {
             matchingCombination = matchingCombination.slice(0, matchingCombination.length - (player.length + 1)).replaceAll("&", "§")
             UpdateInfos()
             msg3.forEach(element => {
-                console.log(matchingCombination, element, "\n\n\n")
                 if ((cmSettingsData.newRank != 5 && cmSettingsData.newTag) || !cmSettingsData.newTag) {
                 if (cmSettingsData.newTag || cmSettingsData.customRank) {
                     if (rank === "rankless") {
@@ -195,7 +195,6 @@ register("chat", (msg, event) => {
                 }} else {
                 switch (rank) {
                     case "MVP++":
-                        console.log(matchingCombination, element.text)
                         element.text = element.text.replace(matchingCombination, "").replace(" ", "");
                         break;
                     case "MVP+":

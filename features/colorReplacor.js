@@ -22,7 +22,7 @@ const colorDict = {
 let player = Player.getName()
 
 register("command", (...args) => {
-    ChatLib.chat("If you want to add colors to your rank, a color is a '&' follow by a number from 0 to 9 or a letter from a to f, f being white (default)")
+    ChatLib.chat("If you want to add colors to your rank, a color is a '&' follow by a number from 0 to 9 or a letter from a to f, f being white (default), if you don't have custom username color, add '&' followed by the color code of your username)")
 }).setName("customRankHelp")
 
 // Color Test

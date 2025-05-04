@@ -12,7 +12,7 @@ import "./features/Stash.js";
 import "./features/FallingBlocks.js";
 import "./features/Mining.js";
 import "./features/Party.js";
-import "./features/colorReplacor.js";
+import "./features/ColorReplacor.js";
 import "./features/Warps.js";
 import "./features/Potions.js";
 import "./features/viewAuctions.js";
@@ -31,13 +31,13 @@ const commands = [
 ];
 
 const changelog = [
-    {header: "+", description: "Color Replacor works now with Skytil chat tabs!"}
+    {header: "+", description: "New Custom Rank Replacor"}
 ]
 
-const newVersion = "1.30.0"
+const newVersion = "1.31.0"
 
 register("command", (args1, ...args) => {
-    if (args1 == undefined ) {
+    if (args1 == undefined || args1.toLowerCase() == "settings") {
         cmSettingsData.openGUI();
     } else {
         switch (args1.toLowerCase()) {

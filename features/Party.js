@@ -136,7 +136,7 @@ register("command", (...args /* Players to not add */) => {
         pLength = partyMembers.length
         if (partyMembers.length > 7 || partyMembers.length == 0) return
         partyMembers.forEach((pMember) => {
-            if (!args.includes(pMember.toLowerCase().replace(" ", ""))) {
+            if (!args.includes(pMember.toLowerCase().replace(" ", "")) && !pMember != Player.getName()) {
                     index = partyMembers.indexOf(pMember)
                     switch(index) {
                         case 0:

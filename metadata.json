@@ -1,8 +1,8 @@
 {
     "name": "CoresModule",
     "creator": "JudgementCorePls | ugo635",
-    "description": "My first module!",
-    "version": "1.30.0",
+    "description": "Best module ever, no cap",
+    "version": "1.31.0",
     "entry": "index.js",
     "requires": [
         "FileUtilities",

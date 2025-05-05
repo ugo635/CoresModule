@@ -1,5 +1,5 @@
 import { request } from "../../requestV2";
-import { formatNum } from "./cmFunctions";
+import { formatNum } from "./cmFunc";
 
 const apiUrl = `https://api.hypixel.net/skyblock/auctions?`;
 

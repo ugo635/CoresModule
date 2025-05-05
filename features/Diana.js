@@ -1,4 +1,4 @@
-import { playCustomSound } from "./cmFunctions";
+import { playCustomSound } from "./cmFunc";
 import cmSettingData from "../settings";
 
 

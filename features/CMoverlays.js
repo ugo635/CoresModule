@@ -1,4 +1,4 @@
-import { loadGuiSettings, saveGuiSettings } from "./cmFunctions";
+import { loadGuiSettings, saveGuiSettings } from "./cmFunc";
 import cmSettingsData from "../settings";
 
 const dragOffset = {x: 0, y: 0};

@@ -4,7 +4,7 @@
 
 import cmSettingsData from "./settings";
 import { data } from "./features/Utils.js"
-import "./features/cmFunctions.js";
+import "./features/cmFunc.js";
 import "./features/cmOverlays.js";
 import "./features/Inv.js";
 import "./features/Diana.js";
@@ -17,6 +17,7 @@ import "./features/Warps.js";
 import "./features/Potions.js";
 import "./features/viewAuctions.js";
 import "./features/Features.js";
+import "./features/playerTracer.js";
 
 
 register("gameLoad", () => {

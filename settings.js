@@ -273,7 +273,7 @@ class cmSettingsData {
         max: 10,
         step: 1
     })
-    lineWidth = 2;
+    lineWidth = 4;
 
     @ColorProperty({
         name: "Line Color",

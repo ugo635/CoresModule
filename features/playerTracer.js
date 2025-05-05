@@ -8,7 +8,10 @@ let [r, g, b, a] = [cmSettingsData.lineColor.getRed() / 255, cmSettingsData.line
 
 function updateTracer(p) {
     let player = World.getPlayerByName(p);
-    [x2, y2, z2] = [player.getRenderX().toFixed(2), player.getRenderY().toFixed(2) /*+ (player.isSneaking() ? 1.54 : 1.62)*/, player.getRenderZ().toFixed(2)]
+    if (!player) return;
+    const toHead = (player) => {return player.isSneaking() ? 1.54 : 1.62}
+    [x2, y2, z2] = [player.getRenderX(), (player.getRenderY() + toHead(player)), player.getRenderZ()]
+    console.log(x2.toFixed(2), y2.toFixed(2), z2.toFixed(2))
     trace(x2, y2, z2, r, g, b, a, "calc", cmSettingsData.lineWidth)
 }
 

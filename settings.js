@@ -258,9 +258,9 @@ class cmSettingsData {
         description: "How often the tracker updates in seconds &a(/trackPlayer playerName)",
         category: "Tracker",
         subcategory: "Settings",
-        min: 0.5,
+        min: 1,
         max: 5,
-        step: 0.5
+        step: 1
     })
     trackerFrequency = 1;
 
@@ -271,7 +271,7 @@ class cmSettingsData {
         subcategory: "Settings",
         min: 0,
         max: 10,
-        step: 0.25
+        step: 1
     })
     lineWidth = 2;
 

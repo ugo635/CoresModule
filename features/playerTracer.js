@@ -9,6 +9,12 @@ let [r, g, b, a] = [cmSettingsData.lineColor.getRed() / 255, cmSettingsData.line
 function updateTracer(p) {
     let player = World.getPlayerByName(p);
     if (!player) return;
+    if (c > 10) {
+        trackedPlayer = null;
+        update_Tracker.unregister();
+        [x2, y2, z2] = [0, 0, 0];
+        c = 0;
+    }
     const toHead = (player) => {return player.isSneaking() ? 1.54 : 1.62}
     try {
         [x2, y2, z2] = [player.getX(), (player.getY() + toHead(player)), player.getZ()]
@@ -21,7 +27,10 @@ function updateTracer(p) {
     }
 }
 
-register("renderWorld", () => { 
+let c = 0;
+
+register("renderWorld", () => {
+    if (!World.getPlayerByName(trackedPlayer.getName())) {c++; return;}
     if (trackedPlayer) {
         updateTracer(trackedPlayer.getName())
     }

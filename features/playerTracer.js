@@ -10,8 +10,15 @@ function updateTracer(p) {
     let player = World.getPlayerByName(p);
     if (!player) return;
     const toHead = (player) => {return player.isSneaking() ? 1.54 : 1.62}
-    [x2, y2, z2] = [player.getX(), (player.getY() + toHead(player)), player.getZ()]
-    trace(x2, y2, z2, r, g, b, a, "", cmSettingsData.lineWidth)
+    try {
+        [x2, y2, z2] = [player.getX(), (player.getY() + toHead(player)), player.getZ()]
+        trace(x2, y2, z2, r, g, b, a, "", cmSettingsData.lineWidth)
+        // if (cmSettingsData.waypoint)
+        // if (cmSettingsData.distance)
+    } catch(e) {
+        console.log(e)
+        return;
+    }
 }
 
 register("renderWorld", () => { 

@@ -254,17 +254,6 @@ class cmSettingsData {
     // ----------- Tracker ----------------
 
     @SliderProperty({
-        name: "Tracker Update",
-        description: "How often the tracker updates in seconds &a(/trackPlayer playerName)",
-        category: "Tracker",
-        subcategory: "Settings",
-        min: 1,
-        max: 5,
-        step: 1
-    })
-    trackerFrequency = 1;
-
-    @SliderProperty({
         name: "Line Width",
         description: "The line width for &a/trackPlayer playerName",
         category: "Tracker",

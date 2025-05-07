@@ -1,4 +1,5 @@
 import renderBeaconBeam from "../../BeaconBeam/index";
+import { Color } from '../../Vigilance';
 import RenderLibV2 from "../../RenderLibV2";
 import cmSettingsData from "../settings";
 import { trace } from "./cmFunc";
@@ -33,17 +34,11 @@ function createWP(array) {
     return [[array[0][0], array[0][1], array[0][2]], [array[1][0], array[1][1], array[1][2]], [array[2][0], array[2][1], array[2][2]]]
 }
 
-let wp;
-wp = createWP(
-    ["", 0, 0, 0],
-    [0, 0, 0],
-    [cmSettingsData.wpColor.getRed(), cmSettingsData.wpColor.getGreen(), cmSettingsData.wpColor.getBlue()]
-)
-
 function updateTracer(playerName) {
     let player = World.getPlayerByName(playerName);
     if (!player) {
         trackedPlayers = trackedPlayers.filter(p => p.name !== playerName);
+        ChatLib.chat("&4[Cm Tracker] &cEnable to track" + playerName)
         return;
     }
 
@@ -65,18 +60,26 @@ function updateTracer(playerName) {
 
     } catch (e) {
         trackedPlayers = trackedPlayers.filter(p => p.name !== playerName);
+        ChatLib.chat("&4[Cm Tracker] &cNo longer tracking" + playerName)
         return;
     }
 
-    /*
     if (cmSettingsData.wpTrue) {
+        [x, y, z] = [
+            player.getX(),
+            player.getY() + toHead(player),
+            player.getZ()
+        ];
         distanceRaw = Math.hypot(Player.getX() - x, Player.getY() - y, Player.getZ() - z);
         distance = Math.round(distanceRaw) + "m";
-        wp[0] = [`§b${playerName}: §a${distance}`, x, y, z]
-        wp[1] = [x, y, z]
+        wp = createWP(
+            [`§b${playerName}: §a${distance}`, x, y, z],
+            [x, y, z],
+            [cmSettingsData.wpColor.getRed(), cmSettingsData.wpColor.getGreen(), cmSettingsData.wpColor.getBlue()]
+        )
+        console.log([cmSettingsData.wpColor.getRed(), cmSettingsData.wpColor.getGreen(), cmSettingsData.wpColor.getBlue()])
         renderWaypoint([wp])
     }
-    */
 }
 
 function renderWaypoint(waypoints) {
@@ -86,17 +89,21 @@ function renderWaypoint(waypoints) {
         box = waypoint[0];
         beam = waypoint[1];
         rgb = waypoint[2];
+        console.log(rgb)
         let removeAtDistance = 10;
         let alpha = cmSettingsData.wpColor.getAlpha();
         // RenderLibV2.drawEspBoxV2(box[1], box[2], box[3], 1, 1, 1, rgb[0], rgb[1], rgb[2], 1, true);
-        RenderLibV2.drawInnerEspBoxV2(box[1], box[2], box[3], 1, 1, 1, rgb[0], rgb[1], rgb[2], alpha/2, true);
+        console.log("Hi")
+        //RenderLibV2.drawInnerEspBoxV2(box[1], box[2], box[3], 1, 1, 1, rgb[0], rgb[1], rgb[2], alpha/2, true);
         let hexCodeString = javaColorToHex(new Color(rgb[0], rgb[1], rgb[2]));
         if (box[0] != "" && box[0] != "§7") {
-            Tessellator.drawString(box[0], box[1], box[2] + 1.5, box[3], parseInt(hexCodeString, 16), true);
+            console.log("Hii")
+            //Tessellator.drawString(box[0], box[1], box[2] + 1.5, box[3], parseInt(hexCodeString, 16), true);
         }
 
         if (box[4] >= removeAtDistance && box[5]) {
-            renderBeaconBeam(beam[0], beam[1]+1, beam[2], rgb[0], rgb[1], rgb[2], alpha, false);
+            console.log("Hiii")
+            //renderBeaconBeam(beam[0], beam[1]+1, beam[2], rgb[0], rgb[1], rgb[2], alpha, false);
         }
     });
 }

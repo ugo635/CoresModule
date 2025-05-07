@@ -297,7 +297,7 @@ class cmSettingsData {
         category: "Tracker",
         subcategory: "Settings",
     })
-    wpColor = new Color(1, 1, 1, 0.5);
+    wpColor = new Color(0, 0, 0, 1);
 
     @ColorProperty({
         name: "Line Color",

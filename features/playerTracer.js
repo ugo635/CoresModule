@@ -4,7 +4,7 @@ import cmSettingsData from "../settings";
 import { trace } from "./cmFunc";
 
 let trackedPlayers = []; // Array to store tracked players as objects with name and coords properties
-let r, g, b, a = [
+let [r, g, b, a] = [
     cmSettingsData.lineColor.getRed() / 255,
     cmSettingsData.lineColor.getGreen() / 255,
     cmSettingsData.lineColor.getBlue() / 255,

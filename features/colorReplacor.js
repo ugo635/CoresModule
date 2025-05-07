@@ -223,33 +223,39 @@ register("chat", (msg, event) => {
     }
 
     // Player Replace
+    cmSettingsData.fontedVal.replace("&", "§")
     if (cmSettingsData.colorUserTrue) {
         UpdateInfos()
         if (rank != "rankless") {
             msg3.forEach(element => {
-                element.text = element.text.replace(player, `${(cmSettingsData.fontedName ? cmSettingsData.fontedVal : "")}${colorDict[cmSettingsData.colorUser]}${player}§f`)
+                if (cmSettingsData.fontedName) {
+                    element.text = element.text.replace(player, `${colorDict[cmSettingsData.colorUser]}${cmSettingsData.fontedVal.replace("&", "§") + player}§f`)
+                } else {
+                    element.text = element.text.replace(player, `${colorDict[cmSettingsData.colorUser]}${player}§f`)
+                }
+                
             });
         } else {
             msg3.forEach(element => {
                 if (!(wantRank && (cmSettingsData.newTag || cmSettingsData.customRank))) {
-                element.text = element.text.replace(player, `${(cmSettingsData.fontedName ? cmSettingsData.fontedVal : "")}${colorDict[cmSettingsData.colorUser]}${player}§r§f`)
+                element.text = element.text.replace(player, `${colorDict[cmSettingsData.colorUser]}${(cmSettingsData.fontedName) ? cmSettingsData.fontedVal + player : player}§r§f`)
                 } else {
-                element.text = element.text.replace(`${player}§7§r§7`, `${(cmSettingsData.fontedName ? cmSettingsData.fontedVal : "")}${colorDict[cmSettingsData.colorUser]}${player}§r§f`)
-                element.text = element.text.replace(`${player}§r§7`, `${(cmSettingsData.fontedName ? cmSettingsData.fontedVal : "")}${colorDict[cmSettingsData.colorUser]}${player}§r§f`)
-                element.text = element.text.replace(`${player}§7`, `${(cmSettingsData.fontedName ? cmSettingsData.fontedVal : "")}${colorDict[cmSettingsData.colorUser]}${player}§r§f`)
-                element.text = element.text.replaceAll(`${player}`, `${(cmSettingsData.fontedName ? cmSettingsData.fontedVal : "")}${colorDict[cmSettingsData.colorUser]}${player}§r§f`)
+                element.text = element.text.replace(`${player}§7§r§7`, `${colorDict[cmSettingsData.colorUser]}${(cmSettingsData.fontedName) ? cmSettingsData.fontedVal + player : player}§r§f`)
+                element.text = element.text.replace(`${player}§r§7`, `${colorDict[cmSettingsData.colorUser]}${(cmSettingsData.fontedName) ? cmSettingsData.fontedVal + player : player}§r§f`)
+                element.text = element.text.replace(`${player}§7`, `${colorDict[cmSettingsData.colorUser]}${(cmSettingsData.fontedName) ? cmSettingsData.fontedVal + player : player}§r§f`)
+                element.text = element.text.replaceAll(`${player}`, `${colorDict[cmSettingsData.colorUser]}${(cmSettingsData.fontedName) ? cmSettingsData.fontedVal + player : player}§r§f`)
                 }
             });
         }
     } else if (cmSettingsData.customRank) {
         msg3.forEach(element => {
             if (!(wantRank && (cmSettingsData.newTag || cmSettingsData.customRank))) {
-                element.text = element.text.replace(player, `${(cmSettingsData.fontedName ? cmSettingsData.fontedVal : "")}${player}§r§f`)
+                element.text = element.text.replace(player, `${(cmSettingsData.fontedName) ? cmSettingsData.fontedVal + player : player}§r§f`)
                 } else {
-                element.text = element.text.replace(`${player}§7§r§7`, `${(cmSettingsData.fontedName ? cmSettingsData.fontedVal : "")}${player}§r§f`)
-                element.text = element.text.replace(`${player}§r§7`, `${(cmSettingsData.fontedName ? cmSettingsData.fontedVal : "")}${player}§r§f`)
-                element.text = element.text.replace(`${player}§7`, `${(cmSettingsData.fontedName ? cmSettingsData.fontedVal : "")}${player}§r§f`)
-                element.text = element.text.replaceAll(`${player}`, `${(cmSettingsData.fontedName ? cmSettingsData.fontedVal : "")}${player}§r§f`)
+                element.text = element.text.replace(`${player}§7§r§7`, `${(cmSettingsData.fontedName) ? cmSettingsData.fontedVal + player : player}§r§f`)
+                element.text = element.text.replace(`${player}§r§7`, `${(cmSettingsData.fontedName) ? cmSettingsData.fontedVal + player : player}§r§f`)
+                element.text = element.text.replace(`${player}§7`, `${(cmSettingsData.fontedName) ? cmSettingsData.fontedVal + player : player}§r§f`)
+                element.text = element.text.replaceAll(`${player}`, `${player}§r§f`)
                 }
         })
     }

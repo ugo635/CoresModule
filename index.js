@@ -27,15 +27,22 @@ register("gameLoad", () => {
 const commands = [
     {cmd: "cm", description: "Open the settings", ph: ""},
     {cmd: "cm help", description: "Show this message", ph: ""},
-    {cmd: "mymf <Number>", description: "Gives your mf on inquisitors for the following input: \n &cInput ur mf with renowned sorrow / mf 10 kuudra armor, fragged dae axe, mf pet, no1 arround so legion isn't active (must have max be, legion V, renowned, shuriken) e.g: /mymf 300", ph: "mymf 300"},
-    {cmd: "mymf <Number> <MF From Kill Combo>", description: "Gives your mf on inquisitors for the following input: \n &cInput ur mf with renowned sorrow / mf 10 kuudra armor, fragged dae axe, mf pet, no1 arround so legion isn't active (must have max be, legion V, renowned, shuriken) \n &cInput the mf you gain from kill combo e.g: /mymf 300 6 (15 kill combo)", ph: "mymf 300 6"}
+    {cmd: "mymf <Number>", description: "Gives your mf on inquisitors -> &cSee /mf_help for details on the input", ph: "mymf 300"},
+    {cmd: "mymf <Number> <MF From Kill Combo>", description: "Gives your mf on inquisitors: &cSee /mfCombo_help for details on the input", ph: "mymf 300 6"},
+    {cmd: "track <player>", description: "Tracks a player loc (see the settings for customability), running it again will remove the first player and tracks the 2nd one", ph: `track ${Player.getName()}`},
+    {cmd: "track add <player> (multiple possible)", description: "Tracks an another player loc", ph: `track ${Player.getName()}`},
+    {cmd: "untrack", description: "Untracks all player", ph: `track ${Player.getName()}`},
+    {cmd: "untrack <player>", description: "Untracks a player loc", ph: `untrack ${Player.getName()}`}
+    
 ];
 
 const changelog = [
-    {header: "+", description: "New Custom Rank Replacor"}
+    {header: "+", description: "New Custom Rank Replacor"},
+    {header: "+", description: "New Fonted Names (like Bold, underlined, obfuscated, etc...)"},
+    {header: "+", description: "New Player Tracker (see /cm help)"}
 ]
 
-const newVersion = "1.31.0"
+const newVersion = "1.32.0"
 
 register("command", (args1, ...args) => {
     if (args1 == undefined || args1.toLowerCase() == "settings") {
@@ -55,7 +62,7 @@ register("command", (args1, ...args) => {
                         ph = ph.replace("/", "")
                         let text = new TextComponent("&7> &a/" + cmd + " &7- &e" + description)
                         .setClick("suggest_command", "/" + ph)
-                        .setHover("show_text", `&7Click to run &a/${cmd}`)
+                        .setHover("show_text", `&7Click to suggest &a/${cmd}`)
                         text.chat()
                     }
                     

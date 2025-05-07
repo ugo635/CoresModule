@@ -7,6 +7,8 @@
     "requires": [
         "FileUtilities",
         "PogObject",
-        "requestV2"
+        "requestV2",
+        "BeaconBeam",
+        "RenderLibV2"
     ]
 }

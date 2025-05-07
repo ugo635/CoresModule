@@ -1,13 +1,44 @@
+import renderBeaconBeam from "../../BeaconBeam/index";
+import RenderLibV2 from "../../RenderLibV2";
 import cmSettingsData from "../settings";
 import { trace } from "./cmFunc";
 
 let trackedPlayers = []; // Array to store tracked players as objects with name and coords properties
-let [r, g, b, a] = [
+let r, g, b, a = [
     cmSettingsData.lineColor.getRed() / 255,
     cmSettingsData.lineColor.getGreen() / 255,
     cmSettingsData.lineColor.getBlue() / 255,
     cmSettingsData.lineColor.getAlpha() / 255
 ];
+
+/**
+ *  > @param {Array} **Waypoint Array**
+ *      > @param {Array} ListOne **List One:**
+ *          > @param {String} name - Waypoint's name
+ *          > @param {Number} x - X coordinate
+ *          > @param {Number} y - Y coordinate
+ *          > @param {Number} z - Z coordinate
+ * 
+ *      > @param {Array} ListTwo **List Two:**
+ *          > @param {Number} x - X coordinate
+ *          > @param {Number} y - Y coordinate
+ *          > @param {Number} z - Z coordinate
+ * 
+ *      > @param {Array} ListThree **RGB:**
+ *          > @param {Number} R - Red value
+ *          > @param {Number} G - Green value
+ *          > @param {Number} B - Blue value
+ */
+function createWP(array) {
+    return [[array[0][0], array[0][1], array[0][2]], [array[1][0], array[1][1], array[1][2]], [array[2][0], array[2][1], array[2][2]]]
+}
+
+let wp;
+wp = createWP(
+    ["", 0, 0, 0],
+    [0, 0, 0],
+    [cmSettingsData.wpColor.getRed(), cmSettingsData.wpColor.getGreen(), cmSettingsData.wpColor.getBlue()]
+)
 
 function updateTracer(playerName) {
     let player = World.getPlayerByName(playerName);
@@ -31,11 +62,45 @@ function updateTracer(playerName) {
             trackedPlayers.push({ name: playerName, coords: [x, y, z] });
         }
         trace(x, y, z, r, g, b, a, "", cmSettingsData.lineWidth);
+
     } catch (e) {
-        console.log(e);
         trackedPlayers = trackedPlayers.filter(p => p.name !== playerName);
+        return;
     }
+
+    /*
+    if (cmSettingsData.wpTrue) {
+        distanceRaw = Math.hypot(Player.getX() - x, Player.getY() - y, Player.getZ() - z);
+        distance = Math.round(distanceRaw) + "m";
+        wp[0] = [`§b${playerName}: §a${distance}`, x, y, z]
+        wp[1] = [x, y, z]
+        renderWaypoint([wp])
+    }
+    */
 }
+
+function renderWaypoint(waypoints) {
+    if (!waypoints.length) return;
+
+    waypoints.forEach((waypoint) => {
+        box = waypoint[0];
+        beam = waypoint[1];
+        rgb = waypoint[2];
+        let removeAtDistance = 10;
+        let alpha = cmSettingsData.wpColor.getAlpha();
+        // RenderLibV2.drawEspBoxV2(box[1], box[2], box[3], 1, 1, 1, rgb[0], rgb[1], rgb[2], 1, true);
+        RenderLibV2.drawInnerEspBoxV2(box[1], box[2], box[3], 1, 1, 1, rgb[0], rgb[1], rgb[2], alpha/2, true);
+        let hexCodeString = javaColorToHex(new Color(rgb[0], rgb[1], rgb[2]));
+        if (box[0] != "" && box[0] != "§7") {
+            Tessellator.drawString(box[0], box[1], box[2] + 1.5, box[3], parseInt(hexCodeString, 16), true);
+        }
+
+        if (box[4] >= removeAtDistance && box[5]) {
+            renderBeaconBeam(beam[0], beam[1]+1, beam[2], rgb[0], rgb[1], rgb[2], alpha, false);
+        }
+    });
+}
+
 
 register("renderWorld", () => {
     for (let player of trackedPlayers) {
@@ -120,6 +185,4 @@ register("command", (playerName) => {
     } else {
         ChatLib.chat(`&c[Cm Tracker] &ePlayer: ${playerName} is not being tracked.`);
     }
-})
-    .setName("unTrackPlayer")
-    .setAliases("untrack");
+}).setName("unTrackPlayer").setAliases("untrack");

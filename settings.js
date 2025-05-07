@@ -54,9 +54,11 @@ class cmSettingsData {
         this.addDependency("Color Username", "Color Username Replacor")
         this.addDependency("Color Tag", "Color Tag Replacor")
         this.addDependency("Custom Rank", "Replace Rank with Custom")
+        this.addDependency("Add font to user", "Color Username Replacor")
+        this.addDependency("Font Value", "Add font to user")
 
     }
-    //----------- General ----------------
+    //----------- Color Replacor ----------------
     @SwitchProperty({
         name: "Color Username Replacor",
         description: "Enable or disable the Username color replacor",
@@ -72,6 +74,21 @@ class cmSettingsData {
         options: ["Black", "Dark Blue", "Dark Green", "Dark Aqua", "Dark Red", "Dark Purple", "Gold", "Gray", "Dark Gray", "Blue", "Green", "Aqua", "Red", "Light Purple / Pink", "Yellow"]
     })
     colorUser = 0;
+    @SwitchProperty({
+        name: "Add font to user",
+        description: "Add fonts to your username like &lBold &r&7 &nUnderlined &r&7 &oItalic &r&7etc... See /colors",
+        category: "Color Replacor",
+        subcategory: "Settings"
+    })
+    fontedName = false;
+    @SwitchProperty({
+        name: "Font Value",
+        description: "Add fonts to your username like &lBold &r&7 &nUnderlined &r&7 &oItalic &r&7etc... See /colors",
+        category: "Color Replacor",
+        subcategory: "Settings"
+    })
+    fontedVal = "&l";
+    
     @SwitchProperty({
         name: "Color Tag Replacor",
         description: "Enable or disable the color tag replacor",
@@ -116,6 +133,9 @@ class cmSettingsData {
         subcategory: "Settings"
     })
     rankText = "&c[&fYOUTUBE&c]"
+
+    //----------- General ----------------
+
     @SwitchProperty({
         name: "Party Invite Message Editor",
         description: "Edits party invite message to lyk if the guy is in your lobby",
@@ -263,6 +283,21 @@ class cmSettingsData {
         step: 1
     })
     lineWidth = 4;
+
+    @SwitchProperty({
+        name: "Waipoint Tracer",
+        description: "Add a waypoint on the player loc",
+        category: "Tracker",
+        subcategory: "Settings",
+    })
+    wpTrue = false;
+    @ColorProperty({
+        name: "Waipoint Tracer Color",
+        description: "Choose the color for the waypoint tracer",
+        category: "Tracker",
+        subcategory: "Settings",
+    })
+    wpColor = new Color(1, 1, 1, 0.5);
 
     @ColorProperty({
         name: "Line Color",

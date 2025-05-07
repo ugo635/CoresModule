@@ -45,7 +45,7 @@ register("command", () => {
     ChatLib.chat(`&eYellow: &e&lBold Yellow : &&ee`);
     ChatLib.chat(`&fWhite: &f&lBold White : &&ff`);
 
-    ChatLib.chat(`&kObfuscated&r : &\k`);
+    ChatLib.chat(`&kObfuscated&r : &+k (without the +)`);
     ChatLib.chat(`&lBold : &&ll`);
     ChatLib.chat(`&mStrikethrough : &&mm`);
     ChatLib.chat(`&nUnderline : &&nn`);

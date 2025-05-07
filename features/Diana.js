@@ -73,9 +73,9 @@ register("chat", (message) => {
 }).setCriteria("${message}");
 
 register("command", (...args) => {
-    ChatLib.chat("&cInput ur mf with renowned sorrow / mf 10 kuudra armor, fragged dae axe, mf pet, no1 arround so legion isn't active (must have max be, legion V, renowned, shuriken) e.g: /mymf 300")
+    ChatLib.chat("&cInput ur mf with any renowned armor, fragged dae axe, mf pet, no1 arround so legion isn't active (must have max be, legion V, renowned, shuriken) e.g: /mymf 300")
 }).setName("mf_help")
 
 register("command", (...args) => {
-    ChatLib.chat("&cInput ur mf with renowned sorrow / mf 10 kuudra armor, fragged dae axe, mf pet, no1 arround so legion isn't active (must have max be, legion V, renowned, shuriken) \n &cInput the mf you gain from kill combo e.g: /mymf 300 6 (15 kill combo)")
+    ChatLib.chat("&cInput ur mf with any renowned armor, fragged dae axe, mf pet, no1 arround so legion isn't active (must have max be, legion V, renowned, shuriken) \n &cInput the mf you gain from kill combo e.g: /mymf 300 6 (15 kill combo)")
 }).setName("mfCombo_help")

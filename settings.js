@@ -21,7 +21,7 @@ import {
         // or a positive number if b should be sorted before a.
 
         // In this case, we can put Not general! to be above general.
-        const categories = ['Color Replacor', 'General', 'Diana', 'Warps', 'Credits'];
+        const categories = ['Color Replacor', 'General', 'Diana', 'Tracker', 'Warps', 'Credits'];
 
         return categories.indexOf(a.name) - categories.indexOf(b.name);
     },
@@ -54,9 +54,11 @@ class cmSettingsData {
         this.addDependency("Color Username", "Color Username Replacor")
         this.addDependency("Color Tag", "Color Tag Replacor")
         this.addDependency("Custom Rank", "Replace Rank with Custom")
+        this.addDependency("Add font to user", "Color Username Replacor")
+        this.addDependency("Font Value", "Add font to user")
 
     }
-    //----------- General ----------------
+    //----------- Color Replacor ----------------
     @SwitchProperty({
         name: "Color Username Replacor",
         description: "Enable or disable the Username color replacor",
@@ -72,6 +74,21 @@ class cmSettingsData {
         options: ["Black", "Dark Blue", "Dark Green", "Dark Aqua", "Dark Red", "Dark Purple", "Gold", "Gray", "Dark Gray", "Blue", "Green", "Aqua", "Red", "Light Purple / Pink", "Yellow"]
     })
     colorUser = 0;
+    @SwitchProperty({
+        name: "Add font to user",
+        description: "Add fonts to your username like &lBold &r&7 &nUnderlined &r&7 &oItalic &r&7etc... See /colors",
+        category: "Color Replacor",
+        subcategory: "Settings"
+    })
+    fontedName = false;
+    @TextProperty({
+        name: "Font Value",
+        description: "Add fonts to your username like &lBold &r&7 &nUnderlined &r&7 &oItalic &r&7etc... See /colors",
+        category: "Color Replacor",
+        subcategory: "Settings"
+    })
+    fontedVal = "&l";
+    
     @SwitchProperty({
         name: "Color Tag Replacor",
         description: "Enable or disable the color tag replacor",
@@ -116,6 +133,9 @@ class cmSettingsData {
         subcategory: "Settings"
     })
     rankText = "&c[&fYOUTUBE&c]"
+
+    //----------- General ----------------
+
     @SwitchProperty({
         name: "Party Invite Message Editor",
         description: "Edits party invite message to lyk if the guy is in your lobby",
@@ -216,14 +236,14 @@ class cmSettingsData {
     @SwitchProperty({
         name: "Spooky Warning",
         description: "Send a message on screen when a spooky treat or trick chest spawn",
-        category: "Warps",
+        category: "General",
         subcategory: "Settings"
     })
     SpookyWarning = true;
     @SwitchProperty({
         name: "Fire Freeze Staff Warning",
         description: "Send a message on screen when to use Fire Freeze Staff on F3/M3",
-        category: "Warps",
+        category: "General",
         subcategory: "Settings"
     })
     FFWarning = true;
@@ -250,6 +270,42 @@ class cmSettingsData {
         options: ["/viewStash", "/pickupStash", "Hide"]
     })
     changeStashClickAction = 0;
+
+    // ----------- Tracker ----------------
+
+    @SliderProperty({
+        name: "Line Width",
+        description: "The line width for &a/trackPlayer playerName",
+        category: "Tracker",
+        subcategory: "Settings",
+        min: 0,
+        max: 10,
+        step: 1
+    })
+    lineWidth = 4;
+
+    @SwitchProperty({
+        name: "Waipoint Tracer",
+        description: "Add a waypoint on the player loc",
+        category: "Tracker",
+        subcategory: "Settings",
+    })
+    wpTrue = false;
+    @ColorProperty({
+        name: "Waipoint Tracer Color",
+        description: "Choose the color for the waypoint tracer",
+        category: "Tracker",
+        subcategory: "Settings",
+    })
+    wpColor = new Color(0, 0, 0, 1);
+
+    @ColorProperty({
+        name: "Line Color",
+        description: "The color of the line for &a/trackPlayer playerName",
+        category: "Tracker",
+        subcategory: "Settings",
+    })
+    lineColor = new Color(0, 0, 0, 1);
 
     // ----------- Warps  ----------------
     @SwitchProperty({
@@ -290,7 +346,7 @@ class cmSettingsData {
     // ----------- Credits ----------------
     @ButtonProperty({
         name: "Diacyz",
-        description: "Found the module name <3",
+        description: "Found the module name, and found many ideas <3",
         category: "Credits",
         subcategory: "Credits",
         placeholder: "Click Me"

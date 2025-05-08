@@ -81,15 +81,13 @@ export function formatNum(number) {
 
 
 export function trace (x, y, z, red, green, blue, alpha, type, lineWidth) {
-    if (type === "calc")
-    {
+    if (type === "calc") {
         if (x >= 0) {
             x = parseFloat(x) + 0.5;
         } else {
             x = parseFloat(x) - 0.5;
         }
-        if (z >= 0)
-        {
+        if (z >= 0) {
             z = parseFloat(z) + 0.5;
         } else {
             z = parseFloat(z) - 0.5;
@@ -128,7 +126,7 @@ export function playCustomSound(sound, volume) {
             new Sound({ source: new java.lang.String(sound + ".ogg") }).setVolume(volume/100).play()
         }
         else {
-            ChatLib.chat(`&6[SBO] &cSound file not found! (if the filename is correct, make sure to reload ct by "/ct load")`);
+            ChatLib.chat(`&6[Cm] &cSound file not found! (if the filename is correct, make sure to reload ct by "/ct load")`);
         }
     }
 }

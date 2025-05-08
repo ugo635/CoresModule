@@ -22,22 +22,28 @@ const colorDict = {
 let player = Player.getName()
 
 register("command", (...args) => {
-    ChatLib.chat("If you want to add colors to your rank, a color is a '&' follow by a number from 0 to 9 or a letter from a to f, f being white (default)")
+    ChatLib.chat("If you want to add colors to your rank, a color is a '&' follow by a number from 0 to 9 or a letter from a to f, f being white (default), if you don't have custom username color, add '&' followed by the color code of your username)")
 }).setName("customRankHelp")
 
 // Color Test
 testing_list = [
+    `&r&8[&r&d331&r&8] &r&b&lᛝ &6[MVP&d++&6] ${player}&r: &fHi, I'm M++`,
+    `&r&8[&r&d331&r&8] &r&b&lᛝ &b[MVP&d+&b] ${player}&r: &fHi, I'm M+`,
+    `&r&8[&r&d331&r&8] &r&b&lᛝ &a[VIP&6+&a] ${player}&r: &fHi, I'm V+`,
+    `&r&8[&r&d331&r&8] &r&b&lᛝ &b[MVP&b] ${player}&r: &fHi, I'm M`,
+    `&r&8[&r&d331&r&8] &r&b&lᛝ &a[VIP&a] ${player}&r: &fHi, I'm V`,
+    `&r&8[&r&d331&r&8] &r&b&lᛝ &7${player}&r&7: Hi, I'm rankless! Hi ${player} wsp?`,
     `&6[MVP&d++&6] ${player}&r: &fHi, I'm M++`,
     `&b[MVP&d+&b] ${player}&r: &fHi, I'm M+`,
     `&a[VIP&6+&a] ${player}&r: &fHi, I'm V+`,
     `&b[MVP&b] ${player}&r: &fHi, I'm M`,
     `&a[VIP&a] ${player}&r: &fHi, I'm V`,
-    `&7${player}&r&7: Hi, I'm rankless!`
+    `&7${player}&r&7: Hi, I'm rankless! Hi ${player} wsp?`
 ]
 
 register("command", () => {
     testing_list.forEach((test_msg) => {
-    ChatLib.command(`ct simulate ${test_msg}`, true)
+    ChatLib.simulateChat(test_msg)
     })
 }).setName("colorTests").setAliases("colorTest")
 
@@ -45,7 +51,7 @@ register("command", () => {
     for (let i = 0; i < 5; i++) {
         setTimeout(() => {
         testing_list.forEach((test_msg) => {
-        ChatLib.command(`ct simulate ${test_msg}`, true)
+        ChatLib.simulateChat(test_msg)
         })
         cmSettingsData.newRank += 1;
         if (cmSettingsData.newRank > 5) cmSettingsData.newRank = 0;
@@ -129,10 +135,10 @@ const combinations = [
 ];
 
 register("chat", (msg, event) => {
-    if (!cmSettingsData.colorUserTrue && !cmSettingsData.colorTagTrue) return;
-    let msg2 = ChatLib.getChatMessage(event, true);
+    if (!cmSettingsData.colorUserTrue && !cmSettingsData.colorTagTrue && !cmSettingsData.customRank) return;
     if (!msg.includes("MVP+") && !msg.includes("VIP+") && !msg.includes("MVP++") && !msg.includes("MVP") && !msg.includes("VIP") && !msg.includes(player)) return;
-    let rank = msg.includes("MVP++") ? "MVP++" : msg.includes("MVP+") ? "MVP+" : msg.includes("MVP") ? "MVP" : msg.includes("VIP+") ? "VIP+" : msg.includes("VIP") ? "VIP" : "rankless";
+    let msg2 = ChatLib.getChatMessage(event, true);
+    let rank = msg.includes("[MVP++]") ? "MVP++" : msg.includes("[MVP+]") ? "MVP+" : msg.includes("[MVP]") ? "MVP" : msg.includes("[VIP+]") ? "VIP+" : msg.includes("[VIP]") ? "VIP" : "rankless";
     let msg3 = new Message(event).getMessageParts();
 
     // Fuse Message
@@ -167,7 +173,7 @@ register("chat", (msg, event) => {
     // Tag Replace
     if (combinations.some(combination => msg2.includes(combination))) {
         let matchingCombination = combinations.find(combination => msg2.includes(combination));
-        if (cmSettingsData.colorTagTrue) {
+        if (cmSettingsData.colorTagTrue || cmSettingsData.customRank) {
             matchingCombination = matchingCombination.slice(0, matchingCombination.length - (player.length + 1)).replaceAll("&", "§")
             UpdateInfos()
             msg3.forEach(element => {
@@ -217,24 +223,41 @@ register("chat", (msg, event) => {
     }
 
     // Player Replace
+    cmSettingsData.fontedVal.replace("&", "§")
     if (cmSettingsData.colorUserTrue) {
         UpdateInfos()
         if (rank != "rankless") {
             msg3.forEach(element => {
-                element.text = element.text.replace(player, `${colorDict[cmSettingsData.colorUser]}${player}§f`)
+                if (cmSettingsData.fontedName) {
+                    element.text = element.text.replace(player, `${colorDict[cmSettingsData.colorUser]}${cmSettingsData.fontedVal.replace("&", "§") + player}§f`)
+                } else {
+                    element.text = element.text.replace(player, `${colorDict[cmSettingsData.colorUser]}${player}§f`)
+                }
+                
             });
         } else {
             msg3.forEach(element => {
                 if (!(wantRank && (cmSettingsData.newTag || cmSettingsData.customRank))) {
-                element.text = element.text.replace(player, `${colorDict[cmSettingsData.colorUser]}${player}`)
+                element.text = element.text.replace(player, `${colorDict[cmSettingsData.colorUser]}${(cmSettingsData.fontedName) ? cmSettingsData.fontedVal + player : player}§r§f`)
                 } else {
-                element.text = element.text.replace(`${player}§7`, `${colorDict[cmSettingsData.colorUser]}${player}§r`)
-                element.text = element.text.replace(`${player}§r§7`, `${colorDict[cmSettingsData.colorUser]}${player}§r`)
-                element.text = element.text.replace(`${player}§7§r§7`, `${colorDict[cmSettingsData.colorUser]}${player}§r`)
+                element.text = element.text.replace(`${player}§7§r§7`, `${colorDict[cmSettingsData.colorUser]}${(cmSettingsData.fontedName) ? cmSettingsData.fontedVal + player : player}§r§f`)
+                element.text = element.text.replace(`${player}§r§7`, `${colorDict[cmSettingsData.colorUser]}${(cmSettingsData.fontedName) ? cmSettingsData.fontedVal + player : player}§r§f`)
+                element.text = element.text.replace(`${player}§7`, `${colorDict[cmSettingsData.colorUser]}${(cmSettingsData.fontedName) ? cmSettingsData.fontedVal + player : player}§r§f`)
+                element.text = element.text.replaceAll(`${player}`, `${colorDict[cmSettingsData.colorUser]}${(cmSettingsData.fontedName) ? cmSettingsData.fontedVal + player : player}§r§f`)
                 }
             });
         }
-        
+    } else if (cmSettingsData.customRank) {
+        msg3.forEach(element => {
+            if (!(wantRank && (cmSettingsData.newTag || cmSettingsData.customRank))) {
+                element.text = element.text.replace(player, `${(cmSettingsData.fontedName) ? cmSettingsData.fontedVal + player : player}§r§f`)
+                } else {
+                element.text = element.text.replace(`${player}§7§r§7`, `${(cmSettingsData.fontedName) ? cmSettingsData.fontedVal + player : player}§r§f`)
+                element.text = element.text.replace(`${player}§r§7`, `${(cmSettingsData.fontedName) ? cmSettingsData.fontedVal + player : player}§r§f`)
+                element.text = element.text.replace(`${player}§7`, `${(cmSettingsData.fontedName) ? cmSettingsData.fontedVal + player : player}§r§f`)
+                element.text = element.text.replaceAll(`${player}`, `${player}§r§f`)
+                }
+        })
     }
 
 
@@ -321,155 +344,4 @@ function textCompToChatComponent(comp) {
     if (fullComponent.func_150253_a().length == 0) fullComponent.func_150257_a(new ChatComponentText(""))
     return fullComponent
 }
-
-
-
-// TextComponent{text='§r§9Party §8> i hate humanity', siblings=[], style=Style{hasParent=false, color=null, bold=null, italic=null, underlined=null, obfuscated=null, clickEvent=null, hoverEvent=null, insertion=null}}
-
-
-// for item in msg:
-//     item.text.replace()
-
-// [TextComponent{text:§r§r, formatted:true, hoverAction:null, hoverValue:null, clickAction:null, clickValue:null}, TextComponent{text:§8[§r, formatted:true, hoverAction:show_text, hoverValue:§b[MVP§d+§b] JudgementCorePls§f
-
-//     §7SkyBlock Level: §8[§9291§8]
-//     §7Skill Average: §645.8
-
-//     §7Emblem: §6ჶ
-//     §8Golden Riftstalker Strange Time
-    
-//     §7§8Unlocked for Vampire Slayer 5.
-    
-//     §7Riftstalker Bloodfiend XP: §e15,910
-//     §7Total Tier V Kills: §576§r, clickAction:null, clickValue:null}, TextComponent{text:§9291§r, formatted:true, hoverAction:show_text, hoverValue:§b[MVP§d+§b] JudgementCorePls§f
-    
-//     §7SkyBlock Level: §8[§9291§8]
-//     §7Skill Average: §645.8
-    
-//     §7Emblem: §6ჶ
-//     §8Golden Riftstalker Strange Time
-    
-//     §7§8Unlocked for Vampire Slayer 5.
-    
-//     §7Riftstalker Bloodfiend XP: §e15,910
-//     §7Total Tier V Kills: §576§r, clickAction:null, clickValue:null}, TextComponent{text:§8] §r, formatted:true, hoverAction:show_text, hoverValue:§b[MVP§d+§b] JudgementCorePls§f
-    
-//     §7SkyBlock Level: §8[§9291§8]
-//     §7Skill Average: §645.8
-    
-//     §7Emblem: §6ჶ
-//     §8Golden Riftstalker Strange Time
-    
-//     §7§8Unlocked for Vampire Slayer 5.
-    
-//     §7Riftstalker Bloodfiend XP: §e15,910
-//     §7Total Tier V Kills: §576§r, clickAction:null, clickValue:null}, TextComponent{text:§6ჶ §r, formatted:true, hoverAction:show_text, hoverValue:§b[MVP§d+§b] JudgementCorePls§f
-    
-//     §7SkyBlock Level: §8[§9291§8]
-//     §7Skill Average: §645.8
-    
-//     §7Emblem: §6ჶ
-//     §8Golden Riftstalker Strange Time
-    
-//     §7§8Unlocked for Vampire Slayer 5.
-    
-//     §7Riftstalker Bloodfiend XP: §e15,910
-//     §7Total Tier V Kills: §576§r, clickAction:null, clickValue:null}, TextComponent{text:§6[The Owner] §r, formatted:true, hoverAction:null, hoverValue:null, clickAction:null, clickValue:null}, TextComponent{text:§b[MVP§r, formatted:true, hoverAction:null, hoverValue:null, clickAction:null, clickValue:null}, TextComponent{text:§d+§r, formatted:true, hoverAction:null, hoverValue:null, clickAction:null, clickValue:null}, TextComponent{text:§b] JudgementCorePls§r, formatted:true, hoverAction:null, hoverValue:null, clickAction:null, clickValue:null}, TextComponent{text:§f: me again§r, formatted:true, hoverAction:null, hoverValue:null, clickAction:null, clickValue:null}]
-
-
-
-
-// /Show: 
-
-// [TextComponent{text:§8[§9291§8] §6ჶ §r§r, formatted:true, hoverAction:show_text, hoverValue:§b[MVP§d+§b] JudgementCorePls§f
-
-//     §7SkyBlock Level: §8[§9291§8]
-//     §7Skill Average: §645.8
-    
-//     §7Emblem: §6ჶ
-//     §8Golden Riftstalker Strange Time
-    
-//     §7§8Unlocked for Vampire Slayer 5.
-    
-//     §7Riftstalker Bloodfiend XP: §e15,910
-//     §7Total Tier V Kills: §576§r, clickAction:null, clickValue:null}, TextComponent{text:§b[MVP§d+§b] JudgementCorePls§f§7 is holding §r, formatted:true, hoverAction:show_text, hoverValue:§b[MVP§d+§b] JudgementCorePls§f
-    
-//     §7SkyBlock Level: §8[§9291§8]
-//     §7Skill Average: §645.8
-    
-//     §7Emblem: §6ჶ
-//     §8Golden Riftstalker Strange Time
-    
-//     §7§8Unlocked for Vampire Slayer 5.
-    
-//     §7Riftstalker Bloodfiend XP: §e15,910
-//     §7Total Tier V Kills: §576§r, clickAction:null, clickValue:null}, TextComponent{text:§8[§dHeroic Hyperion §6✪✪✪✪✪§8]§r, formatted:true, hoverAction:show_text, hoverValue:§dHeroic Hyperion §r§6✪✪✪✪✪
-//     §r§7Gear Score: §r§d1165 §r§8(4381)
-//     §r§7Damage: §r§c+355 §r§e(+30) §r§8(+1,503.53)
-//     §r§7Strength: §r§c+245 §r§e(+30) §r§9(+50) §r§8(+1,051.1)
-//     §r§7Crit Damage: §r§c+70% §r§8(+319.9%)
-//     §r§7Bonus Attack Speed: §r§c+7% §r§9(+7%) §r§8(+10.78%)
-//     §r§7Intelligence: §r§a+628 §r§9(+125) §r§d(+40) §r§8(+2,710.01)
-//     §r§7Ferocity: §r§a+33 §r§8(+46.2)
-//      §r§5[§r§b✎§r§5] §r§5[§r§b⚔§r§5]
-    
-//     §r§d§lUltimate Wise V§r§9, §r§9Champion X§r§9, §r§9Cleave V
-//     §r§9Critical VI§r§9, §r§9Cubism V§r§9, §r§9Ender Slayer VI
-//     §r§9Execute V§r§9, §r§9Experience IV§r§9, §r§9Fire Aspect III
-//     §r§9First Strike IV§r§9, §r§9Giant Killer VI§r§9, §r§9Impaling III
-//     §r§9Lethality VI§r§9, §r§9Life Steal IV§r§9, §r§9Looting IV
-//     §r§9Luck VI§r§9, §r§9Scavenger V§r§9, §r§9Sharpness VI
-//     §r§9Smoldering III§r§9, §r§9Thunderlord V§r§9, §r§9Vampirism VI
-//     §r§9Venomous V
-    
-//     §r§b◆ Music Rune I
-    
-//     §r§7Deals §r§c+50% §r§7damage to Withers.
-//     §r§7Grants §r§c+1 §r§c❁ Damage §r§7and §r§a+2 §r§b✎
-//     §r§bIntelligence §r§7per §r§cCatacombs §r§7level.
-    
-//     §r§aScroll Abilities:
-//     §r§6Ability: Wither Impact  §r§e§lRIGHT CLICK
-//     §r§7Teleport §r§a10 blocks§r§7 ahead of you.
-//     §r§7Then implode dealing §r§c61,730.5 §r§7damage
-//     §r§7to nearby enemies. Also applies the
-//     §r§7wither shield scroll ability reducing
-//     §r§7damage taken and granting an
-//     §r§7absorption shield for §r§e5 §r§7seconds.
-//     §r§8Mana Cost: §r§3150
-    
-//     §r§fKills: §r§6200,771
-    
-//     §r§8§l* §r§8Co-op Soulbound §r§8§l*
-//     §r§d§l§ka§r§r §r§d§lMYTHIC DUNGEON SWORD §r§d§l§ka§r, clickAction:run_command, clickValue:/viewitem f1d7b704-62f8-483a-8e11-e1d7ffe20179}]
-    
-
-// Party message:
-
-// [
-//     TextComponent{
-//       text: §r§r,
-//       formatted: true,
-//       hoverAction: null,
-//       hoverValue: null,
-//       clickAction: null,
-//       clickValue: null
-//     },
-//     TextComponent{
-//       text: §9Party §8> §b[MVP§d+§b] JudgementCorePls§f: §r,
-//       formatted: true,
-//       hoverAction: show_text,
-//       hoverValue: §eClick here to view §bJudgementCorePls§e's profile§r,
-//       clickAction: run_command,
-//       clickValue: /viewprofile eec82c33-ea9d-4628-b2e1-bf1a6b770095
-//     },
-//     TextComponent{
-//       text: :3§r,
-//       formatted: true,
-//       hoverAction: null,
-//       hoverValue: null,
-//       clickAction: null,
-//       clickValue: null
-//     }
-// ]
 

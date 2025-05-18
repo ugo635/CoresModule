@@ -1,7 +1,3 @@
-// Must import other files here for them to work properly 
-// OR 
-// import this file in the other files
-
 import cmSettingsData from "./settings";
 import { data } from "./features/Utils.js"
 import "./features/cmFunc.js";
@@ -18,10 +14,7 @@ import "./features/Potions.js";
 import "./features/viewAuctions.js";
 import "./features/Features.js";
 
-
-register("gameLoad", () => {
-    ChatLib.chat("&6&l[Cores Module] &r&7Module Loaded");
-});
+register("gameLoad", () => ChatLib.chat("&6&l[Cores Module] &r&7Module Loaded"));
 
 const commands = [
     {cmd: "cm", description: "Open the settings", ph: ""},

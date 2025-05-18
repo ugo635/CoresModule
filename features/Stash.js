@@ -7,9 +7,7 @@ register("chat", (message, event) => {
     (message.includes("You have") && message.includes("materials stashed away!")) || 
     (message.includes("(This totals") && message.includes("type of material stashed!)")) ||
     (message.includes(">>> CLICK HERE to pick them up! <<<")) ||
-    (message.includes(">>> CLICK HERE to pick it up! <<<"))
-    ) {
-    if (cmSettingsData.stashMsgEdit == true) {
+    (message.includes(">>> CLICK HERE to pick it up! <<<"))) {
         if (cmSettingsData.changeStashClickAction == 0) {
             new TextComponent(msg).setClick("run_command", "/viewstash material").setHover("show_text", "&eClick To View Material Stash or do /pickupstash to pickup your stash (if you need to open the stash for item rather than material, do /viewstash item)").chat();
             cancel(event);
@@ -19,6 +17,5 @@ register("chat", (message, event) => {
         } else {
             cancel(event)
         }
-    } 
     }
 }).setCriteria("${message}")

@@ -17,7 +17,6 @@ import "./features/Warps.js";
 import "./features/Potions.js";
 import "./features/viewAuctions.js";
 import "./features/Features.js";
-import "./features/playerTracer.js";
 
 
 register("gameLoad", () => {
@@ -28,11 +27,7 @@ const commands = [
     {cmd: "cm", description: "Open the settings", ph: ""},
     {cmd: "cm help", description: "Show this message", ph: ""},
     {cmd: "mymf <Number>", description: "Gives your mf on inquisitors -> &cSee /mf_help for details on the input", ph: "mymf 300"},
-    {cmd: "mymf <Number> <MF From Kill Combo>", description: "Gives your mf on inquisitors: &cSee /mfCombo_help for details on the input", ph: "mymf 300 6"},
-    {cmd: "track <player>", description: "Tracks a player loc (see the settings for customability), running it again will remove the first player and tracks the 2nd one", ph: `track ${Player.getName()}`},
-    {cmd: "track add <player> (multiple possible)", description: "Tracks an another player loc", ph: `track ${Player.getName()}`},
-    {cmd: "untrack", description: "Untracks all player", ph: `track ${Player.getName()}`},
-    {cmd: "untrack <player>", description: "Untracks a player loc", ph: `untrack ${Player.getName()}`}
+    {cmd: "mymf <Number> <MF From Kill Combo>", description: "Gives your mf on inquisitors: &cSee /mfCombo_help for details on the input", ph: "mymf 300 6"}
     
 ];
 

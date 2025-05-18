@@ -21,7 +21,7 @@ import {
         // or a positive number if b should be sorted before a.
 
         // In this case, we can put Not general! to be above general.
-        const categories = ['Color Replacor', 'General', 'Diana', 'Tracker', 'Warps', 'Credits'];
+        const categories = ['Color Replacor', 'General', 'Diana', 'Warps', 'Credits'];
 
         return categories.indexOf(a.name) - categories.indexOf(b.name);
     },
@@ -270,42 +270,6 @@ class cmSettingsData {
         options: ["/viewStash", "/pickupStash", "Hide"]
     })
     changeStashClickAction = 0;
-
-    // ----------- Tracker ----------------
-
-    @SliderProperty({
-        name: "Line Width",
-        description: "The line width for &a/trackPlayer playerName",
-        category: "Tracker",
-        subcategory: "Settings",
-        min: 0,
-        max: 10,
-        step: 1
-    })
-    lineWidth = 4;
-
-    @SwitchProperty({
-        name: "Waipoint Tracer",
-        description: "Add a waypoint on the player loc",
-        category: "Tracker",
-        subcategory: "Settings",
-    })
-    wpTrue = false;
-    @ColorProperty({
-        name: "Waipoint Tracer Color",
-        description: "Choose the color for the waypoint tracer",
-        category: "Tracker",
-        subcategory: "Settings",
-    })
-    wpColor = new Color(0, 0, 0, 1);
-
-    @ColorProperty({
-        name: "Line Color",
-        description: "The color of the line for &a/trackPlayer playerName",
-        category: "Tracker",
-        subcategory: "Settings",
-    })
-    lineColor = new Color(0, 0, 0, 1);
 
     // ----------- Warps  ----------------
     @SwitchProperty({

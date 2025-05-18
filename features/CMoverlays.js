@@ -163,18 +163,15 @@ export class OverlayTextLine {
     }
 
     hover(overlay) {
-        if (this.hoverAction)
-            this.hoverAction(overlay); 
+        if (this.hoverAction) this.hoverAction(overlay); 
     }
 
     mouseEnter() {
-        if (this.mouseEnterAction)
-            this.mouseEnterAction();
+        if (this.mouseEnterAction) this.mouseEnterAction();
     }
 
     mouseLeave() {
-        if (this.mouseLeaveAction)
-            this.mouseLeaveAction();
+        if (this.mouseLeaveAction) this.mouseLeaveAction();
     }
 
     setText(message) {
@@ -222,9 +219,8 @@ export class OverlayTextLine {
         let stringCount = this.text.getString().split("\n").length;
         let longestLine = this.text.getString().split("\n").reduce((a, b) => a.length > b.length ? a : b);
 
-        if (x >= this.X && x <= this.X + Renderer.getStringWidth(longestLine) * this.scale && y >= this.Y && y <= this.Y + 9 * this.scale * stringCount) {
+        if (x >= this.X && x <= this.X + Renderer.getStringWidth(longestLine) * this.scale && y >= this.Y && y <= this.Y + 9 * this.scale * stringCount) 
             return true;
-        }
         return false;
     }
 }
@@ -248,9 +244,8 @@ export class OverlayButton extends OverlayTextLine {
             let stringCount = this.text.getString().split("\n").length;
             let longestLine = this.text.getString().split("\n").reduce((a, b) => a.length > b.length ? a : b);
 
-            if (cx >= this.X && cx <= this.X + Renderer.getStringWidth(longestLine) * this.scale && cy >= this.Y && cy <= this.Y + 9 * this.scale * stringCount) {
+            if (cx >= this.X && cx <= this.X + Renderer.getStringWidth(longestLine) * this.scale && cy >= this.Y && cy <= this.Y + 9 * this.scale * stringCount) 
                 this.action();
-            }
         }
     }
 
@@ -261,12 +256,9 @@ function drawText(overlay) {
     let textLines = overlay.textLines;
     if (overlay.exampleText != undefined && editGui.isOpen()) { 
         if (overlay.name == "kuudraOverlay") {
-            if (settings.lineSetting == 0) {
-                overlay.exampleText = overlayExamples[overlay.example + "Two"];
-            }
-            else {
-                overlay.exampleText = overlayExamples[overlay.example + "One"];
-            }
+            settings.lineSetting == 0
+                ? overlay.exampleText = overlayExamples[overlay.example + "Two"]
+                : overlay.exampleText = overlayExamples[overlay.example + "One"]
         }
         textLines = [overlay.exampleText];
     }

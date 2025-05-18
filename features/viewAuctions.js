@@ -13,10 +13,7 @@ function loadingMsg() {
     //loadingMessage.setChatLineId(1); // Set a unique ID for the message
 
     function animateDots() {
-        if (!loading) {
-            ChatLib.deleteChat(loadingMessage);
-            return;
-        }
+        if (!loading) return ChatLib.deleteChat(loadingMessage);
 
         dots = dots.length < 3 ? dots + "." : "";
         setTimeout(() => {

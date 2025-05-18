@@ -32,7 +32,6 @@ function checkSettings(loadedSettings) {
             loadedSettings[key] = defaultSettings[key];
         }
     }
-    
     return loadedSettings;
 }
 
@@ -122,11 +121,8 @@ function drawLine (x1, y1, z1, x2, y2, z2, red, green, blue, alpha, lineWidth) {
 export function playCustomSound(sound, volume) {
     if (sound != "" && sound != undefined && sound != "none") {
         if (sound.includes(".ogg")) sound = sound.replace(".ogg", "");
-        if (FileLib.exists(Config.modulesFolder.replace("modules", "images") + `/${sound}.ogg`)) {
-            new Sound({ source: new java.lang.String(sound + ".ogg") }).setVolume(volume/100).play()
-        }
-        else {
-            ChatLib.chat(`&6[Cm] &cSound file not found! (if the filename is correct, make sure to reload ct by "/ct load")`);
-        }
+        (FileLib.exists(Config.modulesFolder.replace("modules", "images") + `/${sound}.ogg`)) 
+            ? new Sound({ source: new java.lang.String(sound + ".ogg") }).setVolume(volume/100).play()
+            : ChatLib.chat(`&6[Cm] &cSound file not found! (if the filename is correct, make sure to reload ct by "/ct load")`);
     }
 }

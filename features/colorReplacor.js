@@ -42,17 +42,13 @@ testing_list = [
 ]
 
 register("command", () => {
-    testing_list.forEach((test_msg) => {
-    ChatLib.simulateChat(test_msg)
-    })
+    testing_list.forEach((test_msg) => ChatLib.simulateChat(test_msg))
 }).setName("colorTests").setAliases("colorTest")
 
 register("command", () => {
     for (let i = 0; i < 5; i++) {
         setTimeout(() => {
-        testing_list.forEach((test_msg) => {
-        ChatLib.simulateChat(test_msg)
-        })
+        testing_list.forEach((test_msg) => ChatLib.simulateChat(test_msg))
         cmSettingsData.newRank += 1;
         if (cmSettingsData.newRank > 5) cmSettingsData.newRank = 0;
     }, 500 * i)
@@ -166,9 +162,7 @@ register("chat", (msg, event) => {
         msg3 = msg3.filter(item => item !== null);
     }
 
-    if (iterations === maxIterations) {
-        console.warn("Fusion stopped after reaching max iterations (possible infinite loop).");
-    }
+    if (iterations === maxIterations) console.warn("Fusion stopped after reaching max iterations (possible infinite loop).");
 
     // Tag Replace
     if (combinations.some(combination => msg2.includes(combination))) {
@@ -179,11 +173,9 @@ register("chat", (msg, event) => {
             msg3.forEach(element => {
                 if ((cmSettingsData.newRank != 5 && cmSettingsData.newTag) || !cmSettingsData.newTag) {
                 if (cmSettingsData.newTag || cmSettingsData.customRank) {
-                    if (rank === "rankless") {
-                        element.text = element.text.replace(player, `${newPlayerRank} ${player}`);
-                    } else {
-                        element.text = element.text.replace(matchingCombination, newPlayerRank);
-                    }
+                    rank === "rankless"
+                        ? element.text = element.text.replace(player, `${newPlayerRank} ${player}`)
+                        : element.text = element.text.replace(matchingCombination, newPlayerRank);
                 } else {
                     switch (rank) {
                         case "MVP++":
@@ -228,22 +220,19 @@ register("chat", (msg, event) => {
         UpdateInfos()
         if (rank != "rankless") {
             msg3.forEach(element => {
-                if (cmSettingsData.fontedName) {
-                    element.text = element.text.replace(player, `${colorDict[cmSettingsData.colorUser]}${cmSettingsData.fontedVal.replace("&", "§") + player}§f`)
-                } else {
-                    element.text = element.text.replace(player, `${colorDict[cmSettingsData.colorUser]}${player}§f`)
-                }
-                
+                cmSettingsData.fontedName 
+                    ? element.text = element.text.replace(player, `${colorDict[cmSettingsData.colorUser]}${cmSettingsData.fontedVal.replace("&", "§") + player}§f`)
+                    : element.text = element.text.replace(player, `${colorDict[cmSettingsData.colorUser]}${player}§f`)
             });
         } else {
             msg3.forEach(element => {
                 if (!(wantRank && (cmSettingsData.newTag || cmSettingsData.customRank))) {
-                element.text = element.text.replace(player, `${colorDict[cmSettingsData.colorUser]}${(cmSettingsData.fontedName) ? cmSettingsData.fontedVal + player : player}§r§f`)
+                    element.text = element.text.replace(player, `${colorDict[cmSettingsData.colorUser]}${(cmSettingsData.fontedName) ? cmSettingsData.fontedVal + player : player}§r§f`)
                 } else {
-                element.text = element.text.replace(`${player}§7§r§7`, `${colorDict[cmSettingsData.colorUser]}${(cmSettingsData.fontedName) ? cmSettingsData.fontedVal + player : player}§r§f`)
-                element.text = element.text.replace(`${player}§r§7`, `${colorDict[cmSettingsData.colorUser]}${(cmSettingsData.fontedName) ? cmSettingsData.fontedVal + player : player}§r§f`)
-                element.text = element.text.replace(`${player}§7`, `${colorDict[cmSettingsData.colorUser]}${(cmSettingsData.fontedName) ? cmSettingsData.fontedVal + player : player}§r§f`)
-                element.text = element.text.replaceAll(`${player}`, `${colorDict[cmSettingsData.colorUser]}${(cmSettingsData.fontedName) ? cmSettingsData.fontedVal + player : player}§r§f`)
+                    element.text = element.text.replace(`${player}§7§r§7`, `${colorDict[cmSettingsData.colorUser]}${(cmSettingsData.fontedName) ? cmSettingsData.fontedVal + player : player}§r§f`)
+                    element.text = element.text.replace(`${player}§r§7`, `${colorDict[cmSettingsData.colorUser]}${(cmSettingsData.fontedName) ? cmSettingsData.fontedVal + player : player}§r§f`)
+                    element.text = element.text.replace(`${player}§7`, `${colorDict[cmSettingsData.colorUser]}${(cmSettingsData.fontedName) ? cmSettingsData.fontedVal + player : player}§r§f`)
+                    element.text = element.text.replaceAll(`${player}`, `${colorDict[cmSettingsData.colorUser]}${(cmSettingsData.fontedName) ? cmSettingsData.fontedVal + player : player}§r§f`)
                 }
             });
         }
@@ -251,16 +240,14 @@ register("chat", (msg, event) => {
         msg3.forEach(element => {
             if (!(wantRank && (cmSettingsData.newTag || cmSettingsData.customRank))) {
                 element.text = element.text.replace(player, `${(cmSettingsData.fontedName) ? cmSettingsData.fontedVal + player : player}§r§f`)
-                } else {
+            } else {
                 element.text = element.text.replace(`${player}§7§r§7`, `${(cmSettingsData.fontedName) ? cmSettingsData.fontedVal + player : player}§r§f`)
                 element.text = element.text.replace(`${player}§r§7`, `${(cmSettingsData.fontedName) ? cmSettingsData.fontedVal + player : player}§r§f`)
                 element.text = element.text.replace(`${player}§7`, `${(cmSettingsData.fontedName) ? cmSettingsData.fontedVal + player : player}§r§f`)
                 element.text = element.text.replaceAll(`${player}`, `${player}§r§f`)
-                }
+            }
         })
     }
-
-
     // Send the message
     let fmsg = textCompToChatComponent(new Message(msg3).getMessageParts())
     fmsg = replaceDupe(fmsg)
@@ -268,14 +255,9 @@ register("chat", (msg, event) => {
 }).setCriteria("${msg}")
 
 const ChatComponentText = Java.type("net.minecraft.util.ChatComponentText")
-const IChatComponent = Java.type("net.minecraft.util.IChatComponent")
 const HoverEvent = Java.type("net.minecraft.event.HoverEvent")
 const ClickEvent = Java.type("net.minecraft.event.ClickEvent")
 const ChatStyle = Java.type("net.minecraft.util.ChatStyle")
-
-function stringToChatComponent(message) {
-    return new ChatComponentText(message).func_150257_a(new ChatComponentText(""));;
-}
 
 function eventAction(act) {
     switch(act) {

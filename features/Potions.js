@@ -10,13 +10,8 @@ let resetPotionButton = new OverlayButton("&cReset Session", true, true, true, t
     ChatLib.command("delPotionsTimer", true);
 });
 
-resetPotionButton.onMouseEnter(() => {
-    resetPotionButton.setText(`&c&nReset Session`);
-});
-
-resetPotionButton.onMouseLeave(() => {
-    resetPotionButton.setText(`&cReset Session`);
-})
+resetPotionButton.onMouseEnter(() => resetPotionButton.setText(`&c&nReset Session`));
+resetPotionButton.onMouseLeave(() => resetPotionButton.setText(`&cReset Session`))
 
 
 function potionsTimerOverlay(t) {
@@ -58,40 +53,24 @@ function potionsTimerOverlay(t) {
 &c&l${color +(time * 1000).toFixed(2)} milliseconds
 `;
 
-        potionsOverlay.setLines([
-            potionsText.setText(message)
-        ]);
-
+        potionsOverlay.setLines([potionsText.setText(message)]);
         let finalMessage = [];
         finalMessage.push(potionsText);
         finalMessage.push(resetPotionButton);
-
-        potionsOverlay.setLines(
-            finalMessage
-        )
-
-        
+        potionsOverlay.setLines(finalMessage)
         setTimeout(() => {
             time -= 0.05;
         }, 50);
         
     });
-
-    
 }
 
 register("command", (t) => {
     time = t * 60;
     cmSettingsData.UnregisterPotionsTimer = true;
-    if (isNaN(time) || time <= 0) {
-        ChatLib.chat("&c&l[Cm] Invalid time! Please enter a positive number.");
-        return;
-    }
-
+    if (isNaN(time) || time <= 0) return ChatLib.chat("&c&l[Cm] Invalid time! Please enter a positive number.")
     ChatLib.chat(`&a&l[Cm] Timer Started for ${t} minutes`);
-
     potionsTimerOverlay(t);
-
 }).setName("potionsTimer").setAliases("potionTimer", "potTimer");
 
 
@@ -102,21 +81,14 @@ register("command", (t) => {
         cmSettingsData.UnregisterPotionsTimer = false;
         ChatLib.chat(`&c[Cm] Timer cancelled`);
     }, 250);
-    
-    
-
 }).setName("delPotionsTimer").setAliases("delPotionTimer", "delPotTimer");
 
 register("command", (t) => {
-    if (cmSettingsData.UnregisterPotionsTimer == false) {ChatLib.chat(`&c&l[Cm] Timer is currently not running, you need to start one`); return;}
+    if (cmSettingsData.UnregisterPotionsTimer == false) return ChatLib.chat(`&c&l[Cm] Timer is currently not running, you need to start one`)
     ChatLib.chat(`&c&l[Cm] Timer is currently now for ${t} minutes`);
     time = t * 60;
 }).setName("updatePotionsTimer").setAliases("updatePotionTimer", "updatePotTimer");
 
-register("command", () => {
-    ChatLib.chat(time);
-}).setName("printTime")
+register("command", () => ChatLib.chat(time)).setName("printTime")
 
-register("command", (t) => {
-    time = t
-}).setName("setTimePot")
+register("command", (t) => time = t).setName("setTimePot")

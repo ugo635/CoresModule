@@ -104,14 +104,10 @@ register("step", () => {
         lastMinute = 15;
     }
 
-    if (currentMinute !== lastMinute) {
-        lastMinute = currentMinute;
-    }
+    if (currentMinute !== lastMinute) lastMinute = currentMinute;
 }, 30);
 
-register("command", () => {
-    ChatLib.clearChat();
-}).setName("clear")
+register("command", () => ChatLib.clearChat()).setName("clear")
 
 register("command", () => {
     let item = Player.getHeldItem();
@@ -119,15 +115,11 @@ register("command", () => {
     if (item && item.getNBT()) {
         let nbt = item.getNBT();
         let uuid = nbt.getTag("tag")?.getTag("ExtraAttributes")?.getString("uuid");
-
-        if (uuid) {
-            new TextComponent("&eItem UUID: &b" + uuid).setClick("run_command", `/ct copy ${uuid}`).setHoverValue("&eClick to copy").chat();
-        }
+        if (uuid) new TextComponent("&eItem UUID: &b" + uuid).setClick("run_command", `/ct copy ${uuid}`).setHoverValue("&eClick to copy").chat();
     } else {
         ChatLib.chat("You're not holding a valid item!");
     }
 }).setName("getMyItemUUID");
-
 
 register('chat', (key) => {
     if (!cmSettingsData.FFWarning)

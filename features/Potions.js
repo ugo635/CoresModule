@@ -1,5 +1,5 @@
 // import { setTimeout } from "./cmFunctions";
-import { CMsOverlay, OverlayTextLine, OverlayButton } from "./cmOverlays";
+import { CMsOverlay, OverlayTextLine, OverlayButton } from "./CMoverlays";
 import cmSettingsData from "../settings"
 
 let time = -9999;

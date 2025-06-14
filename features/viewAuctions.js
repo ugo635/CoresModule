@@ -57,7 +57,7 @@ register("command", (...args) => {
     fetchAuctionsAndDisplay(lfItem, "cVam");
 }).setName("cheapestviewAuctionsForItemMult2").setAliases("CVAFIM2", "cVam2");
 
-function fetchAuctionsAndDisplay(lfItem, src) {
+function fetchAuctionsAndDisplay(lfItem, src, price = null) {
     loading = true;
     loadingMsg();
     let itemsWantedFound = 0;
@@ -97,13 +97,12 @@ function fetchAuctionsAndDisplay(lfItem, src) {
                         });
                     }
                 }).catch((error) => {
-                    console.error(`Error fetching auction data: ${error.message}`);
-                    return { error: error.message };
+                    console.error(`Error fetching auction data: ${error}`);
+                    return { error: error };
                 })
             );
         }
 
-        // Remplacement de Promise.allSettled() par une boucle manuelle
         let resolvedPromises = 0;
         let errors = [];
 
@@ -115,7 +114,8 @@ function fetchAuctionsAndDisplay(lfItem, src) {
                         console.error("Errors encountered while fetching auction data:", errors);
                     }
 
-                    ChatLib.chat(`&c${itemsWantedFound} items found`);
+                    if (src != "ta") ChatLib.chat(`&c${itemsWantedFound} items found`);
+
                     if (src == "VAFI") {
                     itemsList.sort((a, b) => a.price - b.price);
                     itemsList.reverse();
@@ -172,7 +172,32 @@ function fetchAuctionsAndDisplay(lfItem, src) {
                         .setClick("run_command", `/viewauction ${item.auction_id}`)
                         .setHoverValue("&eClick to view auction")
                         .chat();
+                } else if (src == "ta") {
+                    itemsList.sort((a, b) => a.price - b.price);
+                    itemsList.reverse();
+                    if (!itemsList || itemsList.length === 0) {
+                        ChatLib.chat(`&cNo auctions found for ${lfItem[0]}.`);
+                        return;
+                    }
+
+                    const filteredItems = itemsList.filter(item => item.price <= price);
+                    if (filteredItems.length === 0) {
+                        ChatLib.chat(`&5No auctions found for ${lfItem[0]} below ${formatNum(price)} coins.`);
+                        loading = false;
+                        return;
+                    }
+
+                    ChatLib.chat(`&aFound ${filteredItems.length} auctions for ${lfItem[0]} below ${formatNum(price)} coins:`);
+                    filteredItems.forEach(item => {
+                        new TextComponent(`&eItem: &c${item.item_name}, &eAuction ID: &a ${item.auction_id}, &ePrice: &c${formatNum(item.price)}`)
+                            .setClick("run_command", `/viewauction ${item.auction_id}`)
+                            .setHoverValue("&eClick to view auction")
+                            .chat();
+                    });
                 }
+
+
+
                 loading = false;
             }}).catch((error) => {
                 errors.push(error);
@@ -180,6 +205,66 @@ function fetchAuctionsAndDisplay(lfItem, src) {
             });
         });
     }).catch((error) => {
-        console.error(`Error initializing auction data fetch: ${error.message}`);
+        console.error(`Error initializing auction data fetch: ${error}`);
     });
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function unFormatNum(num) {
+    let number, mult;
+
+    switch (num.charAt(num.length - 1).toLowerCase()) {
+        case "k":
+            [number, mult] = [num.split("k")[0], 1000]
+
+            break;
+
+        case "m":
+            [number, mult] = [num.split("m")[0], 1000000]
+            break;
+
+        case "b":
+            [number, mult] = [num.split("b")[0], 1000000000]
+            break;
+
+        default:
+            number, mult = num, 1
+            break;
+    }
+
+    return parseFloat(number) * mult
+
+}
+
+
+
+register("command", (arg1, arg2, ...args) => {
+    if (!arg1 || !arg2) {
+        ChatLib.chat("&cUsage: /trackAuction <item> <price>");
+        return;
+    }
+
+    const item = arg1.replace(/_/g, " ");
+    const price = unFormatNum(arg2)
+
+    if (isNaN(price) || price <= 0) {
+        ChatLib.chat("&cInvalid price specified.");
+        return;
+    }
+
+    fetchAuctionsAndDisplay([item], "ta", price);
+
+}).setName("trackAuction")//.setAliases("");

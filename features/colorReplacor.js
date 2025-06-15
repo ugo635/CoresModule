@@ -38,7 +38,8 @@ testing_list = [
     `&a[VIP&6+&a] ${player}&r: &fHi, I'm V+`,
     `&b[MVP&b] ${player}&r: &fHi, I'm M`,
     `&a[VIP&a] ${player}&r: &fHi, I'm V`,
-    `&7${player}&r&7: Hi, I'm rankless! Hi ${player} wsp?`
+    `&7${player}&r&7: Hi, I'm rankless! Hi ${player} wsp?`,
+    `[MVP+] ${player}` // FIX FOR THIS!!! -> [MVP+] [MVP+]s
 ]
 
 register("command", () => {
@@ -108,6 +109,8 @@ const combinations = [
     `[VIP&r&a] ${player}`,
     `[VIP&a] ${player}`,
 
+    `[MVP++] ${player}`, `[MVP+] ${player}`, `[MVP] ${player}`, `[VIP+] ${player}`, `[VIP] ${player}`,
+
     `[MVP&a+&b] ${player}`, `[MVP&b+&b] ${player}`, `[MVP&c+&b] ${player}`, `[MVP&d+&b] ${player}`, 
     `[MVP&e+&b] ${player}`, `[MVP&f+&b] ${player}`, `[MVP&0+&b] ${player}`, `[MVP&1+&b] ${player}`, 
     `[MVP&2+&b] ${player}`, `[MVP&3+&b] ${player}`, `[MVP&4+&b] ${player}`, `[MVP&5+&b] ${player}`,
@@ -146,6 +149,7 @@ register("chat", (msg, event) => {
         iterations++;
         const elem = msg3[i];
         const elem2 = msg3[i + 1];
+        console.log(elem.text, elem2.text);
 
         const noActions = (e) =>
             e.getHoverAction?.() == null &&
@@ -179,13 +183,16 @@ register("chat", (msg, event) => {
                 } else {
                     switch (rank) {
                         case "MVP++":
-                            element.text = element.text.replace(matchingCombination, `[MVP${colorDict[cmSettingsData.colorTag]}++§6]`);
+                            if (element.text.replace(matchingCombination, `§6[MVP${colorDict[cmSettingsData.colorTag]}++§6]`) == element.text.replaceAll(matchingCombination, `§6[MVP${colorDict[cmSettingsData.colorTag]}++§6]`)) element.text = element.text.replace(matchingCombination, `§6[MVP${colorDict[cmSettingsData.colorTag]}++§6]`);
+                            else element.text = element.text.replace(matchingCombination + " " + player, `§6[MVP${colorDict[cmSettingsData.colorTag]}++§6] ${player}`);
                             break;
                         case "MVP+":
-                            element.text = element.text.replace(matchingCombination, `[MVP${colorDict[cmSettingsData.colorTag]}+§b]`);
+                            if (element.text.replace(matchingCombination, `§b[MVP${colorDict[cmSettingsData.colorTag]}+§b]`) == element.text.replaceAll(matchingCombination, `§b[MVP${colorDict[cmSettingsData.colorTag]}+§b]`)) element.text = element.text.replace(matchingCombination, `§b[MVP${colorDict[cmSettingsData.colorTag]}+§b]`);
+                            else element.text = element.text.replace(matchingCombination + " " + player, `§b[MVP${colorDict[cmSettingsData.colorTag]}+§b] ${player}`);
                             break;
                         case "VIP+":
-                            element.text = element.text.replace(matchingCombination, `[VIP${colorDict[cmSettingsData.colorTag]}+§a]`);
+                            if (element.text.replace(matchingCombination, `§a[VIP${colorDict[cmSettingsData.colorTag]}+§a]`) == element.text.replaceAll(matchingCombination, `§a[VIP${colorDict[cmSettingsData.colorTag]}+§a]`)) element.text = element.text.replace(matchingCombination, `§a[VIP${colorDict[cmSettingsData.colorTag]}+§a]`);
+                            else element.text = element.text.replace(matchingCombination + " " + player, `§a[VIP${colorDict[cmSettingsData.colorTag]}+§a] ${player}`);
                             break;
                         default:
                             break;

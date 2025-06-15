@@ -182,12 +182,12 @@ function fetchAuctionsAndDisplay(lfItem, src, price = null) {
 
                     const filteredItems = itemsList.filter(item => item.price <= price);
                     if (filteredItems.length === 0) {
-                        ChatLib.chat(`&5No auctions found for ${lfItem[0]} below ${formatNum(price)} coins.`);
+                        ChatLib.chat(`&cNo auctions found for ${lfItem[0]} below ${formatNum(price)} coins.`);
                         loading = false;
                         return;
                     }
 
-                    ChatLib.chat(`&aFound ${filteredItems.length} auctions for ${lfItem[0]} below ${formatNum(price)} coins:`);
+                    ChatLib.chat(`&5Found ${filteredItems.length} auctions for ${lfItem[0]} below ${formatNum(price)} coins:`);
                     filteredItems.forEach(item => {
                         new TextComponent(`&eItem: &c${item.item_name}, &eAuction ID: &a ${item.auction_id}, &ePrice: &c${formatNum(item.price)}`)
                             .setClick("run_command", `/viewauction ${item.auction_id}`)

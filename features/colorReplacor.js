@@ -39,7 +39,8 @@ testing_list = [
     `&b[MVP&b] ${player}&r: &fHi, I'm M`,
     `&a[VIP&a] ${player}&r: &fHi, I'm V`,
     `&7${player}&r&7: Hi, I'm rankless! Hi ${player} wsp?`,
-    `[MVP+] ${player}` // FIX FOR THIS!!! -> [MVP+] [MVP+]s
+    `[MVP+] ${player}`,
+    `&d&dTo &r&b[MVP&r&4+&r&b] Arcness&r&7: &7I am ${player}`
 ]
 
 register("command", () => {
@@ -109,7 +110,6 @@ const combinations = [
     `[VIP&r&a] ${player}`,
     `[VIP&a] ${player}`,
 
-    `[MVP++] ${player}`, `[MVP+] ${player}`, `[MVP] ${player}`, `[VIP+] ${player}`, `[VIP] ${player}`,
 
     `[MVP&a+&b] ${player}`, `[MVP&b+&b] ${player}`, `[MVP&c+&b] ${player}`, `[MVP&d+&b] ${player}`, 
     `[MVP&e+&b] ${player}`, `[MVP&f+&b] ${player}`, `[MVP&0+&b] ${player}`, `[MVP&1+&b] ${player}`, 
@@ -149,7 +149,6 @@ register("chat", (msg, event) => {
         iterations++;
         const elem = msg3[i];
         const elem2 = msg3[i + 1];
-        console.log(elem.text, elem2.text);
 
         const noActions = (e) =>
             e.getHoverAction?.() == null &&
@@ -169,7 +168,7 @@ register("chat", (msg, event) => {
     if (iterations === maxIterations) console.warn("Fusion stopped after reaching max iterations (possible infinite loop).");
 
     // Tag Replace
-    if (combinations.some(combination => msg2.includes(combination))) {
+    if (combinations.some(combination => msg2.includes(combination)) && !(msg.startsWith("From") || msg.startsWith("To") || !msg.startsWith(`Party > ${rank} ${player}`))) {
         let matchingCombination = combinations.find(combination => msg2.includes(combination));
         if (cmSettingsData.colorTagTrue || cmSettingsData.customRank) {
             matchingCombination = matchingCombination.slice(0, matchingCombination.length - (player.length + 1)).replaceAll("&", "§")
@@ -183,16 +182,13 @@ register("chat", (msg, event) => {
                 } else {
                     switch (rank) {
                         case "MVP++":
-                            if (element.text.replace(matchingCombination, `§6[MVP${colorDict[cmSettingsData.colorTag]}++§6]`) == element.text.replaceAll(matchingCombination, `§6[MVP${colorDict[cmSettingsData.colorTag]}++§6]`)) element.text = element.text.replace(matchingCombination, `§6[MVP${colorDict[cmSettingsData.colorTag]}++§6]`);
-                            else element.text = element.text.replace(matchingCombination + " " + player, `§6[MVP${colorDict[cmSettingsData.colorTag]}++§6] ${player}`);
+                            element.text = element.text.replace(matchingCombination, `[MVP${colorDict[cmSettingsData.colorTag]}++§6]`);
                             break;
                         case "MVP+":
-                            if (element.text.replace(matchingCombination, `§b[MVP${colorDict[cmSettingsData.colorTag]}+§b]`) == element.text.replaceAll(matchingCombination, `§b[MVP${colorDict[cmSettingsData.colorTag]}+§b]`)) element.text = element.text.replace(matchingCombination, `§b[MVP${colorDict[cmSettingsData.colorTag]}+§b]`);
-                            else element.text = element.text.replace(matchingCombination + " " + player, `§b[MVP${colorDict[cmSettingsData.colorTag]}+§b] ${player}`);
+                            element.text = element.text.replace(matchingCombination, `[MVP${colorDict[cmSettingsData.colorTag]}+§b]`);
                             break;
                         case "VIP+":
-                            if (element.text.replace(matchingCombination, `§a[VIP${colorDict[cmSettingsData.colorTag]}+§a]`) == element.text.replaceAll(matchingCombination, `§a[VIP${colorDict[cmSettingsData.colorTag]}+§a]`)) element.text = element.text.replace(matchingCombination, `§a[VIP${colorDict[cmSettingsData.colorTag]}+§a]`);
-                            else element.text = element.text.replace(matchingCombination + " " + player, `§a[VIP${colorDict[cmSettingsData.colorTag]}+§a] ${player}`);
+                            element.text = element.text.replace(matchingCombination, `[VIP${colorDict[cmSettingsData.colorTag]}+§a]`);
                             break;
                         default:
                             break;
@@ -228,13 +224,13 @@ register("chat", (msg, event) => {
         if (rank != "rankless") {
             msg3.forEach(element => {
                 cmSettingsData.fontedName 
-                    ? element.text = element.text.replace(player, `${colorDict[cmSettingsData.colorUser]}${cmSettingsData.fontedVal.replace("&", "§") + player}§f`)
-                    : element.text = element.text.replace(player, `${colorDict[cmSettingsData.colorUser]}${player}§f`)
+                    ? element.text = element.text.replaceAll(player, `${colorDict[cmSettingsData.colorUser]}${cmSettingsData.fontedVal.replace("&", "§") + player}§f`)
+                    : element.text = element.text.replaceAll(player, `${colorDict[cmSettingsData.colorUser]}${player}§f`)
             });
         } else {
             msg3.forEach(element => {
                 if (!(wantRank && (cmSettingsData.newTag || cmSettingsData.customRank))) {
-                    element.text = element.text.replace(player, `${colorDict[cmSettingsData.colorUser]}${(cmSettingsData.fontedName) ? cmSettingsData.fontedVal + player : player}§r§f`)
+                    element.text = element.text.replaceAll(player, `${colorDict[cmSettingsData.colorUser]}${(cmSettingsData.fontedName) ? cmSettingsData.fontedVal + player : player}§r§f`)
                 } else {
                     element.text = element.text.replace(`${player}§7§r§7`, `${colorDict[cmSettingsData.colorUser]}${(cmSettingsData.fontedName) ? cmSettingsData.fontedVal + player : player}§r§f`)
                     element.text = element.text.replace(`${player}§r§7`, `${colorDict[cmSettingsData.colorUser]}${(cmSettingsData.fontedName) ? cmSettingsData.fontedVal + player : player}§r§f`)
@@ -246,7 +242,7 @@ register("chat", (msg, event) => {
     } else if (cmSettingsData.customRank) {
         msg3.forEach(element => {
             if (!(wantRank && (cmSettingsData.newTag || cmSettingsData.customRank))) {
-                element.text = element.text.replace(player, `${(cmSettingsData.fontedName) ? cmSettingsData.fontedVal + player : player}§r§f`)
+                element.text = element.text.replaceAll(player, `${(cmSettingsData.fontedName) ? cmSettingsData.fontedVal + player : player}§r§f`)
             } else {
                 element.text = element.text.replace(`${player}§7§r§7`, `${(cmSettingsData.fontedName) ? cmSettingsData.fontedVal + player : player}§r§f`)
                 element.text = element.text.replace(`${player}§r§7`, `${(cmSettingsData.fontedName) ? cmSettingsData.fontedVal + player : player}§r§f`)

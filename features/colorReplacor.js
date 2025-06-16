@@ -39,7 +39,7 @@ testing_list = [
     `&b[MVP&b] ${player}&r: &fHi, I'm M`,
     `&a[VIP&a] ${player}&r: &fHi, I'm V`,
     `&7${player}&r&7: Hi, I'm rankless! Hi ${player} wsp?`,
-    `[MVP+] ${player}`,
+    `&r&9Party &8> &b[MVP&4+&b] Arcness&f&f: &rHi&r [MVP+] ${player}, wsp? `,
     `&d&dTo &r&b[MVP&r&4+&r&b] Arcness&r&7: &7I am ${player}`
 ]
 

@@ -40,6 +40,7 @@ testing_list = [
     `&a[VIP&a] ${player}&r: &fHi, I'm V`,
     `&7${player}&r&7: Hi, I'm rankless! Hi ${player} wsp?`,
     `&r&9Party &8> &b[MVP&4+&b] Arcness&f&f: &rHi&r [MVP+] ${player}, wsp? `,
+    `&r&9Party &8> &b[MVP&d+&b] ${player}: UwU&r`,
     `&d&dTo &r&b[MVP&r&4+&r&b] Arcness&r&7: &7I am ${player}`
 ]
 
@@ -138,6 +139,7 @@ register("chat", (msg, event) => {
     if (!msg.includes("MVP+") && !msg.includes("VIP+") && !msg.includes("MVP++") && !msg.includes("MVP") && !msg.includes("VIP") && !msg.includes(player)) return;
     let msg2 = ChatLib.getChatMessage(event, true);
     let rank = msg.includes("[MVP++]") ? "MVP++" : msg.includes("[MVP+]") ? "MVP+" : msg.includes("[MVP]") ? "MVP" : msg.includes("[VIP+]") ? "VIP+" : msg.includes("[VIP]") ? "VIP" : "rankless";
+    let rank2 = "[" + rank + "]";
     let msg3 = new Message(event).getMessageParts();
 
     // Fuse Message
@@ -168,7 +170,7 @@ register("chat", (msg, event) => {
     if (iterations === maxIterations) console.warn("Fusion stopped after reaching max iterations (possible infinite loop).");
 
     // Tag Replace
-    if (combinations.some(combination => msg2.includes(combination)) && !(msg.startsWith("From") || msg.startsWith("To") || !msg.startsWith(`Party > ${rank} ${player}`))) {
+    if (combinations.some(combination => msg2.includes(combination)) && !(msg.startsWith("From") || msg.startsWith("To") || ((msg.includes("Party >") ? !msg.includes(`Party > ${rank2} ${player}`) : !msg.includes(`${rank2} ${player}`)) && rank != "rankless"))) {
         let matchingCombination = combinations.find(combination => msg2.includes(combination));
         if (cmSettingsData.colorTagTrue || cmSettingsData.customRank) {
             matchingCombination = matchingCombination.slice(0, matchingCombination.length - (player.length + 1)).replaceAll("&", "§")
@@ -194,21 +196,22 @@ register("chat", (msg, event) => {
                             break;
                     }
                 }} else {
+                let mc2 = matchingCombination + " "
                 switch (rank) {
                     case "MVP++":
-                        element.text = element.text.replace(matchingCombination, "").replace(" ", "");
+                        element.text = element.text.replace(mc2, "");
                         break;
                     case "MVP+":
-                        element.text = element.text.replace(matchingCombination, "").replace(" ", "");
+                        element.text = element.text.replace(mc2, "");
                         break;
                     case "MVP":
-                        element.text = element.text.replace(matchingCombination, "").replace(" ", "");
+                        element.text = element.text.replace(mc2, "");
                         break;
                     case "VIP+":
-                        element.text = element.text.replace(matchingCombination, "").replace(" ", "");
+                        element.text = element.text.replace(mc2, "");
                         break;
                     case "VIP":
-                        element.text = element.text.replace(matchingCombination, "").replace(" ", "");
+                        element.text = element.text.replace(mc2, "");
                         break;
                     case "rankless":
                         break;

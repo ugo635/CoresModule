@@ -126,3 +126,39 @@ export function playCustomSound(sound, volume) {
             : ChatLib.chat(`&6[Cm] &cSound file not found! (if the filename is correct, make sure to reload ct by "/ct load")`);
     }
 }
+
+let world = undefined; // Variable to store the current world
+export function getWorld() { return world }; // Exported function to get the current world
+
+function findWorld() {
+    // Infinite loop prevention
+    if (noFind === 10) return;
+    noFind++;
+    // Get world from tab list
+    world = TabList.getNames().find(tab => tab.includes("Area"));
+    if (world === undefined) {
+        // If the world is not found, try again after a delay
+        zone = findZone();
+        if (zone.includes("Catac")) {
+            world = "Catacombs";
+            setWorldRegisters();
+        }
+        else {
+            delay(() => findWorld(), 1000);
+        }
+    } else {
+        // Get world formatted
+        world = world.removeFormatting();
+        world = world.substring(world.indexOf(': ') + 2);
+        zone = findZone();
+        // Get tier (for Kuudra and Dungeons)
+        if (world === "Kuudra") {
+            delay(() => {
+                tier = parseInt(zone.charAt(zone.length - 2));
+            }, 1000);
+        }
+
+        // Register/unregister features for the current world
+        setWorldRegisters();
+    }
+}

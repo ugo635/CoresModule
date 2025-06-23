@@ -41,7 +41,8 @@ testing_list = [
     `&7${player}&r&7: Hi, I'm rankless! Hi ${player} wsp?`,
     `&r&9Party &8> &b[MVP&4+&b] Arcness&f&f: &rHi&r [MVP+] ${player}, wsp? `,
     `&r&9Party &8> &b[MVP&d+&b] ${player}: UwU&r`,
-    `&d&dTo &r&b[MVP&r&4+&r&b] Arcness&r&7: &7I am ${player}`
+    `&d&dTo &r&b[MVP&r&4+&r&b] Arcness&r&7: &7I am ${player}`,
+    "[406] ☠ [✌] [MVP+] I_Love_Hutao: you agreed to a legally binding agreement which stated this From [MVP+] [MVP+]s: How abt you gimme a chance, and if my amount of death is under the amt of death not including mine I pay for the run, otherwise we just play the runs"
 ]
 
 register("command", () => {

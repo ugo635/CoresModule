@@ -41,8 +41,7 @@ testing_list = [
     `&7${player}&r&7: Hi, I'm rankless! Hi ${player} wsp?`,
     `&r&9Party &8> &b[MVP&4+&b] Arcness&f&f: &rHi&r [MVP+] ${player}, wsp? `,
     `&r&9Party &8> &b[MVP&d+&b] ${player}: UwU&r`,
-    `&d&dTo &r&b[MVP&r&4+&r&b] Arcness&r&7: &7I am ${player}`,
-    "[406] ☠ [✌] [MVP+] I_Love_Hutao: you agreed to a legally binding agreement which stated this From [MVP+] [MVP+]s: How abt you gimme a chance, and if my amount of death is under the amt of death not including mine I pay for the run, otherwise we just play the runs"
+    `&d&dTo &r&b[MVP&r&4+&r&b] Arcness&r&7: &7I am ${player}`
 ]
 
 register("command", () => {
@@ -171,7 +170,9 @@ register("chat", (msg, event) => {
     if (iterations === maxIterations) console.warn("Fusion stopped after reaching max iterations (possible infinite loop).");
 
     // Tag Replace
+    ChatLib.chat(((msg.includes("Party >") ? !msg.includes(`Party > ${rank2} ${player}`) : !msg.includes(`${rank2} ${player}`)) && rank != "rankless"), msg.startsWith("From"), msg.startsWith("To"))
     if (combinations.some(combination => msg2.includes(combination)) && !(msg.startsWith("From") || msg.startsWith("To") || ((msg.includes("Party >") ? !msg.includes(`Party > ${rank2} ${player}`) : !msg.includes(`${rank2} ${player}`)) && rank != "rankless"))) {
+        ChatLib.chat(((msg.includes("Party >") ? !msg.includes(`Party > ${rank2} ${player}`) : !msg.includes(`${rank2} ${player}`)) && rank != "rankless"), msg.startsWith("From"), msg.startsWith("To"))
         let matchingCombination = combinations.find(combination => msg2.includes(combination));
         if (cmSettingsData.colorTagTrue || cmSettingsData.customRank) {
             matchingCombination = matchingCombination.slice(0, matchingCombination.length - (player.length + 1)).replaceAll("&", "§")
@@ -185,13 +186,13 @@ register("chat", (msg, event) => {
                 } else {
                     switch (rank) {
                         case "MVP++":
-                            element.text = element.text.replace(matchingCombination, `[MVP${colorDict[cmSettingsData.colorTag]}++§6]`);
+                            if (element.text.replaceAll(matchingCombination, `[MVP${colorDict[cmSettingsData.colorTag]}++§6]`) == element.text.replace(matchingCombination, `[MVP${colorDict[cmSettingsData.colorTag]}++§6]`)) element.text = element.text.replace(matchingCombination, `[MVP${colorDict[cmSettingsData.colorTag]}++§6]`);
                             break;
                         case "MVP+":
-                            element.text = element.text.replace(matchingCombination, `[MVP${colorDict[cmSettingsData.colorTag]}+§b]`);
+                            if (element.text.replaceAll(matchingCombination, `[MVP${colorDict[cmSettingsData.colorTag]}+§b]`) == element.text.replace(matchingCombination, `[MVP${colorDict[cmSettingsData.colorTag]}+§b]`)) element.text = element.text.replace(matchingCombination, `[MVP${colorDict[cmSettingsData.colorTag]}+§b]`);
                             break;
                         case "VIP+":
-                            element.text = element.text.replace(matchingCombination, `[VIP${colorDict[cmSettingsData.colorTag]}+§a]`);
+                            if (element.text.replaceAll(matchingCombination, `[VIP${colorDict[cmSettingsData.colorTag]}+§a]`) == element.text.replace(matchingCombination, `[VIP${colorDict[cmSettingsData.colorTag]}+§a]`)) element.text = element.text.replace(matchingCombination, `[VIP${colorDict[cmSettingsData.colorTag]}+§a]`);
                             break;
                         default:
                             break;

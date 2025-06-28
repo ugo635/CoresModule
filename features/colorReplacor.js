@@ -41,7 +41,8 @@ testing_list = [
     `&7${player}&r&7: Hi, I'm rankless! Hi ${player} wsp?`,
     `&r&9Party &8> &b[MVP&4+&b] Arcness&f&f: &rHi&r [MVP+] ${player}, wsp? `,
     `&r&9Party &8> &b[MVP&d+&b] ${player}: UwU&r`,
-    `&d&dTo &r&b[MVP&r&4+&r&b] Arcness&r&7: &7I am ${player}`
+    `&d&dTo &r&b[MVP&r&4+&r&b] Arcness&r&7: &7I am ${player}`,
+    `&9Party &8> &b[MVP&4+&b] N00DL3S_&f: Party > [MVP+] ${player}: Coords`
 ]
 
 register("command", () => {
@@ -170,9 +171,7 @@ register("chat", (msg, event) => {
     if (iterations === maxIterations) console.warn("Fusion stopped after reaching max iterations (possible infinite loop).");
 
     // Tag Replace
-    ChatLib.chat(((msg.includes("Party >") ? !msg.includes(`Party > ${rank2} ${player}`) : !msg.includes(`${rank2} ${player}`)) && rank != "rankless"), msg.startsWith("From"), msg.startsWith("To"))
-    if (combinations.some(combination => msg2.includes(combination)) && !(msg.startsWith("From") || msg.startsWith("To") || ((msg.includes("Party >") ? !msg.includes(`Party > ${rank2} ${player}`) : !msg.includes(`${rank2} ${player}`)) && rank != "rankless"))) {
-        ChatLib.chat(((msg.includes("Party >") ? !msg.includes(`Party > ${rank2} ${player}`) : !msg.includes(`${rank2} ${player}`)) && rank != "rankless"), msg.startsWith("From"), msg.startsWith("To"))
+    if (combinations.some(combination => msg2.includes(combination)) && !(msg.startsWith("From") || msg.startsWith("To") || ((msg.includes("Party >") ? !msg.startsWith(`Party > ${rank2} ${player}`) : !msg.includes(`${rank2} ${player}`)) && rank != "rankless"))) {
         let matchingCombination = combinations.find(combination => msg2.includes(combination));
         if (cmSettingsData.colorTagTrue || cmSettingsData.customRank) {
             matchingCombination = matchingCombination.slice(0, matchingCombination.length - (player.length + 1)).replaceAll("&", "§")

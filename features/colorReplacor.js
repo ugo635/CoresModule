@@ -139,6 +139,7 @@ register("chat", (msg, event) => {
     if (!cmSettingsData.colorUserTrue && !cmSettingsData.colorTagTrue && !cmSettingsData.customRank) return;
     if (!msg.includes("MVP+") && !msg.includes("VIP+") && !msg.includes("MVP++") && !msg.includes("MVP") && !msg.includes("VIP") && !msg.includes(player)) return;
     let msg2 = ChatLib.getChatMessage(event, true);
+    if (msg2.includes("From") || msg2.includes("To")) return;
     let rank = msg.includes("[MVP++]") ? "MVP++" : msg.includes("[MVP+]") ? "MVP+" : msg.includes("[MVP]") ? "MVP" : msg.includes("[VIP+]") ? "VIP+" : msg.includes("[VIP]") ? "VIP" : "rankless";
     let rank2 = "[" + rank + "]";
     let msg3 = new Message(event).getMessageParts();

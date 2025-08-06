@@ -388,76 +388,44 @@ register("command", (arg1, arg2) => {
  * This is a helper function primarily for internal calculations (like dragonBootProfit).
  * @param {string} itemId - The ID of the item (e.g., "ENCHANTED_DIAMOND").
  * @param {number} multiplier - Multiplier for the price (e.g., quantity).
- * @returns {Promise<{buyPrice: number, sellPrice: number}>} Object containing buy and sell prices.
+ * @returns {{buyPrice: number, sellPrice: number}} Object containing buy and sell prices.
  */
-function getItemPriceBazaar(itemId, multiplier = 1) {
-    // Directly return the result of the request's promise chain.
-    // This allows the caller to continue using .then() and .catch() on the result
-    // even if it's not a native Promise object, as long as 'request' provides a compatible interface.
+async function getItemPriceBz(itemId, multiplier) {
     return request({ url: BAZAAR_API_URL, json: true })
-        .then(response => {
-            if (!response.success) {
-                // If the API call itself was not successful, throw an error.
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            const data = response;
+    .then(response => {
+        // Check for HTTP errors
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
 
-            const product = data.products[itemId];
-            if (!product) {
-                console.warn(`Item with ID '${itemId}' not found in Bazaar data.`);
-                // If the product is not found, resolve with default zero prices.
-                return { buyPrice: 0, sellPrice: 0 };
-            }
+        const data = response;
 
-            // Calculate buy and sell prices, defaulting to 0 if not available.
-            const buyPrice = product.buy_summary.length ? product.buy_summary[0].pricePerUnit : 0;
-            const sellPrice = product.sell_summary.length ? product.sell_summary[0].pricePerUnit : 0;
+        // Check API's success flag
+        if (!data.success) {
+            throw new Error('Failed to fetch data from the Hypixel API.');
+        }
 
-            // Return the calculated prices, applying the multiplier.
-            return {
-                buyPrice: buyPrice * multiplier,
-                sellPrice: sellPrice * multiplier
-            };
-        })
-        .catch(error => {
-            // Catch any errors during the request or processing.
-            console.error('Error fetching item prices from Bazaar:', error);
-            // Re-throw the error or return a default value, depending on how you want to handle it upstream.
-            // For this helper function, it's often better to re-throw so the calling command can handle it.
-            throw error; // Propagate the error up the chain
-        });
+        const product = data.products[itemId];
+        if (!product) {
+            // Return a resolved promise with zero prices if item is not found
+            return { buyPrice: 0, sellPrice: 0 };
+        }
+
+        const buyPrice = product.buy_summary.length ? product.buy_summary[0].pricePerUnit : 0;
+        const sellPrice = product.sell_summary.length ? product.sell_summary[0].pricePerUnit : 0;
+
+        return {
+            buyPrice: buyPrice * multiplier,
+            sellPrice: sellPrice * multiplier
+        };
+    })
+    .catch(error => {
+        // This catch block handles any errors from the `request` promise or `throw` statements above.
+        console.error('Error fetching item prices:', error);
+        // Return a resolved promise with zero prices on error
+        return { buyPrice: 0, sellPrice: 0 };
+    });
 }
-
-async function getItemPriceBz(item, multiplier) {
-    return await request({ url: BAZAAR_API_URL, json: true })
-        .then(response => {
-            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-            const data = response;
-            if (!data.success) throw new Error('Failed to fetch data from the Hypixel API.');
-
-            const product = data.products[itemId];
-            if (!product) {
-                return { buyPrice: 0, sellPrice: 0 }; // Return zero if item not found
-            }
-
-            const buyPrice = product.buy_summary.length ? product.buy_summary[0].pricePerUnit : 0;
-            const sellPrice = product.sell_summary.length ? product.sell_summary[0].pricePerUnit : 0;
-
-            return {
-                buyPrice: buyPrice * multiplier,
-                sellPrice: sellPrice * multiplier
-            };
-        })
-        
-        
-        .catch(error => {
-            console.error('Error fetching item prices:', error);
-            return { buyPrice: 0, sellPrice: 0 }; // Return zero on error
-        })
-}
-
-
-
 
 
 /**
@@ -467,7 +435,7 @@ async function getItemPriceBz(item, multiplier) {
  * boots_per_run: Number of boots crafted per simulation run (default 1)
  * iterations: Number of simulation iterations (default 100000)
  */
-register("command", (bootsPerRunStr, endermiteType, iterationsStr) => {
+register("command", async (bootsPerRunStr, endermiteType, iterationsStr) => {
     ChatLib.chat("&6&l[Cm] &r&7Calculating Dragon Boot Profit...");
     loadingMsg();
 
@@ -487,130 +455,105 @@ register("command", (bootsPerRunStr, endermiteType, iterationsStr) => {
     }
 
     // --- Price Fetching Logic (Identical to previous edit) ---
-    const fragNames = [
-        'HOLY_FRAGMENT', 'OLD_FRAGMENT', 'PROTECTOR_FRAGMENT', 'STRONG_FRAGMENT',
-        'SUPERIOR_FRAGMENT', 'UNSTABLE_FRAGMENT', 'WISE_FRAGMENT', 'YOUNG_FRAGMENT'
+
+    let frag = [
+        {name: 'Holy_Fragment', multiplier: 1, price: null},
+        {name: 'Old_Fragment', multiplier: 1, price: null},
+        {name: 'Protector_Fragment', multiplier: 1, price: null},
+        {name: 'Strong_Fragment', multiplier: 1, price: null},
+        {name: 'Superior_Fragment', multiplier: 1, price: null},
+        {name: 'Unstable_Fragment', multiplier: 1, price: null},
+        {name: 'Wise_Fragment', multiplier: 1, price: null},
+        {name: 'Young_Fragment', multiplier: 1, price: null}
     ];
-    let cheapestFrag = { name: '', price: Infinity };
-    let fragIndex = 0;
 
-    function fetchNextFragPrice() {
-        if (fragIndex < fragNames.length) {
-            const fragName = fragNames[fragIndex];
-            getItemPriceBazaar(fragName)
-                .then(prices => {
-                    if (prices.buyPrice > 0 && prices.buyPrice < cheapestFrag.price) {
-                        cheapestFrag = { name: fragName, price: prices.buyPrice };
-                    }
-                    fragIndex++;
-                    fetchNextFragPrice();
-                })
-                .catch(error => {
-                    console.error(`Error fetching price for ${fragName}:`, error);
-                    fragIndex++;
-                    fetchNextFragPrice();
-                });
-        } else {
-            if (cheapestFrag.name === '') {
-                ChatLib.chat("&cCould not determine cheapest fragment. Aborting profit calculation.");
-                loading = false;
-                return;
-            }
-
-            // Create the item lists with their multipliers
-            // These arrays are now structured to match the first code
-            const cost = [
-                { name: cheapestFrag.name, multiplier: 40 },
-            ];
-
-            const guaranteed = [
-                { name: 'ESSENCE_DRAGON', multiplier: 30 },
-            ];
-
-            const bonus = [
-                { name: cheapestFrag.name, multiplier: 15, dropChance: 0.8193 },
-                { name: 'RITUAL_RESIDUE', multiplier: 1, dropChance: 0.1084 },
-                { name: 'SUMMONING_EYE', multiplier: 1, dropChance: 0.0482 },
-                { name: 'DRAGON_HORN', multiplier: 1, dropChance: 0.0241 },
-            ];
-
-            let allItems = [];
-            cost.forEach(item => allItems.push(item));
-            guaranteed.forEach(item => allItems.push(item));
-            bonus.forEach(item => allItems.push(item));
-
-            let itemIndex = 0;
-            function fetchNextItemPrice() {
-                if (itemIndex < allItems.length) {
-                    const item = allItems[itemIndex];
-                    getItemPriceBazaar(item.name, item.multiplier)
-                        .then(prices => {
-                            item.buyPrice = prices.buyPrice;
-                            item.sellPrice = prices.sellPrice;
-                            itemIndex++;
-                            fetchNextItemPrice();
-                        })
-                        .catch(error => {
-                            console.error(`Error fetching price for ${item.name}:`, error);
-                            itemIndex++;
-                            fetchNextItemPrice();
-                        });
-                } else {
-                    // All item prices fetched, now run the simulation
-                    let totalProfit = 0;
-                    let minProfit = Infinity;
-                    let maxProfit = -Infinity;
-
-                    for (let i = 0; i < iterations; i++) {
-                        let iterationProfit = 0;
-                        for (let j = 0; j < bootsPerRun; j++) {
-                            let runProfit = 0;
-
-                            // Calculate costs (subtracting sellPrice)
-                            cost.forEach(item => {
-                                runProfit -= item.sellPrice;
-                            });
-
-                            // Add guaranteed rewards (adding buyPrice)
-                            guaranteed.forEach(item => {
-                                runProfit += item.buyPrice;
-                            });
-
-                            // Add bonus rewards based on dropChance (adding buyPrice * multiplier)
-                            bonus.forEach(item => {
-                                if (Math.random() < item.dropChance) {
-                                    runProfit += item.buyPrice * endermiteMultiplier;
-                                }
-                            });
-                            iterationProfit += runProfit;
-                        }
-
-                        totalProfit += iterationProfit;
-                        minProfit = Math.min(minProfit, iterationProfit);
-                        maxProfit = Math.max(maxProfit, iterationProfit);
-                    }
-
-                    let avgProfit = totalProfit / iterations;
-                    let avgProfitPerBoot = formatNum(Math.round(avgProfit / bootsPerRun));
-                    let minProfitPerBoot = formatNum(Math.round(minProfit / bootsPerRun));
-                    let maxProfitPerBoot = formatNum(Math.round(maxProfit / bootsPerRun));
-                    avgProfit = formatNum(Math.round(avgProfit));
-                    minProfit = formatNum(Math.round(minProfit));
-                    maxProfit = formatNum(Math.round(maxProfit));
-                    
-                    ChatLib.chat(`&a----- Dragon Boot Profit Simulation -----`);
-                    ChatLib.chat(`&eEndermite Multiplier: &b${endermiteType}`);
-                    ChatLib.chat(`&eBoots per Run: &b${bootsPerRun}`);
-                    ChatLib.chat(`&eIterations: &b${formatNum(iterations)}`);
-                    ChatLib.chat(`&aMinimum Profit: &b${minProfit} (${minProfitPerBoot}/run)`);
-                    ChatLib.chat(`&aAverage Profit: &b${avgProfit} (${avgProfitPerBoot}/run)`);
-                    ChatLib.chat(`&aMaximum Profit: &b${maxProfit} (${maxProfitPerBoot}/run)`);
-                    ChatLib.chat(`&a-----------------------------------`);
-                    loading = false;
-                }
-            }
-            fetchNextItemPrice();
-        }
+    for (const item of frag) {
+        const prices = await getItemPriceBz(item.name.toUpperCase(), item.multiplier)
+        item.price = prices.buyPrice
     }
-    fetchNextFragPrice();
+    
+    let CheapestFrag = frag[0]
+    for (const item of frag) {
+        if (item.price < CheapestFrag.price) CheapestFrag = item
+    }
+    CheapestFrag = CheapestFrag.name
+
+
+
+    const items = [
+        { name: CheapestFrag, multiplier: 40 },
+        { name: 'Essence_Dragon', multiplier: 30 },
+        { name: CheapestFrag, multiplier: 15, dropChance: 0.8193 },
+        { name: 'Ritual_Residue', multiplier: 1, dropChance: 0.1084 },
+        { name: 'Summoning_Eye', multiplier: 1, dropChance: 0.0482 },
+        { name: 'Dragon_Horn', multiplier: 1, dropChance: 0.0241 }
+    ];
+
+    const cost = [items[0]];
+    const guaranteed = [items[1]];
+    const bonus = items.slice(2);
+
+    for (const item of items) {
+        const prices = await getItemPriceBz(item.name.toUpperCase(), item.multiplier);
+        item.buyPrice = prices.buyPrice;
+        item.sellPrice = prices.sellPrice;
+    }
+
+    let totalProfit = 0;
+    let minProfit = Infinity;
+    let maxProfit = -Infinity;
+
+
+    for (let i = 0; i < iterations; i++) {
+        let iterationProfit = 0;
+
+        for (let j = 0; j < bootsPerRun; j++) {
+            let runProfit = 0;
+
+            // Calculate costs
+            cost.forEach(item => {
+                runProfit -= item.sellPrice;
+            });
+
+            // Add guaranteed rewards
+            guaranteed.forEach(item => {
+                runProfit += item.buyPrice;
+            });
+
+            // Add bonus rewards based on dropChance
+            bonus.forEach(item => {
+                if (Math.random() < item.dropChance) {
+                    runProfit += item.buyPrice * endermiteMultiplier;
+                }
+            });
+
+            iterationProfit += runProfit;
+        }
+
+        totalProfit += iterationProfit;
+        minProfit = Math.min(minProfit, iterationProfit);
+        maxProfit = Math.max(maxProfit, iterationProfit);
+    }
+
+    let avgProfit = totalProfit / iterations;
+    let avgProfitPerBoot = formatNum(Math.round(avgProfit / bootsPerRun));
+    let minProfitPerBoot = formatNum(Math.round(minProfit / bootsPerRun));
+    let maxProfitPerBoot = formatNum(Math.round(maxProfit / bootsPerRun));
+    avgProfit = formatNum(Math.round(avgProfit));
+    minProfit = formatNum(Math.round(minProfit));
+    maxProfit = formatNum(Math.round(maxProfit));
+    
+    ChatLib.chat(`&a----- Dragon Boot Profit Simulation -----`);
+    ChatLib.chat(`&eEndermite Multiplier: &b${endermiteType}`);
+    ChatLib.chat(`&eBoots per Run: &b${bootsPerRun}`);
+    ChatLib.chat(`&eIterations: &b${formatNum(iterations)}`);
+    ChatLib.chat(`&aMinimum Profit: &b${minProfit} (${minProfitPerBoot}/run)`);
+    ChatLib.chat(`&aAverage Profit: &b${avgProfit} (${avgProfitPerBoot}/run)`);
+    ChatLib.chat(`&aMaximum Profit: &b${maxProfit} (${maxProfitPerBoot}/run)`);
+    ChatLib.chat(`&a-----------------------------------`);
+    loading = false;
+
+
+
+    
 }).setName("dragonBootProfit").setAliases("dbp"); // /dragonBootProfit <endermite_multiplier_type (true/false)> <boots_per_run> <iterations>

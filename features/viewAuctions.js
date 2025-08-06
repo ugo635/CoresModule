@@ -10,7 +10,6 @@ function loadingMsg() {
     let dots = "";
     let loadingMessage = new Message("&6&l[Cm] &r&7Loading");
     loadingMessage.chat();
-    //loadingMessage.setChatLineId(1); // Set a unique ID for the message
 
     function animateDots() {
         if (!loading) return ChatLib.deleteChat(loadingMessage);
@@ -26,7 +25,6 @@ function loadingMsg() {
 
     animateDots();
 
-    // Stop after a certain time (e.g., 5 seconds)
     setTimeout(() => {
         loading = false;
     }, 5000);

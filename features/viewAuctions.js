@@ -33,7 +33,7 @@ function loadingMsg() {
     // Set a timeout to stop loading after 5 seconds, just in case.
     setTimeout(() => {
         loading = false;
-    }, 25000);
+    }, 45000);
 }
 
 // Register commands for auction viewing
@@ -452,6 +452,9 @@ register("command", async (bootsPerRunStr, endermiteType, iterationsStr) => {
     let iterations = parseInt(iterationsStr);
     if (isNaN(iterations) || iterations <= 0) {
         iterations = 100000; // Default to 100,000 iterations
+    }
+    if (iterations > 1000000) {
+        iterations = 1000000; // Cap iterations to 1,000,000
     }
 
     // --- Price Fetching Logic (Identical to previous edit) ---

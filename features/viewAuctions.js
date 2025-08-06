@@ -59,7 +59,7 @@ register("command", (...args) => {
 
 register("command", (...args) => {
     const lfItem = args.map(arg => arg.replace(/_/g, " "));
-    fetchAuctionsAndDisplay(lfItem, "cVam");
+    fetchAuctionsAndDisplay(lfItem, "cVam2");
 }).setName("cheapestviewAuctionsForItemMult2").setAliases("CVAFIM2", "cVam2");
 
 /**
@@ -96,7 +96,6 @@ function fetchAuctionsAndDisplay(lfItem, src, price = null) {
             }
 
             // --- Step 2: If not in Bazaar, proceed with Auction House search ---
-            ChatLib.chat(`&eItem '${lfItem[0]}' not found in Bazaar. Searching Auction House...`);
             return request({ url: AUCTION_API_URL, json: true });
         })
         .then(initialData => {
@@ -146,27 +145,73 @@ function fetchAuctionsAndDisplay(lfItem, src, price = null) {
                                 .setHoverValue("&eClick to view auction")
                                 .chat();
                         }
-                    } else if (src === "cVam" || src === "cVam2") { // Both cVam and cVam2 should show cheapest of each type
+                    } else if (src === "cVam") { // Cheapest of each type, sorted ascending based on input queries
                         const groupedItems = {};
+                        // Iterate through each item found in the itemsList
                         for (const item of itemsList) {
-                            const name = item.item_name;
-                            if (!groupedItems[name]) groupedItems[name] = [];
-                            groupedItems[name].push(item);
+                            // For each item, check against every original search query (lfItem)
+                            for (const query of lfItem) {
+                                // If the item's name (case-insensitive) includes the current search query (case-insensitive)
+                                if (item.item_name.toLowerCase().includes(query.toLowerCase())) {
+                                    // Use the original search query as the key for the group
+                                    // This ensures that "Spicy Aspect Of The Dragon" gets grouped under "Aspect Of The Dragon"
+                                    if (!groupedItems[query]) {
+                                        groupedItems[query] = [];
+                                    }
+                                    // Add the item to this group
+                                    groupedItems[query].push(item);
+                                    // Break here: This ensures an item is only added to the first matching group.
+                                    // If an item's name contains multiple search queries (e.g., "Diamond Sword" matches "Diamond" and "Sword"),
+                                    // it will be grouped under the first query it matches in the lfItem array.
+                                    break;
+                                }
+                            }
                         }
 
                         let toOutput = [];
-                        Object.keys(groupedItems).forEach(itemName => {
-                            const sorted = groupedItems[itemName].sort((a, b) => a.price - b.price);
+                        // For each group (which is based on an original search query)
+                        Object.keys(groupedItems).forEach(queryName => {
+                            // Sort the items within this group by price to find the cheapest
+                            const sorted = groupedItems[queryName].sort((a, b) => a.price - b.price);
+                            // Take the cheapest item from this group
                             const cheapest = sorted[0];
-                            toOutput.push(cheapest);
+                            // Add it to the list of items to be outputted
+                            if (cheapest) { // Ensure cheapest is not undefined if group was empty
+                                toOutput.push(cheapest);
+                            }
                         });
 
-                        toOutput.sort((a, b) => a.price - b.price); // Sort ascending for cheapest overall
+                        // Sort the final list of cheapest items (one per query) by price for display
+                        toOutput.sort((a, b) => a.price - b.price);
                         for (const item of toOutput) {
                             new TextComponent(`&eItem: &c${item.item_name}, &eAuction ID: &a ${item.auction_id}, &ePrice: &c${formatNum(item.price)}`)
                                 .setClick("run_command", `/viewauction ${item.auction_id}`)
                                 .setHoverValue("&eClick to view auction")
                                 .chat();
+                        }
+                    } else if (src === "cVam2") { // Single cheapest overall
+                        let matchingItems = [];
+                        // Filter itemsList to include only items that match any of the input queries
+                        for (const item of itemsList) {
+                            for (const query of lfItem) {
+                                if (item.item_name.toLowerCase().includes(query.toLowerCase())) {
+                                    matchingItems.push(item);
+                                    break; // Add item once and move to the next item
+                                }
+                            }
+                        }
+
+                        // If any matching items were found, sort them by price to find the absolute cheapest
+                        if (matchingItems.length > 0) {
+                            matchingItems.sort((a, b) => a.price - b.price);
+                            const absoluteCheapest = matchingItems[0];
+                            new TextComponent(`&eItem: &c${absoluteCheapest.item_name}, &eAuction ID: &a ${absoluteCheapest.auction_id}, &ePrice: &c${formatNum(absoluteCheapest.price)}`)
+                                .setClick("run_command", `/viewauction ${absoluteCheapest.auction_id}`)
+                                .setHoverValue("&eClick to view auction")
+                                .chat();
+                        } else {
+                            // If no auctions were found for any of the input items
+                            ChatLib.chat(`&cNo auctions found for ${lfItem[0]}.`);
                         }
                     } else if (src === "ta") {
                         itemsList.sort((a, b) => b.price - a.price); // Sort descending for tracking auctions
@@ -520,4 +565,4 @@ register("command", (endermiteType, bootsPerRunStr, iterationsStr) => {
         }
     }
     fetchNextFragPrice(); // Start fetching fragment prices
-});
+}).setName("dragonBootProfit").setAliases("dbp");

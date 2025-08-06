@@ -106,7 +106,6 @@ function fetchAuctionsAndDisplay(lfItem, src, price = null) {
             }
 
             const numberOfPages = initialData.totalPages || 0;
-            let promises = [];
             let resolvedPromisesCount = 0; // Manual counter for promises
 
             // Function to check if all promises are resolved
@@ -278,10 +277,8 @@ function displayBazaarItemInfo(itemId) {
         .catch(error => {
             console.error(`Error in displayBazaarItemInfo: ${error}`);
             ChatLib.chat(`&cAn error occurred fetching Bazaar info: ${error.message}`);
-        })
-        .finally(() => { // This .finally() is in a deprecated function, so it's less critical.
-            loading = false;
         });
+        // Removed .finally()
 }
 
 // Register a new command for Bazaar item info
@@ -451,7 +448,12 @@ register("command", (endermiteType, bootsPerRunStr, iterationsStr) => {
                 { name: 'DRAGON_HORN', multiplier: 1, dropChance: 0.0241, type: 'bonus_drop' }
             ];
 
-            let allItems = [...materialsCost, ...potentialDrops];
+            let allItems = [];
+            // Add materialsCost items to allItems
+            materialsCost.forEach(item => allItems.push(item));
+            // Add potentialDrops items to allItems
+            potentialDrops.forEach(item => allItems.push(item));
+
             let itemIndex = 0;
 
             // Function to fetch all item prices sequentially

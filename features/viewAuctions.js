@@ -266,3 +266,8 @@ register("command", (arg1, arg2, ...args) => {
     fetchAuctionsAndDisplay([item], "ta", price);
 
 }).setName("trackAuction")//.setAliases("");
+
+register("command", (arg1, arg2, ...args) => {
+    // /dragonBootProfit <endermite (true/false)> <amt of boots> <amt of runs?>
+
+}).setName("dragonBootProfit").setAliases("dbp");

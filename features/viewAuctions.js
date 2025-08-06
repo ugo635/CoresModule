@@ -33,7 +33,7 @@ function loadingMsg() {
     // Set a timeout to stop loading after 5 seconds, just in case.
     setTimeout(() => {
         loading = false;
-    }, 5000);
+    }, 25000);
 }
 
 // Register commands for auction viewing
@@ -391,34 +391,41 @@ register("command", (arg1, arg2) => {
  * @returns {Promise<{buyPrice: number, sellPrice: number}>} Object containing buy and sell prices.
  */
 function getItemPriceBazaar(itemId, multiplier = 1) {
-    return new Promise((resolve, reject) => {
-        request({ url: BAZAAR_API_URL, json: true })
-            .then(response => {
-                if (!response.success) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                const data = response;
+    // Directly return the result of the request's promise chain.
+    // This allows the caller to continue using .then() and .catch() on the result
+    // even if it's not a native Promise object, as long as 'request' provides a compatible interface.
+    return request({ url: BAZAAR_API_URL, json: true })
+        .then(response => {
+            if (!response.success) {
+                // If the API call itself was not successful, throw an error.
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            const data = response;
 
-                const product = data.products[itemId];
-                if (!product) {
-                    console.warn(`Item with ID '${itemId}' not found in Bazaar data.`);
-                    resolve({ buyPrice: 0, sellPrice: 0 }); // Resolve with 0 if not found
-                    return;
-                }
+            const product = data.products[itemId];
+            if (!product) {
+                console.warn(`Item with ID '${itemId}' not found in Bazaar data.`);
+                // If the product is not found, resolve with default zero prices.
+                return { buyPrice: 0, sellPrice: 0 };
+            }
 
-                const buyPrice = product.buy_summary.length ? product.buy_summary[0].pricePerUnit : 0;
-                const sellPrice = product.sell_summary.length ? product.sell_summary[0].pricePerUnit : 0;
+            // Calculate buy and sell prices, defaulting to 0 if not available.
+            const buyPrice = product.buy_summary.length ? product.buy_summary[0].pricePerUnit : 0;
+            const sellPrice = product.sell_summary.length ? product.sell_summary[0].pricePerUnit : 0;
 
-                resolve({
-                    buyPrice: buyPrice * multiplier,
-                    sellPrice: sellPrice * multiplier
-                });
-            })
-            .catch(error => {
-                console.error('Error fetching item prices from Bazaar:', error);
-                reject(error); // Reject the promise on error
-            });
-    });
+            // Return the calculated prices, applying the multiplier.
+            return {
+                buyPrice: buyPrice * multiplier,
+                sellPrice: sellPrice * multiplier
+            };
+        })
+        .catch(error => {
+            // Catch any errors during the request or processing.
+            console.error('Error fetching item prices from Bazaar:', error);
+            // Re-throw the error or return a default value, depending on how you want to handle it upstream.
+            // For this helper function, it's often better to re-throw so the calling command can handle it.
+            throw error; // Propagate the error up the chain
+        });
 }
 
 /**
@@ -428,7 +435,7 @@ function getItemPriceBazaar(itemId, multiplier = 1) {
  * boots_per_run: Number of boots crafted per simulation run (default 1)
  * iterations: Number of simulation iterations (default 100000)
  */
-register("command", (endermiteType, bootsPerRunStr, iterationsStr) => {
+register("command", (bootsPerRunStr, endermiteType, iterationsStr) => {
     ChatLib.chat("&6&l[Cm] &r&7Calculating Dragon Boot Profit...");
     loadingMsg();
 
@@ -529,15 +536,15 @@ register("command", (endermiteType, bootsPerRunStr, iterationsStr) => {
                         for (let j = 0; j < bootsPerRun; j++) {
                             let runProfit = 0;
 
-                            // Calculate crafting costs (using buy prices for materials)
+                            // Calculate crafting costs (using sell prices for materials)
                             materialsCost.forEach(item => {
-                                runProfit -= item.buyPrice;
+                                runProfit -= item.sellPrice;
                             });
 
-                            // Add profit from potential drops (using sell prices for drops)
+                            // Add profit from potential drops (using buy prices for drops)
                             potentialDrops.forEach(item => {
                                 if (Math.random() < item.dropChance) {
-                                    runProfit += item.sellPrice * endermiteMultiplier; // Apply endermite multiplier to sell price of drops
+                                    runProfit += item.buyPrice * endermiteMultiplier; // Apply endermite multiplier to buy price of drops
                                 }
                             });
                             iterationProfit += runProfit;
@@ -548,15 +555,23 @@ register("command", (endermiteType, bootsPerRunStr, iterationsStr) => {
                         maxProfit = Math.max(maxProfit, iterationProfit);
                     }
 
-                    const avgProfit = totalProfit / iterations;
+                    let avgProfit = totalProfit / iterations;
+                    let avgProfitPerBoot = formatNum(Math.round(avgProfit / bootsPerRun));
+                    let minProfitPerBoot = formatNum(Math.round(minProfit / bootsPerRun));
+                    let maxProfitPerBoot = formatNum(Math.round(maxProfit / bootsPerRun));
+                    avgProfit = formatNum(Math.round(avgProfit));
+                    minProfit = formatNum(Math.round(minProfit));
+                    maxProfit = formatNum(Math.round(maxProfit));
+                    
 
-                    ChatLib.chat(`&a--- Dragon Boot Profit Simulation ---`);
-                    ChatLib.chat(`&eEndermite Multiplier: &b${endermiteMultiplier}`);
+
+                    ChatLib.chat(`&a----- Dragon Boot Profit Simulation -----`);
+                    ChatLib.chat(`&eEndermite Multiplier: &b${endermiteType}`);
                     ChatLib.chat(`&eBoots per Run: &b${bootsPerRun}`);
-                    ChatLib.chat(`&eIterations: &b${iterations}`);
-                    ChatLib.chat(`&aAverage Profit: &b${formatNum(avgProfit)}`);
-                    ChatLib.chat(`&aMinimum Profit: &b${formatNum(minProfit)}`);
-                    ChatLib.chat(`&aMaximum Profit: &b${formatNum(maxProfit)}`);
+                    ChatLib.chat(`&eIterations: &b${formatNum(iterations)}`);
+                    ChatLib.chat(`&aMinimum Profit: &b${minProfit} (${minProfitPerBoot}/run)`);
+                    ChatLib.chat(`&aAverage Profit: &b${avgProfit} (${avgProfitPerBoot}/run)`);
+                    ChatLib.chat(`&aMaximum Profit: &b${maxProfit} (${maxProfitPerBoot}/run)`);
                     ChatLib.chat(`&a-----------------------------------`);
                     loading = false; // Stop loading after simulation
                 }

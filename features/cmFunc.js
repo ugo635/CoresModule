@@ -56,6 +56,9 @@ export function setTimeout(callback, delay, ...args) {
 }
 
 export function formatNum(number) {
+    number = Math.round(number);
+    let isNegative = number < 0;
+    number = Math.abs(number);
     if (number >= 1e9) {
         return (number / 1e9).toFixed(2).replace(/\.0$/, "") + "b";
     } else if (number >= 1e6) {
@@ -63,7 +66,7 @@ export function formatNum(number) {
     } else if (number >= 1e3) {
         return (number / 1e3).toFixed(2).replace(/\.0$/, "") + "k";
     }
-    return number.toString();
+    return isNegative ? "-"+number.toString() : number.toString();
 }
 
 /**

@@ -428,6 +428,38 @@ function getItemPriceBazaar(itemId, multiplier = 1) {
         });
 }
 
+async function getItemPriceBz(item, multiplier) {
+    return await request({ url: BAZAAR_API_URL, json: true })
+        .then(response => {
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            const data = response;
+            if (!data.success) throw new Error('Failed to fetch data from the Hypixel API.');
+
+            const product = data.products[itemId];
+            if (!product) {
+                return { buyPrice: 0, sellPrice: 0 }; // Return zero if item not found
+            }
+
+            const buyPrice = product.buy_summary.length ? product.buy_summary[0].pricePerUnit : 0;
+            const sellPrice = product.sell_summary.length ? product.sell_summary[0].pricePerUnit : 0;
+
+            return {
+                buyPrice: buyPrice * multiplier,
+                sellPrice: sellPrice * multiplier
+            };
+        })
+        
+        
+        .catch(error => {
+            console.error('Error fetching item prices:', error);
+            return { buyPrice: 0, sellPrice: 0 }; // Return zero on error
+        })
+}
+
+
+
+
+
 /**
  * Calculates profit for Dragon Boot crafting based on Bazaar prices and simulates runs.
  * Usage: /dragonBootProfit <endermite_multiplier_type> <boots_per_run> <iterations>
@@ -442,7 +474,7 @@ register("command", (bootsPerRunStr, endermiteType, iterationsStr) => {
     let endermiteMultiplier = 0.55; // Default to true (0.55)
     if (endermiteType && endermiteType.toLowerCase() === 'false') {
         endermiteMultiplier = 0.45;
-    }
+    } else endermiteType = 'true'; // Default to true if not specified
 
     let bootsPerRun = parseInt(bootsPerRunStr);
     if (isNaN(bootsPerRun) || bootsPerRun <= 0) {
@@ -454,16 +486,14 @@ register("command", (bootsPerRunStr, endermiteType, iterationsStr) => {
         iterations = 100000; // Default to 100,000 iterations
     }
 
-    // Use a sequential promise chain for fetching data
+    // --- Price Fetching Logic (Identical to previous edit) ---
     const fragNames = [
         'HOLY_FRAGMENT', 'OLD_FRAGMENT', 'PROTECTOR_FRAGMENT', 'STRONG_FRAGMENT',
         'SUPERIOR_FRAGMENT', 'UNSTABLE_FRAGMENT', 'WISE_FRAGMENT', 'YOUNG_FRAGMENT'
     ];
-
     let cheapestFrag = { name: '', price: Infinity };
     let fragIndex = 0;
 
-    // Function to fetch fragment prices sequentially
     function fetchNextFragPrice() {
         if (fragIndex < fragNames.length) {
             const fragName = fragNames[fragIndex];
@@ -473,42 +503,43 @@ register("command", (bootsPerRunStr, endermiteType, iterationsStr) => {
                         cheapestFrag = { name: fragName, price: prices.buyPrice };
                     }
                     fragIndex++;
-                    fetchNextFragPrice(); // Call next in sequence
+                    fetchNextFragPrice();
                 })
                 .catch(error => {
                     console.error(`Error fetching price for ${fragName}:`, error);
                     fragIndex++;
-                    fetchNextFragPrice(); // Continue even if one fails
+                    fetchNextFragPrice();
                 });
         } else {
-            // All fragments fetched, proceed to next step
             if (cheapestFrag.name === '') {
                 ChatLib.chat("&cCould not determine cheapest fragment. Aborting profit calculation.");
                 loading = false;
-                return; // Stop execution
+                return;
             }
 
-            const materialsCost = [
-                { name: cheapestFrag.name, multiplier: 40, type: 'crafting_cost' },
-                { name: 'ESSENCE_DRAGON', multiplier: 30, type: 'crafting_cost' }
+            // Create the item lists with their multipliers
+            // These arrays are now structured to match the first code
+            const cost = [
+                { name: cheapestFrag.name, multiplier: 40 },
             ];
 
-            const potentialDrops = [
-                { name: cheapestFrag.name, multiplier: 15, dropChance: 0.8193, type: 'bonus_drop' },
-                { name: 'RITUAL_RESIDUE', multiplier: 1, dropChance: 0.1084, type: 'bonus_drop' },
-                { name: 'SUMMONING_EYE', multiplier: 1, dropChance: 0.0482, type: 'bonus_drop' },
-                { name: 'DRAGON_HORN', multiplier: 1, dropChance: 0.0241, type: 'bonus_drop' }
+            const guaranteed = [
+                { name: 'ESSENCE_DRAGON', multiplier: 30 },
+            ];
+
+            const bonus = [
+                { name: cheapestFrag.name, multiplier: 15, dropChance: 0.8193 },
+                { name: 'RITUAL_RESIDUE', multiplier: 1, dropChance: 0.1084 },
+                { name: 'SUMMONING_EYE', multiplier: 1, dropChance: 0.0482 },
+                { name: 'DRAGON_HORN', multiplier: 1, dropChance: 0.0241 },
             ];
 
             let allItems = [];
-            // Add materialsCost items to allItems
-            materialsCost.forEach(item => allItems.push(item));
-            // Add potentialDrops items to allItems
-            potentialDrops.forEach(item => allItems.push(item));
+            cost.forEach(item => allItems.push(item));
+            guaranteed.forEach(item => allItems.push(item));
+            bonus.forEach(item => allItems.push(item));
 
             let itemIndex = 0;
-
-            // Function to fetch all item prices sequentially
             function fetchNextItemPrice() {
                 if (itemIndex < allItems.length) {
                     const item = allItems[itemIndex];
@@ -517,34 +548,38 @@ register("command", (bootsPerRunStr, endermiteType, iterationsStr) => {
                             item.buyPrice = prices.buyPrice;
                             item.sellPrice = prices.sellPrice;
                             itemIndex++;
-                            fetchNextItemPrice(); // Call next in sequence
+                            fetchNextItemPrice();
                         })
                         .catch(error => {
                             console.error(`Error fetching price for ${item.name}:`, error);
                             itemIndex++;
-                            fetchNextItemPrice(); // Continue even if one fails
+                            fetchNextItemPrice();
                         });
                 } else {
-                    // All item prices fetched, now run simulation
+                    // All item prices fetched, now run the simulation
                     let totalProfit = 0;
                     let minProfit = Infinity;
                     let maxProfit = -Infinity;
 
                     for (let i = 0; i < iterations; i++) {
                         let iterationProfit = 0;
-
                         for (let j = 0; j < bootsPerRun; j++) {
                             let runProfit = 0;
 
-                            // Calculate crafting costs (using sell prices for materials)
-                            materialsCost.forEach(item => {
+                            // Calculate costs (subtracting sellPrice)
+                            cost.forEach(item => {
                                 runProfit -= item.sellPrice;
                             });
 
-                            // Add profit from potential drops (using buy prices for drops)
-                            potentialDrops.forEach(item => {
+                            // Add guaranteed rewards (adding buyPrice)
+                            guaranteed.forEach(item => {
+                                runProfit += item.buyPrice;
+                            });
+
+                            // Add bonus rewards based on dropChance (adding buyPrice * multiplier)
+                            bonus.forEach(item => {
                                 if (Math.random() < item.dropChance) {
-                                    runProfit += item.buyPrice * endermiteMultiplier; // Apply endermite multiplier to buy price of drops
+                                    runProfit += item.buyPrice * endermiteMultiplier;
                                 }
                             });
                             iterationProfit += runProfit;
@@ -563,8 +598,6 @@ register("command", (bootsPerRunStr, endermiteType, iterationsStr) => {
                     minProfit = formatNum(Math.round(minProfit));
                     maxProfit = formatNum(Math.round(maxProfit));
                     
-
-
                     ChatLib.chat(`&a----- Dragon Boot Profit Simulation -----`);
                     ChatLib.chat(`&eEndermite Multiplier: &b${endermiteType}`);
                     ChatLib.chat(`&eBoots per Run: &b${bootsPerRun}`);
@@ -573,11 +606,11 @@ register("command", (bootsPerRunStr, endermiteType, iterationsStr) => {
                     ChatLib.chat(`&aAverage Profit: &b${avgProfit} (${avgProfitPerBoot}/run)`);
                     ChatLib.chat(`&aMaximum Profit: &b${maxProfit} (${maxProfitPerBoot}/run)`);
                     ChatLib.chat(`&a-----------------------------------`);
-                    loading = false; // Stop loading after simulation
+                    loading = false;
                 }
             }
-            fetchNextItemPrice(); // Start fetching all item prices
+            fetchNextItemPrice();
         }
     }
-    fetchNextFragPrice(); // Start fetching fragment prices
-}).setName("dragonBootProfit").setAliases("dbp");
+    fetchNextFragPrice();
+}).setName("dragonBootProfit").setAliases("dbp"); // /dragonBootProfit <endermite_multiplier_type (true/false)> <boots_per_run> <iterations>

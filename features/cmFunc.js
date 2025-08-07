@@ -58,15 +58,16 @@ export function setTimeout(callback, delay, ...args) {
 export function formatNum(number) {
     number = Math.round(number);
     let isNegative = number < 0;
+    let sign = isNegative ? "-" : "";
     number = Math.abs(number);
     if (number >= 1e9) {
-        return (number / 1e9).toFixed(2).replace(/\.0$/, "") + "b";
+        return sign + (number / 1e9).toFixed(2).replace(/\.00$/, "") + "b";
     } else if (number >= 1e6) {
-        return (number / 1e6).toFixed(2).replace(/\.0$/, "") + "m";
+        return sign + (number / 1e6).toFixed(2).replace(/\.00$/, "") + "m";
     } else if (number >= 1e3) {
-        return (number / 1e3).toFixed(2).replace(/\.0$/, "") + "k";
+        return sign + (number / 1e3).toFixed(2).replace(/\.00$/, "") + "k";
     }
-    return isNegative ? "-"+number.toString() : number.toString();
+    return sign + number.toString();
 }
 
 /**

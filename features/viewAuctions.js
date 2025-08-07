@@ -1,5 +1,6 @@
 import { request } from "../../requestV2";
 import { formatNum } from "./cmFunc";
+import PogObject from "../../PogData";
 
 // Define the API URLs for both auctions and bazaar
 const AUCTION_API_URL = `https://api.hypixel.net/skyblock/auctions?`;
@@ -30,7 +31,7 @@ function loadingMsg() {
 
     animateDots();
 
-    // Set a timeout to stop loading after 5 seconds, just in case.
+    // Set a timeout to stop loading after 45 seconds, just in case.
     setTimeout(() => {
         loading = false;
     }, 45000);
@@ -75,7 +76,7 @@ function fetchAuctionsAndDisplay(lfItem, src, price = null) {
     let itemsList = [];
     let errors = [];
     const itemNameForBazaar = lfItem[0].toUpperCase().replace(/ /g, '_');
-
+    
     // --- Step 1: Attempt to fetch from Bazaar ---
     request({ url: BAZAAR_API_URL, json: true })
         .then(bazaarResponse => {
@@ -285,61 +286,6 @@ function fetchAuctionsAndDisplay(lfItem, src, price = null) {
 }
 
 /**
- * Fetches and displays item information from the Hypixel Bazaar API.
- * This function is now deprecated as its logic has been integrated into fetchAuctionsAndDisplay.
- * @param {string} itemId - The ID of the item (e.g., "ENCHANTED_DIAMOND").
- */
-function displayBazaarItemInfo(itemId) {
-    // This function is now deprecated. Its logic has been moved to fetchAuctionsAndDisplay.
-    // However, keeping it for compatibility if other parts of the code still call it directly.
-    ChatLib.chat("&6&l[Cm] &r&7Fetching Bazaar Info (via deprecated function)...");
-    loadingMsg();
-    request({ url: BAZAAR_API_URL, json: true })
-        .then(response => {
-            if (!response.success) {
-                throw new Error("Failed to fetch data from the Hypixel Bazaar API.");
-            }
-
-            const products = response.products;
-            const formattedItemId = itemId.toUpperCase().replace(/ /g, '_'); // Convert item name to Bazaar ID format
-
-            if (products[formattedItemId]) {
-                const product = products[formattedItemId];
-                const buyPrice = product.buy_summary.length ? product.buy_summary[0].pricePerUnit : 'N/A';
-                const sellPrice = product.sell_summary.length ? product.sell_summary[0].pricePerUnit : 'N/A';
-                const quickStatus = product.quick_status;
-
-                ChatLib.chat(`&a--- Bazaar Info for &c${itemId} &a---`);
-                ChatLib.chat(`&eBuy Price: &a${formatNum(buyPrice)}`);
-                ChatLib.chat(`&eSell Price: &c${formatNum(sellPrice)}`);
-                ChatLib.chat(`&eDemand: &f${formatNum(quickStatus.buyOrders)}`);
-                ChatLib.chat(`&eSupply: &f${formatNum(quickStatus.sellOrders)}`);
-                ChatLib.chat(`&a-----------------------------------`);
-            } else {
-                ChatLib.chat(`&cItem '${itemId}' not found in Bazaar.`);
-            }
-        })
-        .catch(error => {
-            console.error(`Error in displayBazaarItemInfo: ${error}`);
-            ChatLib.chat(`&cAn error occurred fetching Bazaar info: ${error.message}`);
-        });
-        // Removed .finally()
-}
-
-// Register a new command for Bazaar item info
-// This command will now effectively call the main fetchAuctionsAndDisplay,
-// which will handle the Bazaar check first.
-register("command", (arg1) => {
-    if (!arg1) {
-        ChatLib.chat("&cUsage: /bazaaritem <item_name>");
-        return;
-    }
-    // Call the main function, it will handle the Bazaar check
-    fetchAuctionsAndDisplay([arg1], "bazaar_check_only"); // Using a dummy src for bazaar check
-}).setName("bazaaritem").setAliases("bzi");
-
-
-/**
  * Converts a formatted number string (e.g., "1.2k", "3m") to a numerical value.
  * @param {string} num - The formatted number string.
  * @returns {number} The unformatted numerical value.
@@ -390,14 +336,9 @@ register("command", (arg1, arg2) => {
  * @param {number} multiplier - Multiplier for the price (e.g., quantity).
  * @returns {{buyPrice: number, sellPrice: number}} Object containing buy and sell prices.
  */
-async function getItemPriceBz(itemId, multiplier) {
+function getItemPriceBz() {
     return request({ url: BAZAAR_API_URL, json: true })
     .then(response => {
-        // Check for HTTP errors
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
         const data = response;
 
         // Check API's success flag
@@ -405,26 +346,21 @@ async function getItemPriceBz(itemId, multiplier) {
             throw new Error('Failed to fetch data from the Hypixel API.');
         }
 
-        const product = data.products[itemId];
-        if (!product) {
-            // Return a resolved promise with zero prices if item is not found
-            return { buyPrice: 0, sellPrice: 0 };
-        }
-
-        const buyPrice = product.buy_summary.length ? product.buy_summary[0].pricePerUnit : 0;
-        const sellPrice = product.sell_summary.length ? product.sell_summary[0].pricePerUnit : 0;
-
-        return {
-            buyPrice: buyPrice * multiplier,
-            sellPrice: sellPrice * multiplier
-        };
+        return data;
     })
     .catch(error => {
         // This catch block handles any errors from the `request` promise or `throw` statements above.
         console.error('Error fetching item prices:', error);
         // Return a resolved promise with zero prices on error
-        return { buyPrice: 0, sellPrice: 0 };
+        return;
     });
+}
+
+function getPriceBz(data, itemId, multiplier) {
+    const product = data.result.products[itemId];
+    const buyPrice = product.buy_summary.length ? product.buy_summary[0].pricePerUnit : 0;
+    const sellPrice = product.sell_summary.length ? product.sell_summary[0].pricePerUnit : 0;
+    return { buyPrice: buyPrice * multiplier, sellPrice: sellPrice * multiplier };
 }
 
 
@@ -435,7 +371,7 @@ async function getItemPriceBz(itemId, multiplier) {
  * boots_per_run: Number of boots crafted per simulation run (default 1)
  * iterations: Number of simulation iterations (default 100000)
  */
-register("command", async (bootsPerRunStr, endermiteType, iterationsStr) => {
+register("command", (bootsPerRunStr, endermiteType, iterationsStr) => {
     ChatLib.chat("&6&l[Cm] &r&7Calculating Dragon Boot Profit...");
     loadingMsg();
 
@@ -470,8 +406,19 @@ register("command", async (bootsPerRunStr, endermiteType, iterationsStr) => {
         {name: 'Young_Fragment', multiplier: 1, price: null}
     ];
 
+    let data = getItemPriceBz()
+
+    setTimeout(() => {
+    if (!data) {
+        console.error("Failed to fetch data from Bazaar API.");
+        return;
+    }
+
+
+
+
     for (const item of frag) {
-        const prices = await getItemPriceBz(item.name.toUpperCase(), item.multiplier)
+        const prices = getPriceBz(data, item.name.toUpperCase(), item.multiplier)
         item.price = prices.buyPrice
     }
     
@@ -497,7 +444,7 @@ register("command", async (bootsPerRunStr, endermiteType, iterationsStr) => {
     const bonus = items.slice(2);
 
     for (const item of items) {
-        const prices = await getItemPriceBz(item.name.toUpperCase(), item.multiplier);
+        const prices = getPriceBz(data, item.name.toUpperCase(), item.multiplier);
         item.buyPrice = prices.buyPrice;
         item.sellPrice = prices.sellPrice;
     }
@@ -556,7 +503,7 @@ register("command", async (bootsPerRunStr, endermiteType, iterationsStr) => {
     ChatLib.chat(`&a-----------------------------------`);
     loading = false;
 
-
+    }, 10000)
 
     
 }).setName("dragonBootProfit").setAliases("dbp"); // /dragonBootProfit <endermite_multiplier_type (true/false)> <boots_per_run> <iterations>

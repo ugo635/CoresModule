@@ -497,6 +497,7 @@ register("command", (bootsPerRunStr, endermiteType, iterationsStr) => {
     ChatLib.chat(`&eEndermite Multiplier: &b${endermiteType}`);
     ChatLib.chat(`&eBoots per Run: &b${bootsPerRun}`);
     ChatLib.chat(`&eIterations: &b${formatNum(iterations)}`);
+    ChatLib.chat(`&eCheapest Fragment: &b${CheapestFrag['name']}`);
     ChatLib.chat(`&aMinimum Profit: &b${minProfit} (${minProfitPerBoot}/run)`);
     ChatLib.chat(`&aAverage Profit: &b${avgProfit} (${avgProfitPerBoot}/run)`);
     ChatLib.chat(`&aMaximum Profit: &b${maxProfit} (${maxProfitPerBoot}/run)`);

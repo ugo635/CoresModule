@@ -56,14 +56,18 @@ export function setTimeout(callback, delay, ...args) {
 }
 
 export function formatNum(number) {
+    number = Math.round(number);
+    let isNegative = number < 0;
+    let sign = isNegative ? "-" : "";
+    number = Math.abs(number);
     if (number >= 1e9) {
-        return (number / 1e9).toFixed(2).replace(/\.0$/, "") + "b";
+        return sign + (number / 1e9).toFixed(2).replace(/\.00$/, "") + "b";
     } else if (number >= 1e6) {
-        return (number / 1e6).toFixed(2).replace(/\.0$/, "") + "m";
+        return sign + (number / 1e6).toFixed(2).replace(/\.00$/, "") + "m";
     } else if (number >= 1e3) {
-        return (number / 1e3).toFixed(2).replace(/\.0$/, "") + "k";
+        return sign + (number / 1e3).toFixed(2).replace(/\.00$/, "") + "k";
     }
-    return number.toString();
+    return sign + number.toString();
 }
 
 /**
@@ -124,5 +128,41 @@ export function playCustomSound(sound, volume) {
         (FileLib.exists(Config.modulesFolder.replace("modules", "images") + `/${sound}.ogg`)) 
             ? new Sound({ source: new java.lang.String(sound + ".ogg") }).setVolume(volume/100).play()
             : ChatLib.chat(`&6[Cm] &cSound file not found! (if the filename is correct, make sure to reload ct by "/ct load")`);
+    }
+}
+
+let world = undefined; // Variable to store the current world
+export function getWorld() { return world }; // Exported function to get the current world
+
+function findWorld() {
+    // Infinite loop prevention
+    if (noFind === 10) return;
+    noFind++;
+    // Get world from tab list
+    world = TabList.getNames().find(tab => tab.includes("Area"));
+    if (world === undefined) {
+        // If the world is not found, try again after a delay
+        zone = findZone();
+        if (zone.includes("Catac")) {
+            world = "Catacombs";
+            setWorldRegisters();
+        }
+        else {
+            delay(() => findWorld(), 1000);
+        }
+    } else {
+        // Get world formatted
+        world = world.removeFormatting();
+        world = world.substring(world.indexOf(': ') + 2);
+        zone = findZone();
+        // Get tier (for Kuudra and Dungeons)
+        if (world === "Kuudra") {
+            delay(() => {
+                tier = parseInt(zone.charAt(zone.length - 2));
+            }, 1000);
+        }
+
+        // Register/unregister features for the current world
+        setWorldRegisters();
     }
 }

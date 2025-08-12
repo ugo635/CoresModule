@@ -76,14 +76,14 @@ class cmSettingsData {
     colorUser = 0;
     @SwitchProperty({
         name: "Add font to user",
-        description: "Add fonts to your username like &lBold &r&7 &nUnderlined &r&7 &oItalic &r&7etc... See /colors",
+        description: "Add fonts to your username like &lBold&r&7 &nUnderlined&r&7 &oItalic&r&7 etc... See /color",
         category: "Color Replacor",
         subcategory: "Settings"
     })
     fontedName = false;
     @TextProperty({
         name: "Font Value",
-        description: "Add fonts to your username like &lBold &r&7 &nUnderlined &r&7 &oItalic &r&7etc... See /colors",
+        description: "Add fonts to your username like &lBold&r&7 &nUnderlined&r&7 &oItalic&r&7 etc... See /color",
         category: "Color Replacor",
         subcategory: "Settings"
     })

@@ -38,7 +38,11 @@ testing_list = [
     `&a[VIP&6+&a] ${player}&r: &fHi, I'm V+`,
     `&b[MVP&b] ${player}&r: &fHi, I'm M`,
     `&a[VIP&a] ${player}&r: &fHi, I'm V`,
-    `&7${player}&r&7: Hi, I'm rankless! Hi ${player} wsp?`
+    `&7${player}&r&7: Hi, I'm rankless! Hi ${player} wsp?`,
+    `&r&9Party &8> &b[MVP&4+&b] Arcness&f&f: &rHi&r [MVP+] ${player}, wsp? `,
+    `&r&9Party &8> &b[MVP&d+&b] ${player}: UwU&r`,
+    `&d&dTo &r&b[MVP&r&4+&r&b] Arcness&r&7: &7I am ${player}`,
+    `&9Party &8> &b[MVP&4+&b] N00DL3S_&f: Party > [MVP+] ${player}: Coords`
 ]
 
 register("command", () => {
@@ -108,6 +112,7 @@ const combinations = [
     `[VIP&r&a] ${player}`,
     `[VIP&a] ${player}`,
 
+
     `[MVP&a+&b] ${player}`, `[MVP&b+&b] ${player}`, `[MVP&c+&b] ${player}`, `[MVP&d+&b] ${player}`, 
     `[MVP&e+&b] ${player}`, `[MVP&f+&b] ${player}`, `[MVP&0+&b] ${player}`, `[MVP&1+&b] ${player}`, 
     `[MVP&2+&b] ${player}`, `[MVP&3+&b] ${player}`, `[MVP&4+&b] ${player}`, `[MVP&5+&b] ${player}`,
@@ -134,7 +139,9 @@ register("chat", (msg, event) => {
     if (!cmSettingsData.colorUserTrue && !cmSettingsData.colorTagTrue && !cmSettingsData.customRank) return;
     if (!msg.includes("MVP+") && !msg.includes("VIP+") && !msg.includes("MVP++") && !msg.includes("MVP") && !msg.includes("VIP") && !msg.includes(player)) return;
     let msg2 = ChatLib.getChatMessage(event, true);
+    if (msg2.includes("From") || msg2.includes("To")) return;
     let rank = msg.includes("[MVP++]") ? "MVP++" : msg.includes("[MVP+]") ? "MVP+" : msg.includes("[MVP]") ? "MVP" : msg.includes("[VIP+]") ? "VIP+" : msg.includes("[VIP]") ? "VIP" : "rankless";
+    let rank2 = "[" + rank + "]";
     let msg3 = new Message(event).getMessageParts();
 
     // Fuse Message
@@ -165,7 +172,7 @@ register("chat", (msg, event) => {
     if (iterations === maxIterations) console.warn("Fusion stopped after reaching max iterations (possible infinite loop).");
 
     // Tag Replace
-    if (combinations.some(combination => msg2.includes(combination))) {
+    if (combinations.some(combination => msg2.includes(combination)) && !(msg.startsWith("From") || msg.startsWith("To") || msg.includes(`From ${rank2} ${player}`) || msg.includes(`To ${rank2} ${player}`) || ((msg.includes("Party >") ? !msg.startsWith(`Party > ${rank2} ${player}`) : !msg.includes(`${rank2} ${player}`)) && rank != "rankless"))) {
         let matchingCombination = combinations.find(combination => msg2.includes(combination));
         if (cmSettingsData.colorTagTrue || cmSettingsData.customRank) {
             matchingCombination = matchingCombination.slice(0, matchingCombination.length - (player.length + 1)).replaceAll("&", "§")
@@ -179,33 +186,34 @@ register("chat", (msg, event) => {
                 } else {
                     switch (rank) {
                         case "MVP++":
-                            element.text = element.text.replace(matchingCombination, `[MVP${colorDict[cmSettingsData.colorTag]}++§6]`);
+                            if (element.text.replaceAll(matchingCombination, `[MVP${colorDict[cmSettingsData.colorTag]}++§6]`) == element.text.replace(matchingCombination, `[MVP${colorDict[cmSettingsData.colorTag]}++§6]`)) element.text = element.text.replace(matchingCombination, `[MVP${colorDict[cmSettingsData.colorTag]}++§6]`);
                             break;
                         case "MVP+":
-                            element.text = element.text.replace(matchingCombination, `[MVP${colorDict[cmSettingsData.colorTag]}+§b]`);
+                            if (element.text.replaceAll(matchingCombination, `[MVP${colorDict[cmSettingsData.colorTag]}+§b]`) == element.text.replace(matchingCombination, `[MVP${colorDict[cmSettingsData.colorTag]}+§b]`)) element.text = element.text.replace(matchingCombination, `[MVP${colorDict[cmSettingsData.colorTag]}+§b]`);
                             break;
                         case "VIP+":
-                            element.text = element.text.replace(matchingCombination, `[VIP${colorDict[cmSettingsData.colorTag]}+§a]`);
+                            if (element.text.replaceAll(matchingCombination, `[VIP${colorDict[cmSettingsData.colorTag]}+§a]`) == element.text.replace(matchingCombination, `[VIP${colorDict[cmSettingsData.colorTag]}+§a]`)) element.text = element.text.replace(matchingCombination, `[VIP${colorDict[cmSettingsData.colorTag]}+§a]`);
                             break;
                         default:
                             break;
                     }
                 }} else {
+                let mc2 = matchingCombination + " "
                 switch (rank) {
                     case "MVP++":
-                        element.text = element.text.replace(matchingCombination, "").replace(" ", "");
+                        element.text = element.text.replace(mc2, "");
                         break;
                     case "MVP+":
-                        element.text = element.text.replace(matchingCombination, "").replace(" ", "");
+                        element.text = element.text.replace(mc2, "");
                         break;
                     case "MVP":
-                        element.text = element.text.replace(matchingCombination, "").replace(" ", "");
+                        element.text = element.text.replace(mc2, "");
                         break;
                     case "VIP+":
-                        element.text = element.text.replace(matchingCombination, "").replace(" ", "");
+                        element.text = element.text.replace(mc2, "");
                         break;
                     case "VIP":
-                        element.text = element.text.replace(matchingCombination, "").replace(" ", "");
+                        element.text = element.text.replace(mc2, "");
                         break;
                     case "rankless":
                         break;
@@ -221,13 +229,13 @@ register("chat", (msg, event) => {
         if (rank != "rankless") {
             msg3.forEach(element => {
                 cmSettingsData.fontedName 
-                    ? element.text = element.text.replace(player, `${colorDict[cmSettingsData.colorUser]}${cmSettingsData.fontedVal.replace("&", "§") + player}§f`)
-                    : element.text = element.text.replace(player, `${colorDict[cmSettingsData.colorUser]}${player}§f`)
+                    ? element.text = element.text.replaceAll(player, `${colorDict[cmSettingsData.colorUser]}${cmSettingsData.fontedVal.replace("&", "§") + player}§f`)
+                    : element.text = element.text.replaceAll(player, `${colorDict[cmSettingsData.colorUser]}${player}§f`)
             });
         } else {
             msg3.forEach(element => {
                 if (!(wantRank && (cmSettingsData.newTag || cmSettingsData.customRank))) {
-                    element.text = element.text.replace(player, `${colorDict[cmSettingsData.colorUser]}${(cmSettingsData.fontedName) ? cmSettingsData.fontedVal + player : player}§r§f`)
+                    element.text = element.text.replaceAll(player, `${colorDict[cmSettingsData.colorUser]}${(cmSettingsData.fontedName) ? cmSettingsData.fontedVal + player : player}§r§f`)
                 } else {
                     element.text = element.text.replace(`${player}§7§r§7`, `${colorDict[cmSettingsData.colorUser]}${(cmSettingsData.fontedName) ? cmSettingsData.fontedVal + player : player}§r§f`)
                     element.text = element.text.replace(`${player}§r§7`, `${colorDict[cmSettingsData.colorUser]}${(cmSettingsData.fontedName) ? cmSettingsData.fontedVal + player : player}§r§f`)
@@ -239,7 +247,7 @@ register("chat", (msg, event) => {
     } else if (cmSettingsData.customRank) {
         msg3.forEach(element => {
             if (!(wantRank && (cmSettingsData.newTag || cmSettingsData.customRank))) {
-                element.text = element.text.replace(player, `${(cmSettingsData.fontedName) ? cmSettingsData.fontedVal + player : player}§r§f`)
+                element.text = element.text.replaceAll(player, `${(cmSettingsData.fontedName) ? cmSettingsData.fontedVal + player : player}§r§f`)
             } else {
                 element.text = element.text.replace(`${player}§7§r§7`, `${(cmSettingsData.fontedName) ? cmSettingsData.fontedVal + player : player}§r§f`)
                 element.text = element.text.replace(`${player}§r§7`, `${(cmSettingsData.fontedName) ? cmSettingsData.fontedVal + player : player}§r§f`)

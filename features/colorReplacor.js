@@ -172,10 +172,10 @@ register("chat", (msg, event) => {
     if (iterations === maxIterations) console.warn("Fusion stopped after reaching max iterations (possible infinite loop).");
 
     // Tag Replace
-    if (combinations.some(combination => msg2.includes(combination)) && !(msg.startsWith("From") || msg.startsWith("To") || msg.includes(`From ${rank2} ${player}`) || msg.includes(`To ${rank2} ${player}`) || ((msg.includes("Party >") ? !msg.startsWith(`Party > ${rank2} ${player}`) : !msg.includes(`${rank2} ${player}`)) && rank != "rankless"))) {
+    if (combinations.some(combination => msg2.includes(combination)) && !(msg.startsWith("From") || msg.startsWith("[") || msg.startsWith("To") || msg.includes(`From ${rank2} ${player}`) || msg.includes(`To ${rank2} ${player}`) || ((msg.includes("Party >") ? !msg.startsWith(`Party > ${rank2} ${player}`) : !msg.includes(`${rank2} ${player}`)) && rank != "rankless"))) {
         let matchingCombination = combinations.find(combination => msg2.includes(combination));
         if (cmSettingsData.colorTagTrue || cmSettingsData.customRank) {
-            matchingCombination = matchingCombination.slice(0, matchingCombination.length - (player.length + 1)).replaceAll("&", "§")
+            matchingCombination = matchingCombination.slice(0, matchingCombination.length - (player.length + 1)).replaceAll("&", "§") // What makes [MVP+][MVP+]s
             UpdateInfos()
             msg3.forEach(element => {
                 if ((cmSettingsData.newRank != 5 && cmSettingsData.newTag) || !cmSettingsData.newTag) {

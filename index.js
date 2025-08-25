@@ -13,7 +13,6 @@ import "./features/Warps.js";
 import "./features/Potions.js";
 import "./features/viewAuctions.js";
 import "./features/Features.js";
-import "./features/mutedChat.js";
 
 register("gameLoad", () => ChatLib.chat("&6&l[Cores Module] &r&7Module Loaded"));
 

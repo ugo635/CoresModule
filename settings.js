@@ -71,7 +71,7 @@ class cmSettingsData {
         description: "Choose color username (/color for example)",
         category: "Color Replacor",
         subcategory: "Settings",
-        options: ["Black", "Dark Blue", "Dark Green", "Dark Aqua", "Dark Red", "Dark Purple", "Gold", "Gray", "Dark Gray", "Blue", "Green", "Aqua", "Red", "Light Purple / Pink", "Yellow"]
+        options: ["Black", "Dark Blue", "Dark Green", "Dark Aqua", "Dark Red", "Dark Purple", "Gold", "Gray", "Dark Gray", "Blue", "Green", "Aqua", "Red", "Light Purple / Pink", "Yellow", "Chroma"]
     })
     colorUser = 0;
     @SwitchProperty({
@@ -101,7 +101,7 @@ class cmSettingsData {
         description: "Choose color tag (/color for example)",
         category: "Color Replacor",
         subcategory: "Settings",
-        options: ["Black", "Dark Blue", "Dark Green", "Dark Aqua", "Dark Red", "Dark Purple", "Gold", "Gray", "Dark Gray", "Blue", "Green", "Aqua", "Red", "Light Purple / Pink", "Yellow"]
+        options: ["Black", "Dark Blue", "Dark Green", "Dark Aqua", "Dark Red", "Dark Purple", "Gold", "Gray", "Dark Gray", "Blue", "Green", "Aqua", "Red", "Light Purple / Pink", "Yellow", "Chroma"]
     })
     colorTag = 0;
     @SwitchProperty({

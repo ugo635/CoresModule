@@ -16,7 +16,8 @@ const colorDict = {
     12 : '§c', // #FF5555
     13 : '§d', // #FF55FF
     14 : '§e', // #FFFF55
-    15 : '§f' // #FFFFFF
+    15 : '§f', // #FFFFFF
+    16 : '§z' // Chroma
 }
 
 let player = Player.getName()

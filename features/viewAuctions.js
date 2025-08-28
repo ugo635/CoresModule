@@ -371,7 +371,7 @@ function getPriceBz(data, itemId, multiplier) {
  * boots_per_run: Number of boots crafted per simulation run (default 1)
  * iterations: Number of simulation iterations (default 100000)
  */
-register("command", (bootsPerRunStr, endermiteType, iterationsStr) => {
+register("command", (bootsPerRunStr, endermiteType, iterationsStr, maxEssenceAttribute, maxEchoAttribute) => {
     ChatLib.chat("&6&l[Cm] &r&7Calculating Dragon Boot Profit...");
     loadingMsg();
 
@@ -380,6 +380,17 @@ register("command", (bootsPerRunStr, endermiteType, iterationsStr) => {
         endermiteMultiplier = 0.45;
     } else endermiteType = 'true'; // Default to true if not specified
 
+
+    const drac = maxEssenceAttribute.toLowerCase() == 'true' || maxEssenceAttribute == null || maxEssenceAttribute == undefined;
+    const echo = maxEchoAttribute.toLowerCase() == 'true' || maxEchoAttribute == null || maxEchoAttribute == undefined;
+
+    let maxAttributeMult = 1;
+
+    if (drac && echo) maxAttributeMult = 1.12
+    if (drac && !echo) maxAttributeMult = 1.1
+
+    ChatLib.chat(drac, echo, maxEssenceAttribute, maxEchoAttribute, maxAttributeMult)
+
     let bootsPerRun = parseInt(bootsPerRunStr);
     if (isNaN(bootsPerRun) || bootsPerRun <= 0) {
         bootsPerRun = 1; // Default to 1 boot per run
@@ -387,10 +398,10 @@ register("command", (bootsPerRunStr, endermiteType, iterationsStr) => {
 
     let iterations = parseInt(iterationsStr);
     if (isNaN(iterations) || iterations <= 0) {
-        iterations = 100000; // Default to 100,000 iterations
+        iterations = 10000; // Default to 10,000 iterations
     }
-    if (iterations > 1000000) {
-        iterations = 1000000; // Cap iterations to 1,000,000
+    if (iterations > 100000) {
+        iterations = 100000; // Cap iterations to 100,000
     }
 
     // --- Price Fetching Logic (Identical to previous edit) ---
@@ -432,7 +443,7 @@ register("command", (bootsPerRunStr, endermiteType, iterationsStr) => {
 
     const items = [
         { name: CheapestFrag, multiplier: 40 },
-        { name: 'Essence_Dragon', multiplier: 30 },
+        { name: 'Essence_Dragon', multiplier: (CheapestFrag == "Holy_Fragment" ? 30 : 20) * maxAttributeMult },
         { name: CheapestFrag, multiplier: 15, dropChance: 0.8193 },
         { name: 'Ritual_Residue', multiplier: 1, dropChance: 0.1084 },
         { name: 'Summoning_Eye', multiplier: 1, dropChance: 0.0482 },
@@ -507,4 +518,4 @@ register("command", (bootsPerRunStr, endermiteType, iterationsStr) => {
     }, 10000)
 
     
-}).setName("dragonBootProfit").setAliases("dbp"); // /dragonBootProfit <endermite_multiplier_type (true/false)> <boots_per_run> <iterations>
+}).setName("dragonBootProfit").setAliases("dbp"); // /dragonBootProfit <boots_per_run> <endermite_multiplier_type (true/false)> <iterations> <max draconic attribute (true/false)>

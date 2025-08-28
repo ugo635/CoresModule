@@ -380,16 +380,13 @@ register("command", (bootsPerRunStr, endermiteType, iterationsStr, maxEssenceAtt
         endermiteMultiplier = 0.45;
     } else endermiteType = 'true'; // Default to true if not specified
 
-
-    const drac = maxEssenceAttribute.toLowerCase() == 'true' || maxEssenceAttribute == null || maxEssenceAttribute == undefined;
-    const echo = maxEchoAttribute.toLowerCase() == 'true' || maxEchoAttribute == null || maxEchoAttribute == undefined;
+    let drac = (maxEssenceAttribute == undefined || maxEssenceAttribute == null ? true : maxEssenceAttribute.toLowerCase() == 'true');
+    const echo = (maxEchoAttribute == undefined || maxEchoAttribute == null ? true : maxEchoAttribute.toLowerCase() == 'true')
 
     let maxAttributeMult = 1;
 
     if (drac && echo) maxAttributeMult = 1.12
     if (drac && !echo) maxAttributeMult = 1.1
-
-    ChatLib.chat(drac, echo, maxEssenceAttribute, maxEchoAttribute, maxAttributeMult)
 
     let bootsPerRun = parseInt(bootsPerRunStr);
     if (isNaN(bootsPerRun) || bootsPerRun <= 0) {
@@ -426,7 +423,9 @@ register("command", (bootsPerRunStr, endermiteType, iterationsStr, maxEssenceAtt
     }
 
 
-
+    let essenceTempPrice = getPriceBz(data, 'Essence_Dragon'.toUpperCase(), 1)
+    essenceTempPrice = essenceTempPrice.buyPrice
+    let temp = 0;
 
     for (const item of frag) {
         const prices = getPriceBz(data, item.name.toUpperCase(), item.multiplier)
@@ -435,6 +434,7 @@ register("command", (bootsPerRunStr, endermiteType, iterationsStr, maxEssenceAtt
     
     let CheapestFrag = frag[0]
     for (const item of frag) {
+        if (item.name == "Holy_Fragment") {temp = item.price; item.price -= 0.4 * essenceTempPrice};
         if (item.price < CheapestFrag.price) CheapestFrag = item
     }
     CheapestFrag = CheapestFrag.name

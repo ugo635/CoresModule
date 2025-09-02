@@ -371,7 +371,7 @@ function getPriceBz(data, itemId, multiplier) {
  * boots_per_run: Number of boots crafted per simulation run (default 1)
  * iterations: Number of simulation iterations (default 100000)
  */
-register("command", (bootsPerRunStr, endermiteType, iterationsStr, maxEssenceAttribute, maxEchoAttribute) => {
+register("command", (bootsPerRunStr, endermiteType, iterationsStr, maxEssenceAttribute, maxEchoAttribute, maxEcho2Attribute) => {
     ChatLib.chat("&6&l[Cm] &r&7Calculating Dragon Boot Profit...");
     loadingMsg();
 
@@ -382,11 +382,14 @@ register("command", (bootsPerRunStr, endermiteType, iterationsStr, maxEssenceAtt
 
     let drac = (maxEssenceAttribute == undefined || maxEssenceAttribute == null ? true : maxEssenceAttribute.toLowerCase() == 'true');
     const echo = (maxEchoAttribute == undefined || maxEchoAttribute == null ? true : maxEchoAttribute.toLowerCase() == 'true')
+    const echo2 = (maxEcho2Attribute == undefined || maxEcho2Attribute == null ? true : maxEcho2Attribute.toLowerCase() == 'true')
 
     let maxAttributeMult = 1;
 
-    if (drac && echo) maxAttributeMult = 1.12
+    if (drac && echo && echo2) maxAttributeMult = 1.13
+    if (drac && echo && !echo2) maxAttributeMult = 1.12
     if (drac && !echo) maxAttributeMult = 1.1
+
 
     let bootsPerRun = parseInt(bootsPerRunStr);
     if (isNaN(bootsPerRun) || bootsPerRun <= 0) {
@@ -518,4 +521,4 @@ register("command", (bootsPerRunStr, endermiteType, iterationsStr, maxEssenceAtt
     }, 10000)
 
     
-}).setName("dragonBootProfit").setAliases("dbp"); // /dragonBootProfit <boots_per_run> <endermite_multiplier_type (true/false)> <iterations> <max draconic attribute (true/false)>
+}).setName("dragonBootProfit").setAliases("dbp"); // /dragonBootProfit <boots_per_run> <endermite_multiplier_type (true/false)> <iterations> <max draconic attribute (true/false)> <max echo> <max echo of echoes>

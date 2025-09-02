@@ -429,7 +429,7 @@ register("command", (bootsPerRunStr, endermiteType, iterationsStr, maxEssenceAtt
 
     for (const item of frag) {
         const prices = getPriceBz(data, item.name.toUpperCase(), item.multiplier)
-        item.price = prices.buyPrice
+        item.price = prices.sellPrice
     }
     
     let CheapestFrag = frag[0]

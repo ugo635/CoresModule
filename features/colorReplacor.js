@@ -136,6 +136,7 @@ const combinations = [
     `${player}`
 ];
 
+// When I started writing this between march and june 2025, only god and I understood this, now only him
 register("chat", (msg, event) => {
     if (!cmSettingsData.colorUserTrue && !cmSettingsData.colorTagTrue && !cmSettingsData.customRank) return;
     if (!msg.includes("MVP+") && !msg.includes("VIP+") && !msg.includes("MVP++") && !msg.includes("MVP") && !msg.includes("VIP") && !msg.includes(player)) return;
